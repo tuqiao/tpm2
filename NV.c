@@ -2074,3 +2074,26 @@ NvCapGetCounterAvail(
      else
          return availNVSpace / counterNVSpace;
 }
+
+//
+// NvEarlyStageFindHandle
+//
+// This function checks if a certain handle is present in NVMEM, even before
+// TPM_Startup was invoked.
+//
+// To facilitate NVMEM lookip this function initializes static variables if
+// they are not yet initialized.
+//
+// Returns True if handle was found.
+//
+BOOL
+NvEarlyStageFindHandle(
+   TPM_HANDLE handle
+   )
+
+{
+   if (!s_evictNvEnd)
+      NvInitStatic();
+
+   return NvFindHandle(handle);
+}
