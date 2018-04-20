@@ -88,5 +88,6 @@ TPM_RC NvWriteIndexInfo(TPMI_RH_NV_INDEX handle,  // IN: handle
 void NvWriteReserved(NV_RESERVE type,  // IN: type of reserved data
                      void *buffer      // IN: data buffer
                      );
+BOOL NvEarlyStageFindHandle(TPM_HANDLE handle);
 
 #endif  // __TPM2_NV_FP_H
