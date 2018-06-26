@@ -49,6 +49,10 @@ TPM2_NV_ReadLock(
          // It is not an error to read lock an uninitialized Index.
    }
 
+   // Indexes in the virtual range cannot be locked.
+   if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
    // Get NV index info
    NvGetIndexInfo(in->nvIndex, &nvIndex);
 

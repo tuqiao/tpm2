@@ -37,6 +37,10 @@ TPM2_NV_DefineSpace(
    if(result != TPM_RC_SUCCESS)
        return result;
 
+   // Indexes in the virtual range are reserved.
+   if (_plat__NvGetHandleVirtualOffset(in->publicInfo.t.nvPublic.nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
 // Input Validation
    // If an index is being created by the owner and shEnable is
    // clear, then we would not reach this point because ownerAuth
