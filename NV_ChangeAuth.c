@@ -28,6 +28,10 @@ TPM2_NV_ChangeAuth(
    result = NvIsAvailable();
    if(result != TPM_RC_SUCCESS) return result;
 
+   // Auth for Indexes in the virtual range cannot be changed.
+   if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
    // Read index info from NV
    NvGetIndexInfo(in->nvIndex, &nvIndex);
 

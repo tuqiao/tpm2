@@ -40,6 +40,10 @@ TPM2_NV_WriteLock(
        return TPM_RC_SUCCESS;
    }
 
+   // Indexes in the virtual range are always locked.
+   if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
+       return TPM_RC_SUCCESS;
+
    // Get NV index info
    NvGetIndexInfo(in->nvIndex, &nvIndex);
 
