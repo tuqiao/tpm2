@@ -40,6 +40,10 @@ TPM2_NV_Write(
    if(result != TPM_RC_SUCCESS)
        return result;
 
+   // Indexes in the virtual range cannot be written.
+   if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
+       return TPM_RC_NV_LOCKED;
+
    // Bits index, extend index or counter index may not be updated by
    // TPM2_NV_Write
    if(   nvIndex.publicArea.attributes.TPMA_NV_COUNTER == SET

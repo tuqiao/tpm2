@@ -294,7 +294,44 @@ _plat__ClearNvAvail(
    s_NvIsAvailable = FALSE;
    return;
 }
-
+//
+//
+//      _plat__NvGetHandleVirtualOffset()
+//
+// Dummy implementation that effectively disables vNVRAM.
+//
+LIB_EXPORT uint32_t
+_plat__NvGetHandleVirtualOffset(uint32_t handle)
+{
+   return 0;
+}
+//
+//
+//      _plat__NvOffsetIsVirtual()
+//
+// Always returns false, as vNVRAM is not supported so no offsets are virtual.
+//
+LIB_EXPORT BOOL
+_plat__NvOffsetIsVirtual(unsigned int startOffset)
+{
+   return FALSE;
+}
+//
+//
+//      _plat__NvVirtualMemoryRead()
+//
+// The above functions have effectively disabled vNVRAM, so this function should
+// never be called; sets memory to dummy value to highlight errors if it is
+// called by accident, and to ensure no information is leaked.
+//
+LIB_EXPORT void
+_plat__NvVirtualMemoryRead(
+    unsigned int startOffset,
+    unsigned int size,
+    void *data)
+{
+   memset((BYTE *)data, 0xab, size);
+}
 //
 // Check if a non-PLATFORMCREATE index shall nevertheless be retained when
 // performing TPM2_Clear.

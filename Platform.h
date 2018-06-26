@@ -260,6 +260,41 @@ LIB_EXPORT void
 _plat__ClearNvAvail(void);
 //
 //
+//      _plat__NvGetHandleVirtualOffset()
+//
+// If the specified handle represents a virtual NV index, this function returns
+// the corresponding virtual offset. For all other handles, 0 is returned.
+//
+LIB_EXPORT uint32_t
+_plat__NvGetHandleVirtualOffset(uint32_t handle);
+//
+//
+//      _plat__NvOffsetIsVirtual()
+//
+//
+// Returns true iff the specified offset corresponds to virtual NV memory; if
+// so, this offset must only be read using the _plat__NvVirtualMemoryRead()
+// function below.
+//
+LIB_EXPORT BOOL
+_plat__NvOffsetIsVirtual(unsigned int startOffset);
+//
+//
+//      _plat__NvVirtualMemoryRead()
+//
+//
+// Equivalent of _plat__NvMemoryRead, but for virtual NV memory. Only offsets
+// for which _plat__NvOffsetIsVirtual() returns true should be passed to this
+// function.
+//
+LIB_EXPORT void
+_plat__NvVirtualMemoryRead(
+    unsigned int startOffset,
+    unsigned int size,
+    void *data
+);
+//
+//
 //          Locality Functions
 //
 //          _plat__LocalityGet()

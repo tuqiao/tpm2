@@ -768,6 +768,11 @@ NvFindHandle(
 {
    UINT32              addr;
    NV_ITER             iter = NV_ITER_INIT;
+
+   if ((addr = _plat__NvGetHandleVirtualOffset(handle)) != 0) {
+     return addr;
+   }
+
    while((addr = NvNext(&iter)) != 0)
    {
        TPM_HANDLE          entityHandle;
@@ -1680,6 +1685,13 @@ NvDeleteEntity(
     )
 {
     UINT32         entityAddr;         // pointer to entity
+
+    // Deleting virtual NV indexes is not supported.
+    if(_plat__NvGetHandleVirtualOffset(handle) != 0)
+    {
+        return;
+    }
+
     entityAddr = NvFindHandle(handle);
     pAssert(entityAddr != 0);
     if(HandleGetType(handle) == TPM_HT_NV_INDEX)
