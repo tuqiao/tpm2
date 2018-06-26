@@ -30,6 +30,10 @@ TPM2_NV_UndefineSpace(
    result = NvIsAvailable();
    if(result != TPM_RC_SUCCESS) return result;
 
+   // Indexes in the virtual range cannot be undefined.
+   if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
 // Input Validation
 
    // Get NV index info
