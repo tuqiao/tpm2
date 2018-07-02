@@ -49,8 +49,8 @@ TPM_RC CommandDispatcher(
   BYTE *request_parameter_buffer = request_parameter_buffer_start;
   switch(command_code) {"""
 _COMMAND_DISPATCHER_CASE = """
-#ifdef %(command_code)s
-    case %(command_code)s:
+#if IS_CC_ENABLED(%(command_name)s)
+    case TPM_CC_%(command_name)s:
       return Exec_%(command_name)s(tag, &request_parameter_buffer,
           request_parameter_buffer_size, request_handles,
           response_handle_buffer_size, response_parameter_buffer_size);
@@ -77,8 +77,8 @@ TPM_RC ParseHandleBuffer(
   switch(command_code) {
 """
 _HANDLE_PROCESS_CASE_START = """
-#ifdef %(command_code)s
-    case %(command_code)s:"""
+#if IS_CC_ENABLED(%(command_code)s)
+    case TPM_CC_%(command_code)s:"""
 _HANDLE_PROCESS_CASE_UNMARSHAL = """
       result = %(handle_type)s_Unmarshal(
           (%(handle_type)s*)&request_handles[*num_request_handles],
@@ -118,7 +118,7 @@ _GET_COMMAND_CODE_STRING_START = """
 const char* GetCommandCodeString(TPM_CC command_code) {
   switch(command_code) {"""
 _GET_COMMAND_CODE_STRING_CASE = """
-#ifdef TPM_CC_%(command_name)s
+#if IS_CC_ENABLED(%(command_name)s)
   case TPM_CC_%(command_name)s:
       return "%(command_name)s";
 #endif"""
@@ -200,7 +200,7 @@ TPM_RC Exec_%(command_name)s(
   _EXEC_COMMAND_IMPL_IN_OUT = """
   %(command_name)s_In in;
   %(command_name)s_Out out;
-#ifdef %(command_code)s
+#if IS_CC_ENABLED(%(command_name)s)
   BYTE *response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -220,8 +220,8 @@ TPM_RC Exec_%(command_name)s(
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef %(command_code)s
-  response_buffer = MemoryGetResponseBuffer(%(command_code)s) + 10;
+#if IS_CC_ENABLED(%(command_name)s)
+  response_buffer = MemoryGetResponseBuffer(TPM_CC_%(command_name)s) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = %(command_name)s_Out_Marshal(
       &out, tag, &response_buffer, &response_buffer_size);
@@ -235,7 +235,7 @@ TPM_RC Exec_%(command_name)s(
 """
   _EXEC_COMMAND_IMPL_IN = """
   %(command_name)s_In in;
-#ifdef %(command_code)s
+#if IS_CC_ENABLED(%(command_name)s)
   BYTE *response_buffer;
   INT32 response_buffer_size;
 #endif
@@ -252,8 +252,8 @@ TPM_RC Exec_%(command_name)s(
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#ifdef %(command_code)s
-  response_buffer = MemoryGetResponseBuffer(%(command_code)s) + 10;
+#if IS_CC_ENABLED(%(command_name)s)
+  response_buffer = MemoryGetResponseBuffer(TPM_CC_%(command_name)s) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   // Add parameter_size field, always equal to 0 here.
   if (tag == TPM_ST_SESSIONS) {
@@ -267,7 +267,7 @@ TPM_RC Exec_%(command_name)s(
 """
   _EXEC_COMMAND_IMPL_OUT = """
   %(command_name)s_Out out;
-#ifdef %(command_code)s
+#if IS_CC_ENABLED(%(command_name)s)
   BYTE *response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -282,8 +282,8 @@ TPM_RC Exec_%(command_name)s(
   }
 // Marshal output structure containing response handles and parameters to
 // response buffer.
-#ifdef %(command_code)s
-  response_buffer = MemoryGetResponseBuffer(%(command_code)s) + 10;
+#if IS_CC_ENABLED(%(command_name)s)
+  response_buffer = MemoryGetResponseBuffer(TPM_CC_%(command_name)s) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = %(command_name)s_Out_Marshal(
       &out, tag, &response_buffer, &response_buffer_size);
@@ -303,7 +303,7 @@ static TPM_RC %(command_name)s_In_Unmarshal(
     INT32 *size) {
   TPM_RC result = TPM_RC_SUCCESS;"""
   _MARSHAL_COMMAND_START = """
-#ifdef %(command_code)s
+#if IS_CC_ENABLED(%(command_name)s)
 static UINT16 %(command_name)s_Out_Marshal(
     %(command_name)s_Out *source,
     TPMI_ST_COMMAND_TAG tag,
@@ -386,7 +386,6 @@ static UINT16 %(command_name)s_Out_Marshal(
     handles, parameters = self._SplitArgs(self.response_args)
     out_file.write(self._MARSHAL_COMMAND_START % {
         'command_name': self.MethodName(),
-        'command_code': self.command_code,
         'num_response_handles': self._GetNumberOfResponseHandles()})
     if handles:
       out_file.write('\n  // Marshal response handles.')
@@ -443,16 +442,13 @@ static UINT16 %(command_name)s_Out_Marshal(
     if self.request_args and self.response_args:
       out_file.write(self._EXEC_COMMAND_IMPL_IN_OUT % {
           'command_name': self.MethodName(),
-          'command_code': self.command_code,
           'num_response_handles': self._GetNumberOfResponseHandles()})
     elif self.request_args:
       out_file.write(self._EXEC_COMMAND_IMPL_IN % {
-          'command_name': self.MethodName(),
-          'command_code': self.command_code})
+          'command_name': self.MethodName()})
     elif self.response_args:
       out_file.write(self._EXEC_COMMAND_IMPL_OUT % {
           'command_name': self.MethodName(),
-          'command_code': self.command_code,
           'num_response_handles': self._GetNumberOfResponseHandles()})
 
   def OutputDecl(self, out_file):
@@ -544,10 +540,8 @@ def _OutputCommandDispatcher(commands):
                      {'command_name': command.MethodName()})
     out_file.write(_COMMAND_DISPATCHER_START)
     for command in commands:
-      command_code = 'TPM_CC_' + command.MethodName()
       out_file.write(_COMMAND_DISPATCHER_CASE %
-                     {'command_code': command_code,
-                      'command_name': command.MethodName()})
+                     {'command_name': command.MethodName()})
     out_file.write(_COMMAND_DISPATCHER_END)
   _ProcessClangFormat('CommandDispatcher.c')
 
@@ -564,9 +558,8 @@ def _OutputHandleProcess(commands, typemap):
     out_file.write(COPYRIGHT_HEADER)
     out_file.write(_HANDLE_PROCESS_START)
     for command in commands:
-      command_code = 'TPM_CC_' + command.MethodName()
       out_file.write(_HANDLE_PROCESS_CASE_START %
-                     {'command_code': command_code})
+                     {'command_code': command.MethodName()})
       for handle in command.GetRequestHandles():
         if typemap[handle['type']].HasConditional():
           out_file.write(_HANDLE_PROCESS_CASE_UNMARSHAL_FLAG %

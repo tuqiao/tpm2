@@ -483,11 +483,16 @@ class ConstantType(TPMType):
     return TPM_RC_SUCCESS;
   }
 #endif"""
+  _CHECK_COMMAND_IFDEF = """
+#if IS_CC_ENABLED(%(command_name)s)
+  if (*target == TPM_CC_%(command_name)s) {
+    return TPM_RC_SUCCESS;
+  }
+#endif"""
   _UNMARSHAL_END = """
   return %(error_code)s;
 }
 """
-  _IFDEF_TYPE_RE = re.compile(r'^TPM_(ALG|CC).*')
 
   def __init__(self, old_type, new_type):
     """Initializes a ConstantType instance.
@@ -506,7 +511,7 @@ class ConstantType(TPMType):
 
   def _NeedsIfdef(self):
     """Returns True if new_type is a type which needs ifdef enclosing."""
-    return self._IFDEF_TYPE_RE.search(self.new_type)
+    return re.search('^TPM_ALG', self.new_type)
 
   def OutputMarshalImpl(self, out_file, marshalled_types, typemap):
     """Writes marshal implementations for ConstantType to |out_file|.
@@ -527,6 +532,8 @@ class ConstantType(TPMType):
     for value in self.valid_values:
       if self._NeedsIfdef():
         out_file.write(self._CHECK_VALUE_IFDEF % {'value': value})
+      elif self.new_type == 'TPM_CC':
+        out_file.write(self._CHECK_COMMAND_IFDEF % {'command_name': value.replace('TPM_CC_', '')})
       else:
         out_file.write(self._CHECK_VALUE % {'value': value})
     out_file.write(self._UNMARSHAL_END % {'error_code': self.error_code})

@@ -119,6 +119,8 @@
 //
 //     From Vendor-Specific: Table 6 - Defines for Implemented Commands
 //
+#define   IS_CC_ENABLED(cmd) (defined(CC_##cmd) && CC_##cmd == CC_YES)
+
 #define   CC_ActivateCredential                  CC_YES
 #define   CC_Certify                             CC_YES
 #define   CC_CertifyCreation                     CC_YES
@@ -543,331 +545,115 @@ typedef    UINT16                 TPM_ECC_CURVE;
 typedef UINT32              TPM_CC;
 #define TPM_CC_FIRST                          (TPM_CC)(0x0000011F)
 #define TPM_CC_PP_FIRST                       (TPM_CC)(0x0000011F)
-#if defined CC_NV_UndefineSpaceSpecial && CC_NV_UndefineSpaceSpecial == YES
 #define TPM_CC_NV_UndefineSpaceSpecial        (TPM_CC)(0x0000011F)
-#endif
-#if defined CC_EvictControl && CC_EvictControl == YES
 #define TPM_CC_EvictControl                   (TPM_CC)(0x00000120)
-#endif
-#if defined CC_HierarchyControl && CC_HierarchyControl == YES
 #define TPM_CC_HierarchyControl               (TPM_CC)(0x00000121)
-#endif
-#if defined CC_NV_UndefineSpace && CC_NV_UndefineSpace == YES
 #define TPM_CC_NV_UndefineSpace               (TPM_CC)(0x00000122)
-#endif
-#if defined CC_ChangeEPS && CC_ChangeEPS == YES
 #define TPM_CC_ChangeEPS                      (TPM_CC)(0x00000124)
-#endif
-#if defined CC_ChangePPS && CC_ChangePPS == YES
 #define TPM_CC_ChangePPS                      (TPM_CC)(0x00000125)
-#endif
-#if defined CC_Clear && CC_Clear == YES
 #define TPM_CC_Clear                          (TPM_CC)(0x00000126)
-#endif
-#if defined CC_ClearControl && CC_ClearControl == YES
 #define TPM_CC_ClearControl                   (TPM_CC)(0x00000127)
-#endif
-#if defined CC_ClockSet && CC_ClockSet == YES
 #define TPM_CC_ClockSet                       (TPM_CC)(0x00000128)
-#endif
-#if defined CC_HierarchyChangeAuth && CC_HierarchyChangeAuth == YES
 #define TPM_CC_HierarchyChangeAuth            (TPM_CC)(0x00000129)
-#endif
-#if defined CC_NV_DefineSpace && CC_NV_DefineSpace == YES
 #define TPM_CC_NV_DefineSpace                 (TPM_CC)(0x0000012A)
-#endif
-#if defined CC_PCR_Allocate && CC_PCR_Allocate == YES
 #define TPM_CC_PCR_Allocate                   (TPM_CC)(0x0000012B)
-#endif
-#if defined CC_PCR_SetAuthPolicy && CC_PCR_SetAuthPolicy == YES
 #define TPM_CC_PCR_SetAuthPolicy              (TPM_CC)(0x0000012C)
-#endif
-#if defined CC_PP_Commands && CC_PP_Commands == YES
 #define TPM_CC_PP_Commands                    (TPM_CC)(0x0000012D)
-#endif
-#if defined CC_SetPrimaryPolicy && CC_SetPrimaryPolicy == YES
 #define TPM_CC_SetPrimaryPolicy               (TPM_CC)(0x0000012E)
-#endif
-#if defined CC_FieldUpgradeStart && CC_FieldUpgradeStart == YES
 #define TPM_CC_FieldUpgradeStart              (TPM_CC)(0x0000012F)
-#endif
-#if defined CC_ClockRateAdjust && CC_ClockRateAdjust == YES
 #define TPM_CC_ClockRateAdjust                (TPM_CC)(0x00000130)
-#endif
-#if defined CC_CreatePrimary && CC_CreatePrimary == YES
 #define TPM_CC_CreatePrimary                  (TPM_CC)(0x00000131)
-#endif
-#if defined CC_NV_GlobalWriteLock && CC_NV_GlobalWriteLock == YES
 #define TPM_CC_NV_GlobalWriteLock             (TPM_CC)(0x00000132)
-#endif
 #define TPM_CC_PP_LAST                        (TPM_CC)(0x00000132)
-#if defined CC_GetCommandAuditDigest && CC_GetCommandAuditDigest == YES
 #define TPM_CC_GetCommandAuditDigest          (TPM_CC)(0x00000133)
-#endif
-#if defined CC_NV_Increment && CC_NV_Increment == YES
 #define TPM_CC_NV_Increment                   (TPM_CC)(0x00000134)
-#endif
-#if defined CC_NV_SetBits && CC_NV_SetBits == YES
 #define TPM_CC_NV_SetBits                     (TPM_CC)(0x00000135)
-#endif
-#if defined CC_NV_Extend && CC_NV_Extend == YES
 #define TPM_CC_NV_Extend                      (TPM_CC)(0x00000136)
-#endif
-#if defined CC_NV_Write && CC_NV_Write == YES
 #define TPM_CC_NV_Write                       (TPM_CC)(0x00000137)
-#endif
-#if defined CC_NV_WriteLock && CC_NV_WriteLock == YES
 #define TPM_CC_NV_WriteLock                   (TPM_CC)(0x00000138)
-#endif
-#if defined CC_DictionaryAttackLockReset && CC_DictionaryAttackLockReset == YES
 #define TPM_CC_DictionaryAttackLockReset      (TPM_CC)(0x00000139)
-#endif
-#if defined CC_DictionaryAttackParameters && CC_DictionaryAttackParameters == YES
 #define TPM_CC_DictionaryAttackParameters     (TPM_CC)(0x0000013A)
-#endif
-#if defined CC_NV_ChangeAuth && CC_NV_ChangeAuth == YES
 #define TPM_CC_NV_ChangeAuth                  (TPM_CC)(0x0000013B)
-#endif
-#if defined CC_PCR_Event && CC_PCR_Event == YES
 #define TPM_CC_PCR_Event                      (TPM_CC)(0x0000013C)
-#endif
-#if defined CC_PCR_Reset && CC_PCR_Reset == YES
 #define TPM_CC_PCR_Reset                      (TPM_CC)(0x0000013D)
-#endif
-#if defined CC_SequenceComplete && CC_SequenceComplete == YES
 #define TPM_CC_SequenceComplete               (TPM_CC)(0x0000013E)
-#endif
-#if defined CC_SetAlgorithmSet && CC_SetAlgorithmSet == YES
 #define TPM_CC_SetAlgorithmSet                (TPM_CC)(0x0000013F)
-#endif
-#if defined CC_SetCommandCodeAuditStatus && CC_SetCommandCodeAuditStatus == YES
 #define TPM_CC_SetCommandCodeAuditStatus      (TPM_CC)(0x00000140)
-#endif
-#if defined CC_FieldUpgradeData && CC_FieldUpgradeData == YES
 #define TPM_CC_FieldUpgradeData               (TPM_CC)(0x00000141)
-#endif
-#if defined CC_IncrementalSelfTest && CC_IncrementalSelfTest == YES
 #define TPM_CC_IncrementalSelfTest            (TPM_CC)(0x00000142)
-#endif
-#if defined CC_SelfTest && CC_SelfTest == YES
 #define TPM_CC_SelfTest                       (TPM_CC)(0x00000143)
-#endif
-#if defined CC_Startup && CC_Startup == YES
 #define TPM_CC_Startup                        (TPM_CC)(0x00000144)
-#endif
-#if defined CC_Shutdown && CC_Shutdown == YES
 #define TPM_CC_Shutdown                       (TPM_CC)(0x00000145)
-#endif
-#if defined CC_StirRandom && CC_StirRandom == YES
 #define TPM_CC_StirRandom                     (TPM_CC)(0x00000146)
-#endif
-#if defined CC_ActivateCredential && CC_ActivateCredential == YES
 #define TPM_CC_ActivateCredential             (TPM_CC)(0x00000147)
-#endif
-#if defined CC_Certify && CC_Certify == YES
 #define TPM_CC_Certify                        (TPM_CC)(0x00000148)
-#endif
-#if defined CC_PolicyNV && CC_PolicyNV == YES
 #define TPM_CC_PolicyNV                       (TPM_CC)(0x00000149)
-#endif
-#if defined CC_CertifyCreation && CC_CertifyCreation == YES
 #define TPM_CC_CertifyCreation                (TPM_CC)(0x0000014A)
-#endif
-#if defined CC_Duplicate && CC_Duplicate == YES
 #define TPM_CC_Duplicate                      (TPM_CC)(0x0000014B)
-#endif
-#if defined CC_GetTime && CC_GetTime == YES
 #define TPM_CC_GetTime                        (TPM_CC)(0x0000014C)
-#endif
-#if defined CC_GetSessionAuditDigest && CC_GetSessionAuditDigest == YES
 #define TPM_CC_GetSessionAuditDigest          (TPM_CC)(0x0000014D)
-#endif
-#if defined CC_NV_Read && CC_NV_Read == YES
 #define TPM_CC_NV_Read                        (TPM_CC)(0x0000014E)
-#endif
-#if defined CC_NV_ReadLock && CC_NV_ReadLock == YES
 #define TPM_CC_NV_ReadLock                    (TPM_CC)(0x0000014F)
-#endif
-#if defined CC_ObjectChangeAuth && CC_ObjectChangeAuth == YES
 #define TPM_CC_ObjectChangeAuth               (TPM_CC)(0x00000150)
-#endif
-#if defined CC_PolicySecret && CC_PolicySecret == YES
 #define TPM_CC_PolicySecret                   (TPM_CC)(0x00000151)
-#endif
-#if defined CC_Rewrap && CC_Rewrap == YES
 #define TPM_CC_Rewrap                         (TPM_CC)(0x00000152)
-#endif
-#if defined CC_Create && CC_Create == YES
 #define TPM_CC_Create                         (TPM_CC)(0x00000153)
-#endif
-#if defined CC_ECDH_ZGen && CC_ECDH_ZGen == YES
 #define TPM_CC_ECDH_ZGen                      (TPM_CC)(0x00000154)
-#endif
-#if defined CC_HMAC && CC_HMAC == YES
 #define TPM_CC_HMAC                           (TPM_CC)(0x00000155)
-#endif
-#if defined CC_Import && CC_Import == YES
 #define TPM_CC_Import                         (TPM_CC)(0x00000156)
-#endif
-#if defined CC_Load && CC_Load == YES
 #define TPM_CC_Load                           (TPM_CC)(0x00000157)
-#endif
-#if defined CC_Quote && CC_Quote == YES
 #define TPM_CC_Quote                          (TPM_CC)(0x00000158)
-#endif
-#if defined CC_RSA_Decrypt && CC_RSA_Decrypt == YES
 #define TPM_CC_RSA_Decrypt                    (TPM_CC)(0x00000159)
-#endif
-#if defined CC_HMAC_Start && CC_HMAC_Start == YES
 #define TPM_CC_HMAC_Start                     (TPM_CC)(0x0000015B)
-#endif
-#if defined CC_SequenceUpdate && CC_SequenceUpdate == YES
 #define TPM_CC_SequenceUpdate                 (TPM_CC)(0x0000015C)
-#endif
-#if defined CC_Sign && CC_Sign == YES
 #define TPM_CC_Sign                           (TPM_CC)(0x0000015D)
-#endif
-#if defined CC_Unseal && CC_Unseal == YES
 #define TPM_CC_Unseal                         (TPM_CC)(0x0000015E)
-#endif
-#if defined CC_PolicySigned && CC_PolicySigned == YES
 #define TPM_CC_PolicySigned                   (TPM_CC)(0x00000160)
-#endif
-#if defined CC_ContextLoad && CC_ContextLoad == YES
 #define TPM_CC_ContextLoad                    (TPM_CC)(0x00000161)
-#endif
-#if defined CC_ContextSave && CC_ContextSave == YES
 #define TPM_CC_ContextSave                    (TPM_CC)(0x00000162)
-#endif
-#if defined CC_ECDH_KeyGen && CC_ECDH_KeyGen == YES
 #define TPM_CC_ECDH_KeyGen                    (TPM_CC)(0x00000163)
-#endif
-#if defined CC_EncryptDecrypt && CC_EncryptDecrypt == YES
 #define TPM_CC_EncryptDecrypt                 (TPM_CC)(0x00000164)
-#endif
-#if defined CC_FlushContext && CC_FlushContext == YES
 #define TPM_CC_FlushContext                   (TPM_CC)(0x00000165)
-#endif
-#if defined CC_LoadExternal && CC_LoadExternal == YES
 #define TPM_CC_LoadExternal                   (TPM_CC)(0x00000167)
-#endif
-#if defined CC_MakeCredential && CC_MakeCredential == YES
 #define TPM_CC_MakeCredential                 (TPM_CC)(0x00000168)
-#endif
-#if defined CC_NV_ReadPublic && CC_NV_ReadPublic == YES
 #define TPM_CC_NV_ReadPublic                  (TPM_CC)(0x00000169)
-#endif
-#if defined CC_PolicyAuthorize && CC_PolicyAuthorize == YES
 #define TPM_CC_PolicyAuthorize                (TPM_CC)(0x0000016A)
-#endif
-#if defined CC_PolicyAuthValue && CC_PolicyAuthValue == YES
 #define TPM_CC_PolicyAuthValue                (TPM_CC)(0x0000016B)
-#endif
-#if defined CC_PolicyCommandCode && CC_PolicyCommandCode == YES
 #define TPM_CC_PolicyCommandCode              (TPM_CC)(0x0000016C)
-#endif
-#if defined CC_PolicyCounterTimer && CC_PolicyCounterTimer == YES
 #define TPM_CC_PolicyCounterTimer             (TPM_CC)(0x0000016D)
-#endif
-#if defined CC_PolicyCpHash && CC_PolicyCpHash == YES
 #define TPM_CC_PolicyCpHash                   (TPM_CC)(0x0000016E)
-#endif
-#if defined CC_PolicyLocality && CC_PolicyLocality == YES
 #define TPM_CC_PolicyLocality                 (TPM_CC)(0x0000016F)
-#endif
-#if defined CC_PolicyNameHash && CC_PolicyNameHash == YES
 #define TPM_CC_PolicyNameHash                 (TPM_CC)(0x00000170)
-#endif
-#if defined CC_PolicyOR && CC_PolicyOR == YES
 #define TPM_CC_PolicyOR                       (TPM_CC)(0x00000171)
-#endif
-#if defined CC_PolicyTicket && CC_PolicyTicket == YES
 #define TPM_CC_PolicyTicket                   (TPM_CC)(0x00000172)
-#endif
-#if defined CC_ReadPublic && CC_ReadPublic == YES
 #define TPM_CC_ReadPublic                     (TPM_CC)(0x00000173)
-#endif
-#if defined CC_RSA_Encrypt && CC_RSA_Encrypt == YES
 #define TPM_CC_RSA_Encrypt                    (TPM_CC)(0x00000174)
-#endif
-#if defined CC_StartAuthSession && CC_StartAuthSession == YES
 #define TPM_CC_StartAuthSession               (TPM_CC)(0x00000176)
-#endif
-#if defined CC_VerifySignature && CC_VerifySignature == YES
 #define TPM_CC_VerifySignature                (TPM_CC)(0x00000177)
-#endif
-#if defined CC_ECC_Parameters && CC_ECC_Parameters == YES
 #define TPM_CC_ECC_Parameters                 (TPM_CC)(0x00000178)
-#endif
-#if defined CC_FirmwareRead && CC_FirmwareRead == YES
 #define TPM_CC_FirmwareRead                   (TPM_CC)(0x00000179)
-#endif
-#if defined CC_GetCapability && CC_GetCapability == YES
 #define TPM_CC_GetCapability                  (TPM_CC)(0x0000017A)
-#endif
-#if defined CC_GetRandom && CC_GetRandom == YES
 #define TPM_CC_GetRandom                      (TPM_CC)(0x0000017B)
-#endif
-#if defined CC_GetTestResult && CC_GetTestResult == YES
 #define TPM_CC_GetTestResult                  (TPM_CC)(0x0000017C)
-#endif
-#if defined CC_Hash && CC_Hash == YES
 #define TPM_CC_Hash                           (TPM_CC)(0x0000017D)
-#endif
-#if defined CC_PCR_Read && CC_PCR_Read == YES
 #define TPM_CC_PCR_Read                       (TPM_CC)(0x0000017E)
-#endif
-#if defined CC_PolicyPCR && CC_PolicyPCR == YES
 #define TPM_CC_PolicyPCR                      (TPM_CC)(0x0000017F)
-#endif
-#if defined CC_PolicyRestart && CC_PolicyRestart == YES
 #define TPM_CC_PolicyRestart                  (TPM_CC)(0x00000180)
-#endif
-#if defined CC_ReadClock && CC_ReadClock == YES
 #define TPM_CC_ReadClock                      (TPM_CC)(0x00000181)
-#endif
-#if defined CC_PCR_Extend && CC_PCR_Extend == YES
 #define TPM_CC_PCR_Extend                     (TPM_CC)(0x00000182)
-#endif
-#if defined CC_PCR_SetAuthValue && CC_PCR_SetAuthValue == YES
 #define TPM_CC_PCR_SetAuthValue               (TPM_CC)(0x00000183)
-#endif
-#if defined CC_NV_Certify && CC_NV_Certify == YES
 #define TPM_CC_NV_Certify                     (TPM_CC)(0x00000184)
-#endif
-#if defined CC_EventSequenceComplete && CC_EventSequenceComplete == YES
 #define TPM_CC_EventSequenceComplete          (TPM_CC)(0x00000185)
-#endif
-#if defined CC_HashSequenceStart && CC_HashSequenceStart == YES
 #define TPM_CC_HashSequenceStart              (TPM_CC)(0x00000186)
-#endif
-#if defined CC_PolicyPhysicalPresence && CC_PolicyPhysicalPresence == YES
 #define TPM_CC_PolicyPhysicalPresence         (TPM_CC)(0x00000187)
-#endif
-#if defined CC_PolicyDuplicationSelect && CC_PolicyDuplicationSelect == YES
 #define TPM_CC_PolicyDuplicationSelect        (TPM_CC)(0x00000188)
-#endif
-#if defined CC_PolicyGetDigest && CC_PolicyGetDigest == YES
 #define TPM_CC_PolicyGetDigest                (TPM_CC)(0x00000189)
-#endif
-#if defined CC_TestParms && CC_TestParms == YES
 #define TPM_CC_TestParms                      (TPM_CC)(0x0000018A)
-#endif
-#if defined CC_Commit && CC_Commit == YES
 #define TPM_CC_Commit                         (TPM_CC)(0x0000018B)
-#endif
-#if defined CC_PolicyPassword && CC_PolicyPassword == YES
 #define TPM_CC_PolicyPassword                 (TPM_CC)(0x0000018C)
-#endif
-#if defined CC_ZGen_2Phase && CC_ZGen_2Phase == YES
 #define TPM_CC_ZGen_2Phase                    (TPM_CC)(0x0000018D)
-#endif
-#if defined CC_EC_Ephemeral && CC_EC_Ephemeral == YES
 #define TPM_CC_EC_Ephemeral                   (TPM_CC)(0x0000018E)
-#endif
-#if defined CC_PolicyNvWritten && CC_PolicyNvWritten == YES
 #define TPM_CC_PolicyNvWritten                (TPM_CC)(0x0000018F)
-#endif
 #define TPM_CC_LAST                           (TPM_CC)(0x0000018F)
 #ifndef MAX
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
