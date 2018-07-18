@@ -164,8 +164,7 @@ TPM2_Startup(
    g_DrtmPreStartup = FALSE;
 
 #ifdef EMBEDDED_MODE
-   if (startup == SU_RESET)
-       _plat__ResetCallback();
+   _plat__StartupCallback();
 #endif
 
    return TPM_RC_SUCCESS;
