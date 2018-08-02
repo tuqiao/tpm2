@@ -1739,6 +1739,8 @@ NvFlushHierarchy(
               // For storage hierarchy, flush OwnerCreated index
                if(    nvIndex.publicArea.attributes.TPMA_NV_PLATFORMCREATE == CLEAR)
                {
+                     if(_plat__ShallSurviveOwnerClear(nvIndex.publicArea.nvIndex))
+                         continue;
                      // Delete the NV Index
                      NvDelete(currentAddr);
                      // Re-iterate from beginning after a delete
