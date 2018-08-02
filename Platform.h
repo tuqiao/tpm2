@@ -390,6 +390,15 @@ _plat__StartupCallback(
     void
 );
 
+//
+// Check if a non-PLATFORMCREATE index shall nevertheless be retained when
+// performing TPM2_Clear.
+//
+LIB_EXPORT BOOL
+_plat__ShallSurviveOwnerClear(
+    uint32_t  index
+);
+
 int uart_printf(const char *format, ...);
 #define ecprintf(format, args...) uart_printf(format, ## args);
 
