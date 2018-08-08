@@ -1125,7 +1125,7 @@ TPM_RC %(type)s_Unmarshal(
     UINT16 total_size = 0;"""
   _SETUP_UNMARSHAL_FIELD_ARRAY = """
     INT32 i;
-    TPM_RC result = TPM_RC_SUCCESS;"""
+    TPM_RC result;"""
   _MARSHAL_FIELD_ARRAY = """
     for (i = 0; i < %(array_length)s; ++i) {
       total_size += %(type)s_Marshal(
