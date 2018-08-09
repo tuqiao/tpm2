@@ -5394,7 +5394,7 @@ TPM_RC TPMU_HA_Unmarshal(TPMU_HA* target,
                          UINT32 selector) {
   switch (selector) {
     INT32 i;
-    TPM_RC result = TPM_RC_SUCCESS;
+    TPM_RC result;
 #ifdef TPM_ALG_SHA
     case TPM_ALG_SHA:
       for (i = 0; i < SHA_DIGEST_SIZE; ++i) {
