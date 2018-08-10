@@ -294,3 +294,15 @@ _plat__ClearNvAvail(
    s_NvIsAvailable = FALSE;
    return;
 }
+
+//
+// Check if a non-PLATFORMCREATE index shall nevertheless be retained when
+// performing TPM2_Clear.
+//
+LIB_EXPORT BOOL
+_plat__ShallSurviveOwnerClear(
+    uint32_t  index
+    )
+{
+    return FALSE;
+}
