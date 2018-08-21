@@ -161,53 +161,17 @@ typedef struct {"""
 TPM_RC TPM2_%(command_name)s(
     %(command_name)s_In *in,
     %(command_name)s_Out *out);
-
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC %(command_name)s_In_Unmarshal(
-    %(command_name)s_In *target,
-    TPM_HANDLE request_handles[],
-    BYTE **buffer,
-    INT32 *size);
-
-// Marshals response handles and parameters from |source| to |buffer|. Computes
-// and marshals the size of the parameter area (parameter_size) if |tag| ==
-// TPM_ST_SESSIONS. Returns size of (parameter area + handle area) in bytes.
-// Return value does not include parameter_size field.
-UINT16 %(command_name)s_Out_Marshal(
-    %(command_name)s_Out *source,
-    TPMI_ST_COMMAND_TAG tag,
-    BYTE **buffer,
-    INT32 *size);
 """
   _FUNCTION_DECL_IN = """
 // Executes %(command_name)s with request handles and parameters from |in|.
 TPM_RC TPM2_%(command_name)s(
     %(command_name)s_In *in);
-
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC %(command_name)s_In_Unmarshal(
-    %(command_name)s_In *target,
-    TPM_HANDLE request_handles[],
-    BYTE **buffer,
-    INT32 *size);
 """
   _FUNCTION_DECL_OUT = """
 // Executes %(command_name)s and computes response handles and parameters
 // to |out|.
 TPM_RC TPM2_%(command_name)s(
     %(command_name)s_Out *out);
-
-// Marshals response handles and parameters from |source| to |buffer|. Computes
-// and marshals the size of the parameter area (parameter_size) if |tag| ==
-// TPM_ST_SESSIONS. Returns size of (parameter area + handle area) in bytes.
-// Does not include parameter_size field.
-UINT16 %(command_name)s_Out_Marshal(
-    %(command_name)s_Out *source,
-    TPMI_ST_COMMAND_TAG tag,
-    BYTE **buffer,
-    INT32 *size);
 """
   _EXEC_DECL = """
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
@@ -332,14 +296,15 @@ TPM_RC Exec_%(command_name)s(
 }
 """
   _UNMARSHAL_COMMAND_START = """
-TPM_RC %(command_name)s_In_Unmarshal(
+static TPM_RC %(command_name)s_In_Unmarshal(
     %(command_name)s_In *target,
     TPM_HANDLE request_handles[],
     BYTE **buffer,
     INT32 *size) {
   TPM_RC result = TPM_RC_SUCCESS;"""
   _MARSHAL_COMMAND_START = """
-UINT16 %(command_name)s_Out_Marshal(
+#ifdef %(command_code)s
+static UINT16 %(command_name)s_Out_Marshal(
     %(command_name)s_Out *source,
     TPMI_ST_COMMAND_TAG tag,
     BYTE **buffer,
@@ -365,6 +330,7 @@ UINT16 %(command_name)s_Out_Marshal(
   }
   return total_size;
 }
+#endif
 """
   _SET_COMMAND_HANDLE = """
   target->%(field_name)s = request_handles[%(num)s];"""
@@ -420,6 +386,7 @@ UINT16 %(command_name)s_Out_Marshal(
     handles, parameters = self._SplitArgs(self.response_args)
     out_file.write(self._MARSHAL_COMMAND_START % {
         'command_name': self.MethodName(),
+        'command_code': self.command_code,
         'num_response_handles': self._GetNumberOfResponseHandles()})
     if handles:
       out_file.write('\n  // Marshal response handles.')
