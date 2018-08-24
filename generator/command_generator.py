@@ -582,7 +582,7 @@ def _OutputCommandDispatcher(commands):
                      {'command_code': command_code,
                       'command_name': command.MethodName()})
     out_file.write(_COMMAND_DISPATCHER_END)
-  call(['clang-format', '-i', '-style=Chromium', 'CommandDispatcher.c'])
+  _ProcessClangFormat('CommandDispatcher.c')
 
 
 def _OutputHandleProcess(commands, typemap):
@@ -611,7 +611,7 @@ def _OutputHandleProcess(commands, typemap):
         out_file.write(_HANDLE_PROCESS_CASE_CHECK)
       out_file.write(_HANDLE_PROCESS_CASE_END)
     out_file.write(_HANDLE_PROCESS_END)
-  call(['clang-format', '-i', '-style=Chromium', 'HandleProcess.c'])
+  _ProcessClangFormat('HandleProcess.c')
 
 
 def _OutputGetCommandCodeString(commands):
@@ -623,7 +623,7 @@ def _OutputGetCommandCodeString(commands):
   with open('GetCommandCodeString_fp.h', 'w') as out_file:
     out_file.write(COPYRIGHT_HEADER)
     out_file.write(_GET_COMMAND_CODE_STRING_HEADER)
-  call(['clang-format', '-i', '-style=Chromium', 'GetCommandCodeString_fp.h'])
+  _ProcessClangFormat('GetCommandCodeString_fp.h')
   with open('GetCommandCodeString.c', 'w') as out_file:
     out_file.write(COPYRIGHT_HEADER)
     out_file.write(_GET_COMMAND_CODE_STRING_START)
@@ -631,7 +631,7 @@ def _OutputGetCommandCodeString(commands):
       out_file.write(_GET_COMMAND_CODE_STRING_CASE %
                      {'command_name': command.MethodName()})
     out_file.write(_GET_COMMAND_CODE_STRING_END)
-  call(['clang-format', '-i', '-style=Chromium', 'GetCommandCodeString.c'])
+  _ProcessClangFormat('GetCommandCodeString.c')
 
 
 def GenerateHeader(commands):
@@ -650,7 +650,7 @@ def GenerateHeader(commands):
       command.OutputDecl(out_file)
       out_file.write(
           _HEADER_FILE_GUARD_FOOTER % {'name': command.MethodName().upper()})
-    call(['clang-format', '-i', '-style=Chromium', command_header_file])
+    _ProcessClangFormat(command_header_file)
 
 
 def GenerateImplementation(commands, typemap):
@@ -670,7 +670,17 @@ def GenerateImplementation(commands, typemap):
       command.OutputMarshalFunction(out_file, typemap)
       command.OutputUnmarshalFunction(out_file, typemap)
       command.OutputExecFunction(out_file)
-    call(['clang-format', '-i', '-style=Chromium', marshal_command_file])
+    _ProcessClangFormat(marshal_command_file)
   _OutputHandleProcess(commands, typemap)
   _OutputCommandDispatcher(commands)
   _OutputGetCommandCodeString(commands)
+
+
+def _ProcessClangFormat(file_name):
+  """Call clang-format on the given file name.
+
+  Args:
+    file_name: A file name to apply clang-format.
+  """
+  call(['clang-format', '-i', '-style=Chromium', '-sort-includes=false',
+        file_name])
