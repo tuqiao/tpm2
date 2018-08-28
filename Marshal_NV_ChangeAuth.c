@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "NV_ChangeAuth_fp.h"
 
-TPM_RC NV_ChangeAuth_In_Unmarshal(NV_ChangeAuth_In* target,
-                                  TPM_HANDLE request_handles[],
-                                  BYTE** buffer,
-                                  INT32* size) {
+static TPM_RC NV_ChangeAuth_In_Unmarshal(NV_ChangeAuth_In* target,
+                                         TPM_HANDLE request_handles[],
+                                         BYTE** buffer,
+                                         INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->nvIndex = request_handles[0];

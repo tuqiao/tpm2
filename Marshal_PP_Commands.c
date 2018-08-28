@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "PP_Commands_fp.h"
 
-TPM_RC PP_Commands_In_Unmarshal(PP_Commands_In* target,
-                                TPM_HANDLE request_handles[],
-                                BYTE** buffer,
-                                INT32* size) {
+static TPM_RC PP_Commands_In_Unmarshal(PP_Commands_In* target,
+                                       TPM_HANDLE request_handles[],
+                                       BYTE** buffer,
+                                       INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->auth = request_handles[0];

@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "Shutdown_fp.h"
 
-TPM_RC Shutdown_In_Unmarshal(Shutdown_In* target,
-                             TPM_HANDLE request_handles[],
-                             BYTE** buffer,
-                             INT32* size) {
+static TPM_RC Shutdown_In_Unmarshal(Shutdown_In* target,
+                                    TPM_HANDLE request_handles[],
+                                    BYTE** buffer,
+                                    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPM_SU_Unmarshal(&target->shutdownType, buffer, size);

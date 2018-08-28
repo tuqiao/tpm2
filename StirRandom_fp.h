@@ -14,13 +14,6 @@ typedef struct { TPM2B_SENSITIVE_DATA inData; } StirRandom_In;
 // Executes StirRandom with request handles and parameters from |in|.
 TPM_RC TPM2_StirRandom(StirRandom_In* in);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC StirRandom_In_Unmarshal(StirRandom_In* target,
-                               TPM_HANDLE request_handles[],
-                               BYTE** buffer,
-                               INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

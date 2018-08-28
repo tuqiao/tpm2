@@ -19,13 +19,6 @@ typedef struct {
 // Executes PCR_SetAuthPolicy with request handles and parameters from |in|.
 TPM_RC TPM2_PCR_SetAuthPolicy(PCR_SetAuthPolicy_In* in);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC PCR_SetAuthPolicy_In_Unmarshal(PCR_SetAuthPolicy_In* target,
-                                      TPM_HANDLE request_handles[],
-                                      BYTE** buffer,
-                                      INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

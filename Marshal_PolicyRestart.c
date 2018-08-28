@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "PolicyRestart_fp.h"
 
-TPM_RC PolicyRestart_In_Unmarshal(PolicyRestart_In* target,
-                                  TPM_HANDLE request_handles[],
-                                  BYTE** buffer,
-                                  INT32* size) {
+static TPM_RC PolicyRestart_In_Unmarshal(PolicyRestart_In* target,
+                                         TPM_HANDLE request_handles[],
+                                         BYTE** buffer,
+                                         INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->sessionHandle = request_handles[0];

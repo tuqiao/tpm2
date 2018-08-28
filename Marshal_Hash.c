@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "Hash_fp.h"
 
-UINT16 Hash_Out_Marshal(Hash_Out* source,
-                        TPMI_ST_COMMAND_TAG tag,
-                        BYTE** buffer,
-                        INT32* size) {
+#ifdef TPM_CC_Hash
+static UINT16 Hash_Out_Marshal(Hash_Out* source,
+                               TPMI_ST_COMMAND_TAG tag,
+                               BYTE** buffer,
+                               INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -34,11 +35,12 @@ UINT16 Hash_Out_Marshal(Hash_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC Hash_In_Unmarshal(Hash_In* target,
-                         TPM_HANDLE request_handles[],
-                         BYTE** buffer,
-                         INT32* size) {
+static TPM_RC Hash_In_Unmarshal(Hash_In* target,
+                                TPM_HANDLE request_handles[],
+                                BYTE** buffer,
+                                INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPM2B_MAX_BUFFER_Unmarshal(&target->data, buffer, size);

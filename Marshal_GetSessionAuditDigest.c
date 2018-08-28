@@ -7,10 +7,12 @@
 #include "MemoryLib_fp.h"
 #include "GetSessionAuditDigest_fp.h"
 
-UINT16 GetSessionAuditDigest_Out_Marshal(GetSessionAuditDigest_Out* source,
-                                         TPMI_ST_COMMAND_TAG tag,
-                                         BYTE** buffer,
-                                         INT32* size) {
+#ifdef TPM_CC_GetSessionAuditDigest
+static UINT16 GetSessionAuditDigest_Out_Marshal(
+    GetSessionAuditDigest_Out* source,
+    TPMI_ST_COMMAND_TAG tag,
+    BYTE** buffer,
+    INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -34,11 +36,13 @@ UINT16 GetSessionAuditDigest_Out_Marshal(GetSessionAuditDigest_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC GetSessionAuditDigest_In_Unmarshal(GetSessionAuditDigest_In* target,
-                                          TPM_HANDLE request_handles[],
-                                          BYTE** buffer,
-                                          INT32* size) {
+static TPM_RC GetSessionAuditDigest_In_Unmarshal(
+    GetSessionAuditDigest_In* target,
+    TPM_HANDLE request_handles[],
+    BYTE** buffer,
+    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->privacyAdminHandle = request_handles[0];

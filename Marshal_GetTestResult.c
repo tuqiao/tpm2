@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "GetTestResult_fp.h"
 
-UINT16 GetTestResult_Out_Marshal(GetTestResult_Out* source,
-                                 TPMI_ST_COMMAND_TAG tag,
-                                 BYTE** buffer,
-                                 INT32* size) {
+#ifdef TPM_CC_GetTestResult
+static UINT16 GetTestResult_Out_Marshal(GetTestResult_Out* source,
+                                        TPMI_ST_COMMAND_TAG tag,
+                                        BYTE** buffer,
+                                        INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -34,6 +35,7 @@ UINT16 GetTestResult_Out_Marshal(GetTestResult_Out* source,
   }
   return total_size;
 }
+#endif
 
 TPM_RC Exec_GetTestResult(TPMI_ST_COMMAND_TAG tag,
                           BYTE** request_parameter_buffer,

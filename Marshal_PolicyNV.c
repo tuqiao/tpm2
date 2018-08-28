@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "PolicyNV_fp.h"
 
-TPM_RC PolicyNV_In_Unmarshal(PolicyNV_In* target,
-                             TPM_HANDLE request_handles[],
-                             BYTE** buffer,
-                             INT32* size) {
+static TPM_RC PolicyNV_In_Unmarshal(PolicyNV_In* target,
+                                    TPM_HANDLE request_handles[],
+                                    BYTE** buffer,
+                                    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->authHandle = request_handles[0];
