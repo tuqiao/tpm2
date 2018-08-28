@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "Quote_fp.h"
 
-UINT16 Quote_Out_Marshal(Quote_Out* source,
-                         TPMI_ST_COMMAND_TAG tag,
-                         BYTE** buffer,
-                         INT32* size) {
+#ifdef TPM_CC_Quote
+static UINT16 Quote_Out_Marshal(Quote_Out* source,
+                                TPMI_ST_COMMAND_TAG tag,
+                                BYTE** buffer,
+                                INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -34,11 +35,12 @@ UINT16 Quote_Out_Marshal(Quote_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC Quote_In_Unmarshal(Quote_In* target,
-                          TPM_HANDLE request_handles[],
-                          BYTE** buffer,
-                          INT32* size) {
+static TPM_RC Quote_In_Unmarshal(Quote_In* target,
+                                 TPM_HANDLE request_handles[],
+                                 BYTE** buffer,
+                                 INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->signHandle = request_handles[0];

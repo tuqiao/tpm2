@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "SetCommandCodeAuditStatus_fp.h"
 
-TPM_RC SetCommandCodeAuditStatus_In_Unmarshal(
+static TPM_RC SetCommandCodeAuditStatus_In_Unmarshal(
     SetCommandCodeAuditStatus_In* target,
     TPM_HANDLE request_handles[],
     BYTE** buffer,

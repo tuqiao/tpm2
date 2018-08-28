@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "FlushContext_fp.h"
 
-TPM_RC FlushContext_In_Unmarshal(FlushContext_In* target,
-                                 TPM_HANDLE request_handles[],
-                                 BYTE** buffer,
-                                 INT32* size) {
+static TPM_RC FlushContext_In_Unmarshal(FlushContext_In* target,
+                                        TPM_HANDLE request_handles[],
+                                        BYTE** buffer,
+                                        INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPMI_DH_CONTEXT_Unmarshal(&target->flushHandle, buffer, size);

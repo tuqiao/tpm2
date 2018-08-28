@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "GetCapability_fp.h"
 
-UINT16 GetCapability_Out_Marshal(GetCapability_Out* source,
-                                 TPMI_ST_COMMAND_TAG tag,
-                                 BYTE** buffer,
-                                 INT32* size) {
+#ifdef TPM_CC_GetCapability
+static UINT16 GetCapability_Out_Marshal(GetCapability_Out* source,
+                                        TPMI_ST_COMMAND_TAG tag,
+                                        BYTE** buffer,
+                                        INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -35,11 +36,12 @@ UINT16 GetCapability_Out_Marshal(GetCapability_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC GetCapability_In_Unmarshal(GetCapability_In* target,
-                                  TPM_HANDLE request_handles[],
-                                  BYTE** buffer,
-                                  INT32* size) {
+static TPM_RC GetCapability_In_Unmarshal(GetCapability_In* target,
+                                         TPM_HANDLE request_handles[],
+                                         BYTE** buffer,
+                                         INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPM_CAP_Unmarshal(&target->capability, buffer, size);

@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "HashSequenceStart_fp.h"
 
-UINT16 HashSequenceStart_Out_Marshal(HashSequenceStart_Out* source,
-                                     TPMI_ST_COMMAND_TAG tag,
-                                     BYTE** buffer,
-                                     INT32* size) {
+#ifdef TPM_CC_HashSequenceStart
+static UINT16 HashSequenceStart_Out_Marshal(HashSequenceStart_Out* source,
+                                            TPMI_ST_COMMAND_TAG tag,
+                                            BYTE** buffer,
+                                            INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,11 +34,12 @@ UINT16 HashSequenceStart_Out_Marshal(HashSequenceStart_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC HashSequenceStart_In_Unmarshal(HashSequenceStart_In* target,
-                                      TPM_HANDLE request_handles[],
-                                      BYTE** buffer,
-                                      INT32* size) {
+static TPM_RC HashSequenceStart_In_Unmarshal(HashSequenceStart_In* target,
+                                             TPM_HANDLE request_handles[],
+                                             BYTE** buffer,
+                                             INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPM2B_AUTH_Unmarshal(&target->auth, buffer, size);

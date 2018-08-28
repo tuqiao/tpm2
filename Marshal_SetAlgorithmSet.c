@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "SetAlgorithmSet_fp.h"
 
-TPM_RC SetAlgorithmSet_In_Unmarshal(SetAlgorithmSet_In* target,
-                                    TPM_HANDLE request_handles[],
-                                    BYTE** buffer,
-                                    INT32* size) {
+static TPM_RC SetAlgorithmSet_In_Unmarshal(SetAlgorithmSet_In* target,
+                                           TPM_HANDLE request_handles[],
+                                           BYTE** buffer,
+                                           INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->authHandle = request_handles[0];

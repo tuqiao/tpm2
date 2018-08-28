@@ -21,22 +21,6 @@ typedef struct { TPMT_TK_VERIFIED validation; } VerifySignature_Out;
 // |in| and computes response handles and parameters to |out|.
 TPM_RC TPM2_VerifySignature(VerifySignature_In* in, VerifySignature_Out* out);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC VerifySignature_In_Unmarshal(VerifySignature_In* target,
-                                    TPM_HANDLE request_handles[],
-                                    BYTE** buffer,
-                                    INT32* size);
-
-// Marshals response handles and parameters from |source| to |buffer|. Computes
-// and marshals the size of the parameter area (parameter_size) if |tag| ==
-// TPM_ST_SESSIONS. Returns size of (parameter area + handle area) in bytes.
-// Return value does not include parameter_size field.
-UINT16 VerifySignature_Out_Marshal(VerifySignature_Out* source,
-                                   TPMI_ST_COMMAND_TAG tag,
-                                   BYTE** buffer,
-                                   INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

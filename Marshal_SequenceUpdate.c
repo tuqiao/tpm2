@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "SequenceUpdate_fp.h"
 
-TPM_RC SequenceUpdate_In_Unmarshal(SequenceUpdate_In* target,
-                                   TPM_HANDLE request_handles[],
-                                   BYTE** buffer,
-                                   INT32* size) {
+static TPM_RC SequenceUpdate_In_Unmarshal(SequenceUpdate_In* target,
+                                          TPM_HANDLE request_handles[],
+                                          BYTE** buffer,
+                                          INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->sequenceHandle = request_handles[0];

@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "PCR_Extend_fp.h"
 
-TPM_RC PCR_Extend_In_Unmarshal(PCR_Extend_In* target,
-                               TPM_HANDLE request_handles[],
-                               BYTE** buffer,
-                               INT32* size) {
+static TPM_RC PCR_Extend_In_Unmarshal(PCR_Extend_In* target,
+                                      TPM_HANDLE request_handles[],
+                                      BYTE** buffer,
+                                      INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->pcrHandle = request_handles[0];

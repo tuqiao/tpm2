@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "StirRandom_fp.h"
 
-TPM_RC StirRandom_In_Unmarshal(StirRandom_In* target,
-                               TPM_HANDLE request_handles[],
-                               BYTE** buffer,
-                               INT32* size) {
+static TPM_RC StirRandom_In_Unmarshal(StirRandom_In* target,
+                                      TPM_HANDLE request_handles[],
+                                      BYTE** buffer,
+                                      INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPM2B_SENSITIVE_DATA_Unmarshal(&target->inData, buffer, size);
