@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "PolicyCounterTimer_fp.h"
 
-TPM_RC PolicyCounterTimer_In_Unmarshal(PolicyCounterTimer_In* target,
-                                       TPM_HANDLE request_handles[],
-                                       BYTE** buffer,
-                                       INT32* size) {
+static TPM_RC PolicyCounterTimer_In_Unmarshal(PolicyCounterTimer_In* target,
+                                              TPM_HANDLE request_handles[],
+                                              BYTE** buffer,
+                                              INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->policySession = request_handles[0];

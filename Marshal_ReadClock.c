@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "ReadClock_fp.h"
 
-UINT16 ReadClock_Out_Marshal(ReadClock_Out* source,
-                             TPMI_ST_COMMAND_TAG tag,
-                             BYTE** buffer,
-                             INT32* size) {
+#ifdef TPM_CC_ReadClock
+static UINT16 ReadClock_Out_Marshal(ReadClock_Out* source,
+                                    TPMI_ST_COMMAND_TAG tag,
+                                    BYTE** buffer,
+                                    INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,6 +34,7 @@ UINT16 ReadClock_Out_Marshal(ReadClock_Out* source,
   }
   return total_size;
 }
+#endif
 
 TPM_RC Exec_ReadClock(TPMI_ST_COMMAND_TAG tag,
                       BYTE** request_parameter_buffer,

@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "DictionaryAttackLockReset_fp.h"
 
-TPM_RC DictionaryAttackLockReset_In_Unmarshal(
+static TPM_RC DictionaryAttackLockReset_In_Unmarshal(
     DictionaryAttackLockReset_In* target,
     TPM_HANDLE request_handles[],
     BYTE** buffer,

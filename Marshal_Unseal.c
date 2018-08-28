@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "Unseal_fp.h"
 
-UINT16 Unseal_Out_Marshal(Unseal_Out* source,
-                          TPMI_ST_COMMAND_TAG tag,
-                          BYTE** buffer,
-                          INT32* size) {
+#ifdef TPM_CC_Unseal
+static UINT16 Unseal_Out_Marshal(Unseal_Out* source,
+                                 TPMI_ST_COMMAND_TAG tag,
+                                 BYTE** buffer,
+                                 INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,11 +34,12 @@ UINT16 Unseal_Out_Marshal(Unseal_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC Unseal_In_Unmarshal(Unseal_In* target,
-                           TPM_HANDLE request_handles[],
-                           BYTE** buffer,
-                           INT32* size) {
+static TPM_RC Unseal_In_Unmarshal(Unseal_In* target,
+                                  TPM_HANDLE request_handles[],
+                                  BYTE** buffer,
+                                  INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->itemHandle = request_handles[0];

@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "Load_fp.h"
 
-UINT16 Load_Out_Marshal(Load_Out* source,
-                        TPMI_ST_COMMAND_TAG tag,
-                        BYTE** buffer,
-                        INT32* size) {
+#ifdef TPM_CC_Load
+static UINT16 Load_Out_Marshal(Load_Out* source,
+                               TPMI_ST_COMMAND_TAG tag,
+                               BYTE** buffer,
+                               INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -35,11 +36,12 @@ UINT16 Load_Out_Marshal(Load_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC Load_In_Unmarshal(Load_In* target,
-                         TPM_HANDLE request_handles[],
-                         BYTE** buffer,
-                         INT32* size) {
+static TPM_RC Load_In_Unmarshal(Load_In* target,
+                                TPM_HANDLE request_handles[],
+                                BYTE** buffer,
+                                INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->parentHandle = request_handles[0];

@@ -20,13 +20,6 @@ typedef struct {
 // |in|.
 TPM_RC TPM2_PolicyDuplicationSelect(PolicyDuplicationSelect_In* in);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC PolicyDuplicationSelect_In_Unmarshal(PolicyDuplicationSelect_In* target,
-                                            TPM_HANDLE request_handles[],
-                                            BYTE** buffer,
-                                            INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

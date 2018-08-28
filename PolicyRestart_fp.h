@@ -14,13 +14,6 @@ typedef struct { TPMI_SH_POLICY sessionHandle; } PolicyRestart_In;
 // Executes PolicyRestart with request handles and parameters from |in|.
 TPM_RC TPM2_PolicyRestart(PolicyRestart_In* in);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC PolicyRestart_In_Unmarshal(PolicyRestart_In* target,
-                                  TPM_HANDLE request_handles[],
-                                  BYTE** buffer,
-                                  INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and
