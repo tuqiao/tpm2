@@ -18,13 +18,6 @@ typedef struct {
 // Executes PP_Commands with request handles and parameters from |in|.
 TPM_RC TPM2_PP_Commands(PP_Commands_In* in);
 
-// Initializes handle fields in |target| from |request_handles|. Unmarshals
-// parameter fields in |target| from |buffer|.
-TPM_RC PP_Commands_In_Unmarshal(PP_Commands_In* target,
-                                TPM_HANDLE request_handles[],
-                                BYTE** buffer,
-                                INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

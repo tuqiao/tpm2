@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "NV_Read_fp.h"
 
-UINT16 NV_Read_Out_Marshal(NV_Read_Out* source,
-                           TPMI_ST_COMMAND_TAG tag,
-                           BYTE** buffer,
-                           INT32* size) {
+#ifdef TPM_CC_NV_Read
+static UINT16 NV_Read_Out_Marshal(NV_Read_Out* source,
+                                  TPMI_ST_COMMAND_TAG tag,
+                                  BYTE** buffer,
+                                  INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,11 +34,12 @@ UINT16 NV_Read_Out_Marshal(NV_Read_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC NV_Read_In_Unmarshal(NV_Read_In* target,
-                            TPM_HANDLE request_handles[],
-                            BYTE** buffer,
-                            INT32* size) {
+static TPM_RC NV_Read_In_Unmarshal(NV_Read_In* target,
+                                   TPM_HANDLE request_handles[],
+                                   BYTE** buffer,
+                                   INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->authHandle = request_handles[0];

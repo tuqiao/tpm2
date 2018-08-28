@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "ZGen_2Phase_fp.h"
 
-UINT16 ZGen_2Phase_Out_Marshal(ZGen_2Phase_Out* source,
-                               TPMI_ST_COMMAND_TAG tag,
-                               BYTE** buffer,
-                               INT32* size) {
+#ifdef TPM_CC_ZGen_2Phase
+static UINT16 ZGen_2Phase_Out_Marshal(ZGen_2Phase_Out* source,
+                                      TPMI_ST_COMMAND_TAG tag,
+                                      BYTE** buffer,
+                                      INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -34,11 +35,12 @@ UINT16 ZGen_2Phase_Out_Marshal(ZGen_2Phase_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC ZGen_2Phase_In_Unmarshal(ZGen_2Phase_In* target,
-                                TPM_HANDLE request_handles[],
-                                BYTE** buffer,
-                                INT32* size) {
+static TPM_RC ZGen_2Phase_In_Unmarshal(ZGen_2Phase_In* target,
+                                       TPM_HANDLE request_handles[],
+                                       BYTE** buffer,
+                                       INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->keyA = request_handles[0];

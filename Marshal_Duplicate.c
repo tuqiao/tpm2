@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "Duplicate_fp.h"
 
-UINT16 Duplicate_Out_Marshal(Duplicate_Out* source,
-                             TPMI_ST_COMMAND_TAG tag,
-                             BYTE** buffer,
-                             INT32* size) {
+#ifdef TPM_CC_Duplicate
+static UINT16 Duplicate_Out_Marshal(Duplicate_Out* source,
+                                    TPMI_ST_COMMAND_TAG tag,
+                                    BYTE** buffer,
+                                    INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -36,11 +37,12 @@ UINT16 Duplicate_Out_Marshal(Duplicate_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC Duplicate_In_Unmarshal(Duplicate_In* target,
-                              TPM_HANDLE request_handles[],
-                              BYTE** buffer,
-                              INT32* size) {
+static TPM_RC Duplicate_In_Unmarshal(Duplicate_In* target,
+                                     TPM_HANDLE request_handles[],
+                                     BYTE** buffer,
+                                     INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->objectHandle = request_handles[0];

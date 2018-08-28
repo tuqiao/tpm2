@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "TestParms_fp.h"
 
-TPM_RC TestParms_In_Unmarshal(TestParms_In* target,
-                              TPM_HANDLE request_handles[],
-                              BYTE** buffer,
-                              INT32* size) {
+static TPM_RC TestParms_In_Unmarshal(TestParms_In* target,
+                                     TPM_HANDLE request_handles[],
+                                     BYTE** buffer,
+                                     INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPMT_PUBLIC_PARMS_Unmarshal(&target->parameters, buffer, size);

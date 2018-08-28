@@ -7,10 +7,12 @@
 #include "MemoryLib_fp.h"
 #include "EventSequenceComplete_fp.h"
 
-UINT16 EventSequenceComplete_Out_Marshal(EventSequenceComplete_Out* source,
-                                         TPMI_ST_COMMAND_TAG tag,
-                                         BYTE** buffer,
-                                         INT32* size) {
+#ifdef TPM_CC_EventSequenceComplete
+static UINT16 EventSequenceComplete_Out_Marshal(
+    EventSequenceComplete_Out* source,
+    TPMI_ST_COMMAND_TAG tag,
+    BYTE** buffer,
+    INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,11 +35,13 @@ UINT16 EventSequenceComplete_Out_Marshal(EventSequenceComplete_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC EventSequenceComplete_In_Unmarshal(EventSequenceComplete_In* target,
-                                          TPM_HANDLE request_handles[],
-                                          BYTE** buffer,
-                                          INT32* size) {
+static TPM_RC EventSequenceComplete_In_Unmarshal(
+    EventSequenceComplete_In* target,
+    TPM_HANDLE request_handles[],
+    BYTE** buffer,
+    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Get request handles from request_handles array.
   target->pcrHandle = request_handles[0];

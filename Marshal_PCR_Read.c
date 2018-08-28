@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "PCR_Read_fp.h"
 
-UINT16 PCR_Read_Out_Marshal(PCR_Read_Out* source,
-                            TPMI_ST_COMMAND_TAG tag,
-                            BYTE** buffer,
-                            INT32* size) {
+#ifdef TPM_CC_PCR_Read
+static UINT16 PCR_Read_Out_Marshal(PCR_Read_Out* source,
+                                   TPMI_ST_COMMAND_TAG tag,
+                                   BYTE** buffer,
+                                   INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -36,11 +37,12 @@ UINT16 PCR_Read_Out_Marshal(PCR_Read_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC PCR_Read_In_Unmarshal(PCR_Read_In* target,
-                             TPM_HANDLE request_handles[],
-                             BYTE** buffer,
-                             INT32* size) {
+static TPM_RC PCR_Read_In_Unmarshal(PCR_Read_In* target,
+                                    TPM_HANDLE request_handles[],
+                                    BYTE** buffer,
+                                    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPML_PCR_SELECTION_Unmarshal(&target->pcrSelectionIn, buffer, size);

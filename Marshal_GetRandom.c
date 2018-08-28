@@ -7,10 +7,11 @@
 #include "MemoryLib_fp.h"
 #include "GetRandom_fp.h"
 
-UINT16 GetRandom_Out_Marshal(GetRandom_Out* source,
-                             TPMI_ST_COMMAND_TAG tag,
-                             BYTE** buffer,
-                             INT32* size) {
+#ifdef TPM_CC_GetRandom
+static UINT16 GetRandom_Out_Marshal(GetRandom_Out* source,
+                                    TPMI_ST_COMMAND_TAG tag,
+                                    BYTE** buffer,
+                                    INT32* size) {
   UINT16 total_size = 0;
   UINT32 parameter_size = 0;
   BYTE* parameter_size_location;
@@ -33,11 +34,12 @@ UINT16 GetRandom_Out_Marshal(GetRandom_Out* source,
   }
   return total_size;
 }
+#endif
 
-TPM_RC GetRandom_In_Unmarshal(GetRandom_In* target,
-                              TPM_HANDLE request_handles[],
-                              BYTE** buffer,
-                              INT32* size) {
+static TPM_RC GetRandom_In_Unmarshal(GetRandom_In* target,
+                                     TPM_HANDLE request_handles[],
+                                     BYTE** buffer,
+                                     INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = UINT16_Unmarshal(&target->bytesRequested, buffer, size);

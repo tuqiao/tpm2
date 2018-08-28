@@ -7,10 +7,10 @@
 #include "MemoryLib_fp.h"
 #include "SelfTest_fp.h"
 
-TPM_RC SelfTest_In_Unmarshal(SelfTest_In* target,
-                             TPM_HANDLE request_handles[],
-                             BYTE** buffer,
-                             INT32* size) {
+static TPM_RC SelfTest_In_Unmarshal(SelfTest_In* target,
+                                    TPM_HANDLE request_handles[],
+                                    BYTE** buffer,
+                                    INT32* size) {
   TPM_RC result = TPM_RC_SUCCESS;
   // Unmarshal request parameters.
   result = TPMI_YES_NO_Unmarshal(&target->fullTest, buffer, size);

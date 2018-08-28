@@ -15,15 +15,6 @@ typedef struct { TPMS_TIME_INFO currentTime; } ReadClock_Out;
 // to |out|.
 TPM_RC TPM2_ReadClock(ReadClock_Out* out);
 
-// Marshals response handles and parameters from |source| to |buffer|. Computes
-// and marshals the size of the parameter area (parameter_size) if |tag| ==
-// TPM_ST_SESSIONS. Returns size of (parameter area + handle area) in bytes.
-// Does not include parameter_size field.
-UINT16 ReadClock_Out_Marshal(ReadClock_Out* source,
-                             TPMI_ST_COMMAND_TAG tag,
-                             BYTE** buffer,
-                             INT32* size);
-
 // Unmarshals any request parameters starting at |request_parameter_buffer|.
 // Executes command. Marshals any response handles and parameters to the
 // global response buffer and computes |*response_handle_buffer_size| and

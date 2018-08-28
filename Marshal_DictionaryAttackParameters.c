@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "DictionaryAttackParameters_fp.h"
 
-TPM_RC DictionaryAttackParameters_In_Unmarshal(
+static TPM_RC DictionaryAttackParameters_In_Unmarshal(
     DictionaryAttackParameters_In* target,
     TPM_HANDLE request_handles[],
     BYTE** buffer,
