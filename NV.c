@@ -151,7 +151,7 @@ NvNext(
    // Adjust iter pointer pointing to next entity
    // Read pointer value
    _plat__NvMemoryRead(*iter, sizeof(UINT32), iter);
-   if(*iter == 0) return 0;
+   if(!*iter || (*iter == NV_ITER_INIT)) return 0;
    return currentIter + sizeof(UINT32);                // entity stores after the pointer
 }
 //
