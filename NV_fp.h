@@ -89,5 +89,21 @@ void NvWriteReserved(NV_RESERVE type,  // IN: type of reserved data
                      void *buffer      // IN: data buffer
                      );
 BOOL NvEarlyStageFindHandle(TPM_HANDLE handle);
+BOOL NvIsDefinedHiddenObject(TPMI_RH_NV_INDEX handle  // IN: handle
+                        );
+TPM_RC NvAddHiddenObject(TPM_HANDLE handle,  // IN: new evict handle
+                         UINT16 size,
+                         void *object               // IN: object to be added
+                        );
+TPM_RC NvWriteHiddenObject(TPM_HANDLE handle,  // IN: new evict handle
+                         UINT16 size,
+                         void *object               // IN: object to be added
+                        );
+TPM_RC NvGetHiddenObject(
+    TPM_HANDLE          handle,            //   IN: handle
+    UINT16                    size,              //   IN: size of NV data
+    void                     *data               //   OUT: data buffer
+                  );
+
 
 #endif  // __TPM2_NV_FP_H
