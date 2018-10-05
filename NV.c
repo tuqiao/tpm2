@@ -2111,3 +2111,168 @@ NvEarlyStageFindHandle(
 
    return NvFindHandle(handle);
 }
+//
+//           NvIsDefinedHiddenObject()
+//
+//      This function indicates if a handle references an existing
+//      hidden object.
+//
+//      Return Value                     Meaning
+//
+//      TRUE                             handle references an
+//                                       existing hidden object
+//      FALSE                            handle does not reference an
+//                                       existing hidden object
+//
+BOOL
+NvIsDefinedHiddenObject(
+   TPM_HANDLE            handle             // IN: handle
+   )
+{
+   return HandleGetType(handle) == TPM_HT_HIDDEN &&
+       NvFindHandle(handle) != 0;
+}
+//
+//
+//           NvAddHiddenObject()
+//
+//       This function is used to assign NV memory to a new hidden object.
+//
+//       Error Returns                     Meaning
+//
+//       TPM_RC_NV_HANDLE                  the requested handle is already in use
+//       TPM_RC_NV_SPACE                   insufficient NV space
+//
+TPM_RC
+NvAddHiddenObject(
+    TPM_HANDLE       handle,         // IN: new handle
+    UINT16           object_size,
+    void             *object         // IN: data to be stored
+    )
+{
+    // The buffer to be written to NV memory
+    BYTE            nvBuffer[sizeof(TPM_HANDLE) + object_size];
+    BYTE            *buf = nvBuffer;
+
+    if (HandleGetType(handle) != TPM_HT_HIDDEN)
+        return TPM_RC_HANDLE;
+
+    // Do not attemp storing a duplicate handle.
+    if(NvIsDefinedHiddenObject(handle))
+        return TPM_RC_NV_DEFINED;
+
+    // Check if we have enough space to add this hidden object
+    if(!NvTestSpace(sizeof(nvBuffer), FALSE))
+        return TPM_RC_NV_SPACE;
+
+    memcpy(buf, &handle, sizeof(TPM_HANDLE));
+    buf += sizeof(TPM_HANDLE);
+
+    memcpy(buf, object, object_size);
+
+    NvAdd(sizeof(nvBuffer), sizeof(nvBuffer), nvBuffer);
+
+    return TPM_RC_SUCCESS;
+}
+
+//
+//
+//           NvWriteHiddenObject()
+//
+//       This function is used to write new data to an existing hidden object.
+//
+//       Error Returns                     Meaning
+//
+//       TPM_RC_HANDLE                  the requested handle could not be found
+//       TPM_RC_NV_SPACE                   size does not match NV space
+//
+TPM_RC NvWriteHiddenObject(TPM_HANDLE handle,  // IN: new evict handle
+                           UINT16 size,
+                           void *object        // IN: object to be added
+                           ) {
+   UINT32           entityAddr;    // offset points to the entity
+   UINT16           entitySize;    // recorded size of the entity
+   NV_ITER          iter;          // iterator used to find next entity
+
+  if (HandleGetType(handle) != TPM_HT_HIDDEN)
+        return TPM_RC_HANDLE;
+
+   // Find the address of hidden object.
+   entityAddr = NvFindHandle(handle);
+   // If handle is not found, return error.
+   if(entityAddr == 0) {
+     return TPM_RC_HANDLE;
+   } else {
+     // Create iterator starting at the 'next' pointer for this item
+     // in the NV list. The 'next' pointer is a UINT32, and immediately
+     // precedes the address returned by NvFindHandle.
+     iter = entityAddr - sizeof(UINT32);
+     // This will return the same address we already have in NvFindHandle,
+     // (we discard this return value), and advance iter to point to the
+     // start of next item in the list (it's next pointer).
+     NvNext(&iter);
+     // Calculate size of this entity using position of next item.
+     entitySize =
+         iter                   // Points to beginning of next entry.
+         - entityAddr           // Points to beginning of current item.
+         - sizeof(TPM_HANDLE);  // Current item includes a handle.
+
+     if (size != entitySize) {
+       return TPM_RC_NV_SPACE;
+     }
+     _plat__NvMemoryWrite(entityAddr + sizeof(TPM_HANDLE),
+                          size, object);
+     g_updateNV = TRUE;
+   }
+
+   return TPM_RC_SUCCESS;
+}
+//
+//
+//           NvGetHiddenObject()
+//
+//      This function is used to access data stored as a hidden object.
+//
+//      This function requires that the index be defined, and that the
+//      required data is within the data range.
+//
+//       Error Returns                     Meaning
+//
+//       TPM_RC_HANDLE                  the requested handle could not be found
+TPM_RC
+NvGetHiddenObject(
+    TPM_HANDLE          handle,            //   IN: handle
+    UINT16              size,              //   IN: size of NV data
+    void                *data              //   OUT: data buffer
+    )
+{
+  UINT32      entityAddr;
+  UINT16      entitySize;
+  NV_ITER     iter;
+
+  if (HandleGetType(handle) != TPM_HT_HIDDEN)
+    return TPM_RC_HANDLE;
+
+  entityAddr = NvFindHandle(handle);
+
+  if (entityAddr == 0) {
+    return TPM_RC_HANDLE;
+  } else {
+    iter = entityAddr - sizeof(UINT32);
+    // This will return the same address we already have in NvFindHandle,
+    // and advance iter to point to the start of next item in the list.
+    NvNext(&iter);
+    // Calculate size of this entity using position of next item.
+    entitySize =
+        iter                    // Points to beginning of next entry.
+        - entityAddr            // Points to beginning of current item.
+        - sizeof(TPM_HANDLE);   // Current item includes a handle.
+
+    if (size > entitySize) {
+      return TPM_RC_NV_SPACE;
+    }
+
+    _plat__NvMemoryRead(entityAddr + sizeof(TPM_HANDLE), size, data);
+    return TPM_RC_SUCCESS;
+  }
+}

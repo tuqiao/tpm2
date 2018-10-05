@@ -370,6 +370,7 @@ typedef UINT8 TPM_HT;
 #define TPM_HT_PERMANENT       0x40
 #define TPM_HT_TRANSIENT       0x80
 #define TPM_HT_PERSISTENT      0x81
+#define TPM_HT_HIDDEN          0xfe
 
 // Table 29  Definition of TPM_RH Constants <  S>
 typedef TPM_HANDLE TPM_RH;
@@ -404,6 +405,7 @@ typedef TPM_HANDLE TPM_HC;
 #define HR_PERSISTENT                       (TPM_HT_PERSISTENT <<  HR_SHIFT)
 #define HR_NV_INDEX                           (TPM_HT_NV_INDEX <<  HR_SHIFT)
 #define HR_PERMANENT                         (TPM_HT_PERMANENT <<  HR_SHIFT)
+#define HR_HIDDEN                               (TPM_HT_HIDDEN <<  HR_SHIFT)
 #define PCR_FIRST                                               (HR_PCR + 0)
 #define PCR_LAST                          (PCR_FIRST + IMPLEMENTATION_PCR-1)
 #define HMAC_SESSION_FIRST                             (HR_HMAC_SESSION + 0)
