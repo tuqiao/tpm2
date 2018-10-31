@@ -434,6 +434,12 @@ _plat__ShallSurviveOwnerClear(
     uint32_t  index
 );
 
+// A function to call as part of every TPM2_Clear.
+LIB_EXPORT void
+_plat__OwnerClearCallback(
+    void
+);
+
 int uart_printf(const char *format, ...);
 #define ecprintf(format, args...) uart_printf(format, ## args);
 
