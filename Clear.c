@@ -98,6 +98,11 @@ TPM2_Clear(
    NvWriteReserved(NV_RESET_COUNT, &gp.resetCount);
    NvWriteReserved(NV_AUDIT_COUNTER, &gp.auditCounter);
 
+#ifdef EMBEDDED_MODE
+   // Perform any platform-specific actions.
+   _plat__OwnerClearCallback();
+#endif
+
    // orderly state should be cleared because of the update to state clear data
    g_clearOrderly = TRUE;
 
