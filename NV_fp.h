@@ -104,6 +104,10 @@ TPM_RC NvGetHiddenObject(
     UINT16                    size,              //   IN: size of NV data
     void                     *data               //   OUT: data buffer
                   );
+void NvSelectivelyInvalidateCache(
+     const UINT16 *keep_range  // A two element array, the inclusive range of
+                               // NV indices to preserve.
+                 );
 
 
 #endif  // __TPM2_NV_FP_H
