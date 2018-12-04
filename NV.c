@@ -2276,3 +2276,49 @@ NvGetHiddenObject(
     return TPM_RC_SUCCESS;
   }
 }
+
+//
+// NVWipeCache
+//
+// A function to call to wipe out SRAM cache of NVMEM. Most evictable objects'
+// contents get overwritten with some random data. The passed in two element
+// array communicates an inclusive range of NV indexes to preserve during
+// wipeout.
+//
+void NvSelectivelyInvalidateCache(const UINT16 *keep_range)
+{
+   UINT32              addr;
+   NV_ITER             iter = NV_ITER_INIT;
+   TPMI_RH_NV_INDEX    bottom = NV_INDEX_FIRST + keep_range[0];
+   TPMI_RH_NV_INDEX    top = NV_INDEX_FIRST + keep_range[1];
+
+   if (!s_evictNvEnd)
+       return; /* Cache not initialized, nothing to do here. */
+
+   while((addr = NvNext(&iter)) != 0)
+   {
+       TPM_HANDLE entityHandle;
+       size_t     space;
+
+       /*
+        * Read the object's handle. Note that TPMI_RH_NV_INDEX is a handle of
+        * a certain type, the same size as TPM_HANDLE.
+        */
+       _plat__NvMemoryRead(addr, sizeof(TPM_HANDLE), &entityHandle);
+
+       /* Skip it if it is in the range to preserve. */
+       if((entityHandle >= bottom) && (entityHandle <= top))
+           continue;
+
+       /*
+        * Determine the space the object takes in the cache less the handle
+        * size. Note that at this point 'iter' points at the location right
+        * above the current object.
+        */
+       space = iter - addr - sizeof(TPMI_RH_NV_INDEX);
+
+       /* Overwrite the cache space with junk data coped from text segment. */
+       _plat__NvMemoryWrite(addr + sizeof(TPMI_RH_NV_INDEX), space,
+                            NvCapGetCounterAvail);
+    }
+}
