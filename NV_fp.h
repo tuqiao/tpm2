@@ -7,6 +7,16 @@
 #ifndef __TPM2_NV_FP_H
 #define __TPM2_NV_FP_H
 
+//
+// Structure used to communicate locations and sizes of reserved objects in
+// the NVMEM cache.
+//
+typedef struct {
+  UINT16 offset;
+  uint16_t size;
+} NV_RESERVED_ITEM;
+
+
 TPM_RC NvAddEvictObject(TPMI_DH_OBJECT evictHandle,  // IN: new evict handle
                         OBJECT *object               // IN: object to be added
                         );
@@ -108,6 +118,6 @@ void NvSelectivelyInvalidateCache(
      const UINT16 *keep_range  // A two element array, the inclusive range of
                                // NV indices to preserve.
                  );
-
+void NvGetReserved(UINT32 index, NV_RESERVED_ITEM *ri);
 
 #endif  // __TPM2_NV_FP_H
