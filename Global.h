@@ -502,7 +502,15 @@ typedef enum
    NV_STATE_CLEAR,
 // STATE_RESET_DATA structure written on each Shutdown(STATE)
    NV_STATE_RESET,
-   NV_RESERVE_LAST             // end of NV reserved data list
+   NV_RESERVE_LAST,            // end of NV reserved data list
+
+   //
+   // "Pseudo" reserved objects made available to the platform, allowing it to
+   // access to NV RAM INDEX space and maxCount, which are not considered
+   // reserved objects, but located at fixed offset in the NVMEM cache.
+   //
+   NV_RAM_INDEX_SPACE = NV_RESERVE_LAST,
+   NV_MAX_COUNTER
 } NV_RESERVE;
 //
 //           NV_INDEX

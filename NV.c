@@ -2322,3 +2322,48 @@ void NvSelectivelyInvalidateCache(const UINT16 *keep_range)
                             NvCapGetCounterAvail);
     }
 }
+
+/*
+ * A helper function which allows the caller to find out NVMEM cache offset
+ * and size of all reserved objects AND of the RAM index space AND of the
+ * maxCount value. The last two items are technically not reserved objects,
+ * but are always present in the NVMEM cache and need to be preserved in
+ * non-volatile storage.
+ *
+ * From the caller's perspective these two items are considered reserved
+ * objects at indices NV_RAM_INDEX_SPACE and NV_MAX_COUNTER.
+ */
+void NvGetReserved(UINT32 index, NV_RESERVED_ITEM *ri)
+{
+  UINT32 indexSize;
+
+  if (index < NV_RESERVE_LAST) {
+    ri->size = s_reservedSize[index];
+    ri->offset = s_reservedAddr[index];
+    return;
+  }
+
+  switch (index) {
+  case NV_RAM_INDEX_SPACE:
+    /*
+     * This is a request for the RAM index space, which is a concatenation of
+     * the 4 byte size field and the actual RAM index contents field. For the
+     * purposes of this function both fields are considered as single space
+     * with the size equal 4 + the value stored at s_ramIndexSize.
+     */
+    _plat__NvMemoryRead(s_ramIndexSizeAddr, sizeof(UINT32), &indexSize);
+    if (indexSize == ~0)
+      indexSize = 0; /* Must be starting with empty flash memeory. */
+    ri->offset = s_ramIndexSizeAddr;
+    ri->size = indexSize + sizeof(indexSize);
+    return;
+
+  case NV_MAX_COUNTER:
+    ri->size = sizeof(UINT64);
+    ri->offset = s_maxCountAddr;
+    return;
+  }
+
+  ri->size = 0;
+}
+
