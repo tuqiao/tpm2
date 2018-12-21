@@ -331,8 +331,8 @@
 #define PROOF_SIZE                        CONTEXT_INTEGRITY_HASH_SIZE
 #define NV_CLOCK_UPDATE_INTERVAL          12
 #define NUM_POLICY_PCR                    1
-#define MAX_COMMAND_SIZE                  4096
-#define MAX_RESPONSE_SIZE                 4096
+#define MAX_COMMAND_SIZE                  2048
+#define MAX_RESPONSE_SIZE                 2048
 #define ORDERLY_BITS                      8
 #define MAX_ORDERLY_COUNT                 ((1<<ORDERLY_BITS)-1)
 #define ALG_ID_FIRST                      TPM_ALG_FIRST
