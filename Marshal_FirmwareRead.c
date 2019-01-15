@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "FirmwareRead_fp.h"
 
-#ifdef TPM_CC_FirmwareRead
+#if IS_CC_ENABLED(FirmwareRead)
 static UINT16 FirmwareRead_Out_Marshal(FirmwareRead_Out* source,
                                        TPMI_ST_COMMAND_TAG tag,
                                        BYTE** buffer,
@@ -61,7 +61,7 @@ TPM_RC Exec_FirmwareRead(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   FirmwareRead_In in;
   FirmwareRead_Out out;
-#ifdef TPM_CC_FirmwareRead
+#if IS_CC_ENABLED(FirmwareRead)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -82,7 +82,7 @@ TPM_RC Exec_FirmwareRead(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_FirmwareRead
+#if IS_CC_ENABLED(FirmwareRead)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_FirmwareRead) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = FirmwareRead_Out_Marshal(&out, tag, &response_buffer,

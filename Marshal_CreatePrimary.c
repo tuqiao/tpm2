@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "CreatePrimary_fp.h"
 
-#ifdef TPM_CC_CreatePrimary
+#if IS_CC_ENABLED(CreatePrimary)
 static UINT16 CreatePrimary_Out_Marshal(CreatePrimary_Out* source,
                                         TPMI_ST_COMMAND_TAG tag,
                                         BYTE** buffer,
@@ -82,7 +82,7 @@ TPM_RC Exec_CreatePrimary(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   CreatePrimary_In in;
   CreatePrimary_Out out;
-#ifdef TPM_CC_CreatePrimary
+#if IS_CC_ENABLED(CreatePrimary)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -103,7 +103,7 @@ TPM_RC Exec_CreatePrimary(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_CreatePrimary
+#if IS_CC_ENABLED(CreatePrimary)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_CreatePrimary) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = CreatePrimary_Out_Marshal(&out, tag, &response_buffer,

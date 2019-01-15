@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "GetRandom_fp.h"
 
-#ifdef TPM_CC_GetRandom
+#if IS_CC_ENABLED(GetRandom)
 static UINT16 GetRandom_Out_Marshal(GetRandom_Out* source,
                                     TPMI_ST_COMMAND_TAG tag,
                                     BYTE** buffer,
@@ -61,7 +61,7 @@ TPM_RC Exec_GetRandom(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   GetRandom_In in;
   GetRandom_Out out;
-#ifdef TPM_CC_GetRandom
+#if IS_CC_ENABLED(GetRandom)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -82,7 +82,7 @@ TPM_RC Exec_GetRandom(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_GetRandom
+#if IS_CC_ENABLED(GetRandom)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_GetRandom) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

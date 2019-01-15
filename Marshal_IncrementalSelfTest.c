@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "IncrementalSelfTest_fp.h"
 
-#ifdef TPM_CC_IncrementalSelfTest
+#if IS_CC_ENABLED(IncrementalSelfTest)
 static UINT16 IncrementalSelfTest_Out_Marshal(IncrementalSelfTest_Out* source,
                                               TPMI_ST_COMMAND_TAG tag,
                                               BYTE** buffer,
@@ -61,7 +61,7 @@ TPM_RC Exec_IncrementalSelfTest(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   IncrementalSelfTest_In in;
   IncrementalSelfTest_Out out;
-#ifdef TPM_CC_IncrementalSelfTest
+#if IS_CC_ENABLED(IncrementalSelfTest)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -82,7 +82,7 @@ TPM_RC Exec_IncrementalSelfTest(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_IncrementalSelfTest
+#if IS_CC_ENABLED(IncrementalSelfTest)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_IncrementalSelfTest) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = IncrementalSelfTest_Out_Marshal(

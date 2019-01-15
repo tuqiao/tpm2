@@ -4678,562 +4678,562 @@ TPM_RC TPM_CC_Unmarshal(TPM_CC* target, BYTE** buffer, INT32* size) {
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#ifdef TPM_CC_FIRST
+#if IS_CC_ENABLED(FIRST)
   if (*target == TPM_CC_FIRST) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PP_FIRST
+#if IS_CC_ENABLED(PP_FIRST)
   if (*target == TPM_CC_PP_FIRST) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_UndefineSpaceSpecial
+#if IS_CC_ENABLED(NV_UndefineSpaceSpecial)
   if (*target == TPM_CC_NV_UndefineSpaceSpecial) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_EvictControl
+#if IS_CC_ENABLED(EvictControl)
   if (*target == TPM_CC_EvictControl) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_HierarchyControl
+#if IS_CC_ENABLED(HierarchyControl)
   if (*target == TPM_CC_HierarchyControl) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_UndefineSpace
+#if IS_CC_ENABLED(NV_UndefineSpace)
   if (*target == TPM_CC_NV_UndefineSpace) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ChangeEPS
+#if IS_CC_ENABLED(ChangeEPS)
   if (*target == TPM_CC_ChangeEPS) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ChangePPS
+#if IS_CC_ENABLED(ChangePPS)
   if (*target == TPM_CC_ChangePPS) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Clear
+#if IS_CC_ENABLED(Clear)
   if (*target == TPM_CC_Clear) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ClearControl
+#if IS_CC_ENABLED(ClearControl)
   if (*target == TPM_CC_ClearControl) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ClockSet
+#if IS_CC_ENABLED(ClockSet)
   if (*target == TPM_CC_ClockSet) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_HierarchyChangeAuth
+#if IS_CC_ENABLED(HierarchyChangeAuth)
   if (*target == TPM_CC_HierarchyChangeAuth) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_DefineSpace
+#if IS_CC_ENABLED(NV_DefineSpace)
   if (*target == TPM_CC_NV_DefineSpace) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_Allocate
+#if IS_CC_ENABLED(PCR_Allocate)
   if (*target == TPM_CC_PCR_Allocate) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_SetAuthPolicy
+#if IS_CC_ENABLED(PCR_SetAuthPolicy)
   if (*target == TPM_CC_PCR_SetAuthPolicy) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PP_Commands
+#if IS_CC_ENABLED(PP_Commands)
   if (*target == TPM_CC_PP_Commands) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SetPrimaryPolicy
+#if IS_CC_ENABLED(SetPrimaryPolicy)
   if (*target == TPM_CC_SetPrimaryPolicy) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_FieldUpgradeStart
+#if IS_CC_ENABLED(FieldUpgradeStart)
   if (*target == TPM_CC_FieldUpgradeStart) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ClockRateAdjust
+#if IS_CC_ENABLED(ClockRateAdjust)
   if (*target == TPM_CC_ClockRateAdjust) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_CreatePrimary
+#if IS_CC_ENABLED(CreatePrimary)
   if (*target == TPM_CC_CreatePrimary) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_GlobalWriteLock
+#if IS_CC_ENABLED(NV_GlobalWriteLock)
   if (*target == TPM_CC_NV_GlobalWriteLock) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PP_LAST
+#if IS_CC_ENABLED(PP_LAST)
   if (*target == TPM_CC_PP_LAST) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetCommandAuditDigest
+#if IS_CC_ENABLED(GetCommandAuditDigest)
   if (*target == TPM_CC_GetCommandAuditDigest) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_Increment
+#if IS_CC_ENABLED(NV_Increment)
   if (*target == TPM_CC_NV_Increment) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_SetBits
+#if IS_CC_ENABLED(NV_SetBits)
   if (*target == TPM_CC_NV_SetBits) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_Extend
+#if IS_CC_ENABLED(NV_Extend)
   if (*target == TPM_CC_NV_Extend) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_Write
+#if IS_CC_ENABLED(NV_Write)
   if (*target == TPM_CC_NV_Write) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_WriteLock
+#if IS_CC_ENABLED(NV_WriteLock)
   if (*target == TPM_CC_NV_WriteLock) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_DictionaryAttackLockReset
+#if IS_CC_ENABLED(DictionaryAttackLockReset)
   if (*target == TPM_CC_DictionaryAttackLockReset) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_DictionaryAttackParameters
+#if IS_CC_ENABLED(DictionaryAttackParameters)
   if (*target == TPM_CC_DictionaryAttackParameters) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_ChangeAuth
+#if IS_CC_ENABLED(NV_ChangeAuth)
   if (*target == TPM_CC_NV_ChangeAuth) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_Event
+#if IS_CC_ENABLED(PCR_Event)
   if (*target == TPM_CC_PCR_Event) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_Reset
+#if IS_CC_ENABLED(PCR_Reset)
   if (*target == TPM_CC_PCR_Reset) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SequenceComplete
+#if IS_CC_ENABLED(SequenceComplete)
   if (*target == TPM_CC_SequenceComplete) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SetAlgorithmSet
+#if IS_CC_ENABLED(SetAlgorithmSet)
   if (*target == TPM_CC_SetAlgorithmSet) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SetCommandCodeAuditStatus
+#if IS_CC_ENABLED(SetCommandCodeAuditStatus)
   if (*target == TPM_CC_SetCommandCodeAuditStatus) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_FieldUpgradeData
+#if IS_CC_ENABLED(FieldUpgradeData)
   if (*target == TPM_CC_FieldUpgradeData) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_IncrementalSelfTest
+#if IS_CC_ENABLED(IncrementalSelfTest)
   if (*target == TPM_CC_IncrementalSelfTest) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SelfTest
+#if IS_CC_ENABLED(SelfTest)
   if (*target == TPM_CC_SelfTest) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Startup
+#if IS_CC_ENABLED(Startup)
   if (*target == TPM_CC_Startup) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Shutdown
+#if IS_CC_ENABLED(Shutdown)
   if (*target == TPM_CC_Shutdown) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_StirRandom
+#if IS_CC_ENABLED(StirRandom)
   if (*target == TPM_CC_StirRandom) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ActivateCredential
+#if IS_CC_ENABLED(ActivateCredential)
   if (*target == TPM_CC_ActivateCredential) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Certify
+#if IS_CC_ENABLED(Certify)
   if (*target == TPM_CC_Certify) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyNV
+#if IS_CC_ENABLED(PolicyNV)
   if (*target == TPM_CC_PolicyNV) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_CertifyCreation
+#if IS_CC_ENABLED(CertifyCreation)
   if (*target == TPM_CC_CertifyCreation) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Duplicate
+#if IS_CC_ENABLED(Duplicate)
   if (*target == TPM_CC_Duplicate) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetTime
+#if IS_CC_ENABLED(GetTime)
   if (*target == TPM_CC_GetTime) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetSessionAuditDigest
+#if IS_CC_ENABLED(GetSessionAuditDigest)
   if (*target == TPM_CC_GetSessionAuditDigest) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_Read
+#if IS_CC_ENABLED(NV_Read)
   if (*target == TPM_CC_NV_Read) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_ReadLock
+#if IS_CC_ENABLED(NV_ReadLock)
   if (*target == TPM_CC_NV_ReadLock) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ObjectChangeAuth
+#if IS_CC_ENABLED(ObjectChangeAuth)
   if (*target == TPM_CC_ObjectChangeAuth) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicySecret
+#if IS_CC_ENABLED(PolicySecret)
   if (*target == TPM_CC_PolicySecret) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Rewrap
+#if IS_CC_ENABLED(Rewrap)
   if (*target == TPM_CC_Rewrap) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Create
+#if IS_CC_ENABLED(Create)
   if (*target == TPM_CC_Create) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ECDH_ZGen
+#if IS_CC_ENABLED(ECDH_ZGen)
   if (*target == TPM_CC_ECDH_ZGen) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_HMAC
+#if IS_CC_ENABLED(HMAC)
   if (*target == TPM_CC_HMAC) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Import
+#if IS_CC_ENABLED(Import)
   if (*target == TPM_CC_Import) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Load
+#if IS_CC_ENABLED(Load)
   if (*target == TPM_CC_Load) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Quote
+#if IS_CC_ENABLED(Quote)
   if (*target == TPM_CC_Quote) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_RSA_Decrypt
+#if IS_CC_ENABLED(RSA_Decrypt)
   if (*target == TPM_CC_RSA_Decrypt) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_HMAC_Start
+#if IS_CC_ENABLED(HMAC_Start)
   if (*target == TPM_CC_HMAC_Start) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_SequenceUpdate
+#if IS_CC_ENABLED(SequenceUpdate)
   if (*target == TPM_CC_SequenceUpdate) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Sign
+#if IS_CC_ENABLED(Sign)
   if (*target == TPM_CC_Sign) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Unseal
+#if IS_CC_ENABLED(Unseal)
   if (*target == TPM_CC_Unseal) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicySigned
+#if IS_CC_ENABLED(PolicySigned)
   if (*target == TPM_CC_PolicySigned) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ContextLoad
+#if IS_CC_ENABLED(ContextLoad)
   if (*target == TPM_CC_ContextLoad) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ContextSave
+#if IS_CC_ENABLED(ContextSave)
   if (*target == TPM_CC_ContextSave) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ECDH_KeyGen
+#if IS_CC_ENABLED(ECDH_KeyGen)
   if (*target == TPM_CC_ECDH_KeyGen) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_EncryptDecrypt
+#if IS_CC_ENABLED(EncryptDecrypt)
   if (*target == TPM_CC_EncryptDecrypt) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_FlushContext
+#if IS_CC_ENABLED(FlushContext)
   if (*target == TPM_CC_FlushContext) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_LoadExternal
+#if IS_CC_ENABLED(LoadExternal)
   if (*target == TPM_CC_LoadExternal) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_MakeCredential
+#if IS_CC_ENABLED(MakeCredential)
   if (*target == TPM_CC_MakeCredential) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_ReadPublic
+#if IS_CC_ENABLED(NV_ReadPublic)
   if (*target == TPM_CC_NV_ReadPublic) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyAuthorize
+#if IS_CC_ENABLED(PolicyAuthorize)
   if (*target == TPM_CC_PolicyAuthorize) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyAuthValue
+#if IS_CC_ENABLED(PolicyAuthValue)
   if (*target == TPM_CC_PolicyAuthValue) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyCommandCode
+#if IS_CC_ENABLED(PolicyCommandCode)
   if (*target == TPM_CC_PolicyCommandCode) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyCounterTimer
+#if IS_CC_ENABLED(PolicyCounterTimer)
   if (*target == TPM_CC_PolicyCounterTimer) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyCpHash
+#if IS_CC_ENABLED(PolicyCpHash)
   if (*target == TPM_CC_PolicyCpHash) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyLocality
+#if IS_CC_ENABLED(PolicyLocality)
   if (*target == TPM_CC_PolicyLocality) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyNameHash
+#if IS_CC_ENABLED(PolicyNameHash)
   if (*target == TPM_CC_PolicyNameHash) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyOR
+#if IS_CC_ENABLED(PolicyOR)
   if (*target == TPM_CC_PolicyOR) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyTicket
+#if IS_CC_ENABLED(PolicyTicket)
   if (*target == TPM_CC_PolicyTicket) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ReadPublic
+#if IS_CC_ENABLED(ReadPublic)
   if (*target == TPM_CC_ReadPublic) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_RSA_Encrypt
+#if IS_CC_ENABLED(RSA_Encrypt)
   if (*target == TPM_CC_RSA_Encrypt) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_StartAuthSession
+#if IS_CC_ENABLED(StartAuthSession)
   if (*target == TPM_CC_StartAuthSession) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_VerifySignature
+#if IS_CC_ENABLED(VerifySignature)
   if (*target == TPM_CC_VerifySignature) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ECC_Parameters
+#if IS_CC_ENABLED(ECC_Parameters)
   if (*target == TPM_CC_ECC_Parameters) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_FirmwareRead
+#if IS_CC_ENABLED(FirmwareRead)
   if (*target == TPM_CC_FirmwareRead) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetCapability
+#if IS_CC_ENABLED(GetCapability)
   if (*target == TPM_CC_GetCapability) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetRandom
+#if IS_CC_ENABLED(GetRandom)
   if (*target == TPM_CC_GetRandom) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_GetTestResult
+#if IS_CC_ENABLED(GetTestResult)
   if (*target == TPM_CC_GetTestResult) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Hash
+#if IS_CC_ENABLED(Hash)
   if (*target == TPM_CC_Hash) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_Read
+#if IS_CC_ENABLED(PCR_Read)
   if (*target == TPM_CC_PCR_Read) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyPCR
+#if IS_CC_ENABLED(PolicyPCR)
   if (*target == TPM_CC_PolicyPCR) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyRestart
+#if IS_CC_ENABLED(PolicyRestart)
   if (*target == TPM_CC_PolicyRestart) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ReadClock
+#if IS_CC_ENABLED(ReadClock)
   if (*target == TPM_CC_ReadClock) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_Extend
+#if IS_CC_ENABLED(PCR_Extend)
   if (*target == TPM_CC_PCR_Extend) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PCR_SetAuthValue
+#if IS_CC_ENABLED(PCR_SetAuthValue)
   if (*target == TPM_CC_PCR_SetAuthValue) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_NV_Certify
+#if IS_CC_ENABLED(NV_Certify)
   if (*target == TPM_CC_NV_Certify) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_EventSequenceComplete
+#if IS_CC_ENABLED(EventSequenceComplete)
   if (*target == TPM_CC_EventSequenceComplete) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_HashSequenceStart
+#if IS_CC_ENABLED(HashSequenceStart)
   if (*target == TPM_CC_HashSequenceStart) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyPhysicalPresence
+#if IS_CC_ENABLED(PolicyPhysicalPresence)
   if (*target == TPM_CC_PolicyPhysicalPresence) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyDuplicationSelect
+#if IS_CC_ENABLED(PolicyDuplicationSelect)
   if (*target == TPM_CC_PolicyDuplicationSelect) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyGetDigest
+#if IS_CC_ENABLED(PolicyGetDigest)
   if (*target == TPM_CC_PolicyGetDigest) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_TestParms
+#if IS_CC_ENABLED(TestParms)
   if (*target == TPM_CC_TestParms) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_Commit
+#if IS_CC_ENABLED(Commit)
   if (*target == TPM_CC_Commit) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyPassword
+#if IS_CC_ENABLED(PolicyPassword)
   if (*target == TPM_CC_PolicyPassword) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_ZGen_2Phase
+#if IS_CC_ENABLED(ZGen_2Phase)
   if (*target == TPM_CC_ZGen_2Phase) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_EC_Ephemeral
+#if IS_CC_ENABLED(EC_Ephemeral)
   if (*target == TPM_CC_EC_Ephemeral) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_PolicyNvWritten
+#if IS_CC_ENABLED(PolicyNvWritten)
   if (*target == TPM_CC_PolicyNvWritten) {
     return TPM_RC_SUCCESS;
   }
 #endif
-#ifdef TPM_CC_LAST
+#if IS_CC_ENABLED(LAST)
   if (*target == TPM_CC_LAST) {
     return TPM_RC_SUCCESS;
   }

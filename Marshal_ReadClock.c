@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ReadClock_fp.h"
 
-#ifdef TPM_CC_ReadClock
+#if IS_CC_ENABLED(ReadClock)
 static UINT16 ReadClock_Out_Marshal(ReadClock_Out* source,
                                     TPMI_ST_COMMAND_TAG tag,
                                     BYTE** buffer,
@@ -44,7 +44,7 @@ TPM_RC Exec_ReadClock(TPMI_ST_COMMAND_TAG tag,
                       UINT32* response_parameter_buffer_size) {
   TPM_RC result = TPM_RC_SUCCESS;
   ReadClock_Out out;
-#ifdef TPM_CC_ReadClock
+#if IS_CC_ENABLED(ReadClock)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -59,7 +59,7 @@ TPM_RC Exec_ReadClock(TPMI_ST_COMMAND_TAG tag,
   }
 // Marshal output structure containing response handles and parameters to
 // response buffer.
-#ifdef TPM_CC_ReadClock
+#if IS_CC_ENABLED(ReadClock)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ReadClock) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

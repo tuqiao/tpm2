@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Create_fp.h"
 
-#ifdef TPM_CC_Create
+#if IS_CC_ENABLED(Create)
 static UINT16 Create_Out_Marshal(Create_Out* source,
                                  TPMI_ST_COMMAND_TAG tag,
                                  BYTE** buffer,
@@ -80,7 +80,7 @@ TPM_RC Exec_Create(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Create_In in;
   Create_Out out;
-#ifdef TPM_CC_Create
+#if IS_CC_ENABLED(Create)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -100,7 +100,7 @@ TPM_RC Exec_Create(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Create
+#if IS_CC_ENABLED(Create)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Create) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

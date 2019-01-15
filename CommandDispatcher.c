@@ -124,756 +124,756 @@ TPM_RC CommandDispatcher(TPMI_ST_COMMAND_TAG tag,
                          UINT32* response_parameter_buffer_size) {
   BYTE* request_parameter_buffer = request_parameter_buffer_start;
   switch (command_code) {
-#ifdef TPM_CC_ActivateCredential
+#if IS_CC_ENABLED(ActivateCredential)
     case TPM_CC_ActivateCredential:
       return Exec_ActivateCredential(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Certify
+#if IS_CC_ENABLED(Certify)
     case TPM_CC_Certify:
       return Exec_Certify(tag, &request_parameter_buffer,
                           request_parameter_buffer_size, request_handles,
                           response_handle_buffer_size,
                           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_CertifyCreation
+#if IS_CC_ENABLED(CertifyCreation)
     case TPM_CC_CertifyCreation:
       return Exec_CertifyCreation(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ChangeEPS
+#if IS_CC_ENABLED(ChangeEPS)
     case TPM_CC_ChangeEPS:
       return Exec_ChangeEPS(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ChangePPS
+#if IS_CC_ENABLED(ChangePPS)
     case TPM_CC_ChangePPS:
       return Exec_ChangePPS(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Clear
+#if IS_CC_ENABLED(Clear)
     case TPM_CC_Clear:
       return Exec_Clear(tag, &request_parameter_buffer,
                         request_parameter_buffer_size, request_handles,
                         response_handle_buffer_size,
                         response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ClearControl
+#if IS_CC_ENABLED(ClearControl)
     case TPM_CC_ClearControl:
       return Exec_ClearControl(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ClockRateAdjust
+#if IS_CC_ENABLED(ClockRateAdjust)
     case TPM_CC_ClockRateAdjust:
       return Exec_ClockRateAdjust(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ClockSet
+#if IS_CC_ENABLED(ClockSet)
     case TPM_CC_ClockSet:
       return Exec_ClockSet(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Commit
+#if IS_CC_ENABLED(Commit)
     case TPM_CC_Commit:
       return Exec_Commit(tag, &request_parameter_buffer,
                          request_parameter_buffer_size, request_handles,
                          response_handle_buffer_size,
                          response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ContextLoad
+#if IS_CC_ENABLED(ContextLoad)
     case TPM_CC_ContextLoad:
       return Exec_ContextLoad(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ContextSave
+#if IS_CC_ENABLED(ContextSave)
     case TPM_CC_ContextSave:
       return Exec_ContextSave(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Create
+#if IS_CC_ENABLED(Create)
     case TPM_CC_Create:
       return Exec_Create(tag, &request_parameter_buffer,
                          request_parameter_buffer_size, request_handles,
                          response_handle_buffer_size,
                          response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_CreatePrimary
+#if IS_CC_ENABLED(CreatePrimary)
     case TPM_CC_CreatePrimary:
       return Exec_CreatePrimary(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_DictionaryAttackLockReset
+#if IS_CC_ENABLED(DictionaryAttackLockReset)
     case TPM_CC_DictionaryAttackLockReset:
       return Exec_DictionaryAttackLockReset(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_DictionaryAttackParameters
+#if IS_CC_ENABLED(DictionaryAttackParameters)
     case TPM_CC_DictionaryAttackParameters:
       return Exec_DictionaryAttackParameters(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Duplicate
+#if IS_CC_ENABLED(Duplicate)
     case TPM_CC_Duplicate:
       return Exec_Duplicate(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ECC_Parameters
+#if IS_CC_ENABLED(ECC_Parameters)
     case TPM_CC_ECC_Parameters:
       return Exec_ECC_Parameters(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ECDH_KeyGen
+#if IS_CC_ENABLED(ECDH_KeyGen)
     case TPM_CC_ECDH_KeyGen:
       return Exec_ECDH_KeyGen(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ECDH_ZGen
+#if IS_CC_ENABLED(ECDH_ZGen)
     case TPM_CC_ECDH_ZGen:
       return Exec_ECDH_ZGen(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_EC_Ephemeral
+#if IS_CC_ENABLED(EC_Ephemeral)
     case TPM_CC_EC_Ephemeral:
       return Exec_EC_Ephemeral(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_EncryptDecrypt
+#if IS_CC_ENABLED(EncryptDecrypt)
     case TPM_CC_EncryptDecrypt:
       return Exec_EncryptDecrypt(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_EventSequenceComplete
+#if IS_CC_ENABLED(EventSequenceComplete)
     case TPM_CC_EventSequenceComplete:
       return Exec_EventSequenceComplete(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_EvictControl
+#if IS_CC_ENABLED(EvictControl)
     case TPM_CC_EvictControl:
       return Exec_EvictControl(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_FieldUpgradeData
+#if IS_CC_ENABLED(FieldUpgradeData)
     case TPM_CC_FieldUpgradeData:
       return Exec_FieldUpgradeData(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_FieldUpgradeStart
+#if IS_CC_ENABLED(FieldUpgradeStart)
     case TPM_CC_FieldUpgradeStart:
       return Exec_FieldUpgradeStart(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_FirmwareRead
+#if IS_CC_ENABLED(FirmwareRead)
     case TPM_CC_FirmwareRead:
       return Exec_FirmwareRead(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_FlushContext
+#if IS_CC_ENABLED(FlushContext)
     case TPM_CC_FlushContext:
       return Exec_FlushContext(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetCapability
+#if IS_CC_ENABLED(GetCapability)
     case TPM_CC_GetCapability:
       return Exec_GetCapability(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetCommandAuditDigest
+#if IS_CC_ENABLED(GetCommandAuditDigest)
     case TPM_CC_GetCommandAuditDigest:
       return Exec_GetCommandAuditDigest(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetRandom
+#if IS_CC_ENABLED(GetRandom)
     case TPM_CC_GetRandom:
       return Exec_GetRandom(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetSessionAuditDigest
+#if IS_CC_ENABLED(GetSessionAuditDigest)
     case TPM_CC_GetSessionAuditDigest:
       return Exec_GetSessionAuditDigest(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetTestResult
+#if IS_CC_ENABLED(GetTestResult)
     case TPM_CC_GetTestResult:
       return Exec_GetTestResult(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_GetTime
+#if IS_CC_ENABLED(GetTime)
     case TPM_CC_GetTime:
       return Exec_GetTime(tag, &request_parameter_buffer,
                           request_parameter_buffer_size, request_handles,
                           response_handle_buffer_size,
                           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_HMAC
+#if IS_CC_ENABLED(HMAC)
     case TPM_CC_HMAC:
       return Exec_HMAC(tag, &request_parameter_buffer,
                        request_parameter_buffer_size, request_handles,
                        response_handle_buffer_size,
                        response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_HMAC_Start
+#if IS_CC_ENABLED(HMAC_Start)
     case TPM_CC_HMAC_Start:
       return Exec_HMAC_Start(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Hash
+#if IS_CC_ENABLED(Hash)
     case TPM_CC_Hash:
       return Exec_Hash(tag, &request_parameter_buffer,
                        request_parameter_buffer_size, request_handles,
                        response_handle_buffer_size,
                        response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_HashSequenceStart
+#if IS_CC_ENABLED(HashSequenceStart)
     case TPM_CC_HashSequenceStart:
       return Exec_HashSequenceStart(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_HierarchyChangeAuth
+#if IS_CC_ENABLED(HierarchyChangeAuth)
     case TPM_CC_HierarchyChangeAuth:
       return Exec_HierarchyChangeAuth(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_HierarchyControl
+#if IS_CC_ENABLED(HierarchyControl)
     case TPM_CC_HierarchyControl:
       return Exec_HierarchyControl(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Import
+#if IS_CC_ENABLED(Import)
     case TPM_CC_Import:
       return Exec_Import(tag, &request_parameter_buffer,
                          request_parameter_buffer_size, request_handles,
                          response_handle_buffer_size,
                          response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_IncrementalSelfTest
+#if IS_CC_ENABLED(IncrementalSelfTest)
     case TPM_CC_IncrementalSelfTest:
       return Exec_IncrementalSelfTest(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Load
+#if IS_CC_ENABLED(Load)
     case TPM_CC_Load:
       return Exec_Load(tag, &request_parameter_buffer,
                        request_parameter_buffer_size, request_handles,
                        response_handle_buffer_size,
                        response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_LoadExternal
+#if IS_CC_ENABLED(LoadExternal)
     case TPM_CC_LoadExternal:
       return Exec_LoadExternal(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_MakeCredential
+#if IS_CC_ENABLED(MakeCredential)
     case TPM_CC_MakeCredential:
       return Exec_MakeCredential(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_Certify
+#if IS_CC_ENABLED(NV_Certify)
     case TPM_CC_NV_Certify:
       return Exec_NV_Certify(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_ChangeAuth
+#if IS_CC_ENABLED(NV_ChangeAuth)
     case TPM_CC_NV_ChangeAuth:
       return Exec_NV_ChangeAuth(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_DefineSpace
+#if IS_CC_ENABLED(NV_DefineSpace)
     case TPM_CC_NV_DefineSpace:
       return Exec_NV_DefineSpace(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_Extend
+#if IS_CC_ENABLED(NV_Extend)
     case TPM_CC_NV_Extend:
       return Exec_NV_Extend(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_GlobalWriteLock
+#if IS_CC_ENABLED(NV_GlobalWriteLock)
     case TPM_CC_NV_GlobalWriteLock:
       return Exec_NV_GlobalWriteLock(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_Increment
+#if IS_CC_ENABLED(NV_Increment)
     case TPM_CC_NV_Increment:
       return Exec_NV_Increment(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_Read
+#if IS_CC_ENABLED(NV_Read)
     case TPM_CC_NV_Read:
       return Exec_NV_Read(tag, &request_parameter_buffer,
                           request_parameter_buffer_size, request_handles,
                           response_handle_buffer_size,
                           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_ReadLock
+#if IS_CC_ENABLED(NV_ReadLock)
     case TPM_CC_NV_ReadLock:
       return Exec_NV_ReadLock(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_ReadPublic
+#if IS_CC_ENABLED(NV_ReadPublic)
     case TPM_CC_NV_ReadPublic:
       return Exec_NV_ReadPublic(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_SetBits
+#if IS_CC_ENABLED(NV_SetBits)
     case TPM_CC_NV_SetBits:
       return Exec_NV_SetBits(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_UndefineSpace
+#if IS_CC_ENABLED(NV_UndefineSpace)
     case TPM_CC_NV_UndefineSpace:
       return Exec_NV_UndefineSpace(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_UndefineSpaceSpecial
+#if IS_CC_ENABLED(NV_UndefineSpaceSpecial)
     case TPM_CC_NV_UndefineSpaceSpecial:
       return Exec_NV_UndefineSpaceSpecial(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_Write
+#if IS_CC_ENABLED(NV_Write)
     case TPM_CC_NV_Write:
       return Exec_NV_Write(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_NV_WriteLock
+#if IS_CC_ENABLED(NV_WriteLock)
     case TPM_CC_NV_WriteLock:
       return Exec_NV_WriteLock(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ObjectChangeAuth
+#if IS_CC_ENABLED(ObjectChangeAuth)
     case TPM_CC_ObjectChangeAuth:
       return Exec_ObjectChangeAuth(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_Allocate
+#if IS_CC_ENABLED(PCR_Allocate)
     case TPM_CC_PCR_Allocate:
       return Exec_PCR_Allocate(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_Event
+#if IS_CC_ENABLED(PCR_Event)
     case TPM_CC_PCR_Event:
       return Exec_PCR_Event(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_Extend
+#if IS_CC_ENABLED(PCR_Extend)
     case TPM_CC_PCR_Extend:
       return Exec_PCR_Extend(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_Read
+#if IS_CC_ENABLED(PCR_Read)
     case TPM_CC_PCR_Read:
       return Exec_PCR_Read(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_Reset
+#if IS_CC_ENABLED(PCR_Reset)
     case TPM_CC_PCR_Reset:
       return Exec_PCR_Reset(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_SetAuthPolicy
+#if IS_CC_ENABLED(PCR_SetAuthPolicy)
     case TPM_CC_PCR_SetAuthPolicy:
       return Exec_PCR_SetAuthPolicy(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PCR_SetAuthValue
+#if IS_CC_ENABLED(PCR_SetAuthValue)
     case TPM_CC_PCR_SetAuthValue:
       return Exec_PCR_SetAuthValue(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PP_Commands
+#if IS_CC_ENABLED(PP_Commands)
     case TPM_CC_PP_Commands:
       return Exec_PP_Commands(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyAuthValue
+#if IS_CC_ENABLED(PolicyAuthValue)
     case TPM_CC_PolicyAuthValue:
       return Exec_PolicyAuthValue(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyAuthorize
+#if IS_CC_ENABLED(PolicyAuthorize)
     case TPM_CC_PolicyAuthorize:
       return Exec_PolicyAuthorize(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyCommandCode
+#if IS_CC_ENABLED(PolicyCommandCode)
     case TPM_CC_PolicyCommandCode:
       return Exec_PolicyCommandCode(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyCounterTimer
+#if IS_CC_ENABLED(PolicyCounterTimer)
     case TPM_CC_PolicyCounterTimer:
       return Exec_PolicyCounterTimer(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyCpHash
+#if IS_CC_ENABLED(PolicyCpHash)
     case TPM_CC_PolicyCpHash:
       return Exec_PolicyCpHash(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyDuplicationSelect
+#if IS_CC_ENABLED(PolicyDuplicationSelect)
     case TPM_CC_PolicyDuplicationSelect:
       return Exec_PolicyDuplicationSelect(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyGetDigest
+#if IS_CC_ENABLED(PolicyGetDigest)
     case TPM_CC_PolicyGetDigest:
       return Exec_PolicyGetDigest(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyLocality
+#if IS_CC_ENABLED(PolicyLocality)
     case TPM_CC_PolicyLocality:
       return Exec_PolicyLocality(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyNV
+#if IS_CC_ENABLED(PolicyNV)
     case TPM_CC_PolicyNV:
       return Exec_PolicyNV(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyNameHash
+#if IS_CC_ENABLED(PolicyNameHash)
     case TPM_CC_PolicyNameHash:
       return Exec_PolicyNameHash(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyNvWritten
+#if IS_CC_ENABLED(PolicyNvWritten)
     case TPM_CC_PolicyNvWritten:
       return Exec_PolicyNvWritten(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyOR
+#if IS_CC_ENABLED(PolicyOR)
     case TPM_CC_PolicyOR:
       return Exec_PolicyOR(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyPCR
+#if IS_CC_ENABLED(PolicyPCR)
     case TPM_CC_PolicyPCR:
       return Exec_PolicyPCR(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyPassword
+#if IS_CC_ENABLED(PolicyPassword)
     case TPM_CC_PolicyPassword:
       return Exec_PolicyPassword(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyPhysicalPresence
+#if IS_CC_ENABLED(PolicyPhysicalPresence)
     case TPM_CC_PolicyPhysicalPresence:
       return Exec_PolicyPhysicalPresence(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyRestart
+#if IS_CC_ENABLED(PolicyRestart)
     case TPM_CC_PolicyRestart:
       return Exec_PolicyRestart(tag, &request_parameter_buffer,
                                 request_parameter_buffer_size, request_handles,
                                 response_handle_buffer_size,
                                 response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicySecret
+#if IS_CC_ENABLED(PolicySecret)
     case TPM_CC_PolicySecret:
       return Exec_PolicySecret(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicySigned
+#if IS_CC_ENABLED(PolicySigned)
     case TPM_CC_PolicySigned:
       return Exec_PolicySigned(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_PolicyTicket
+#if IS_CC_ENABLED(PolicyTicket)
     case TPM_CC_PolicyTicket:
       return Exec_PolicyTicket(tag, &request_parameter_buffer,
                                request_parameter_buffer_size, request_handles,
                                response_handle_buffer_size,
                                response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Quote
+#if IS_CC_ENABLED(Quote)
     case TPM_CC_Quote:
       return Exec_Quote(tag, &request_parameter_buffer,
                         request_parameter_buffer_size, request_handles,
                         response_handle_buffer_size,
                         response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_RSA_Decrypt
+#if IS_CC_ENABLED(RSA_Decrypt)
     case TPM_CC_RSA_Decrypt:
       return Exec_RSA_Decrypt(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_RSA_Encrypt
+#if IS_CC_ENABLED(RSA_Encrypt)
     case TPM_CC_RSA_Encrypt:
       return Exec_RSA_Encrypt(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
                               response_handle_buffer_size,
                               response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ReadClock
+#if IS_CC_ENABLED(ReadClock)
     case TPM_CC_ReadClock:
       return Exec_ReadClock(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ReadPublic
+#if IS_CC_ENABLED(ReadPublic)
     case TPM_CC_ReadPublic:
       return Exec_ReadPublic(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Rewrap
+#if IS_CC_ENABLED(Rewrap)
     case TPM_CC_Rewrap:
       return Exec_Rewrap(tag, &request_parameter_buffer,
                          request_parameter_buffer_size, request_handles,
                          response_handle_buffer_size,
                          response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SelfTest
+#if IS_CC_ENABLED(SelfTest)
     case TPM_CC_SelfTest:
       return Exec_SelfTest(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SequenceComplete
+#if IS_CC_ENABLED(SequenceComplete)
     case TPM_CC_SequenceComplete:
       return Exec_SequenceComplete(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SequenceUpdate
+#if IS_CC_ENABLED(SequenceUpdate)
     case TPM_CC_SequenceUpdate:
       return Exec_SequenceUpdate(tag, &request_parameter_buffer,
                                  request_parameter_buffer_size, request_handles,
                                  response_handle_buffer_size,
                                  response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SetAlgorithmSet
+#if IS_CC_ENABLED(SetAlgorithmSet)
     case TPM_CC_SetAlgorithmSet:
       return Exec_SetAlgorithmSet(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SetCommandCodeAuditStatus
+#if IS_CC_ENABLED(SetCommandCodeAuditStatus)
     case TPM_CC_SetCommandCodeAuditStatus:
       return Exec_SetCommandCodeAuditStatus(
           tag, &request_parameter_buffer, request_parameter_buffer_size,
           request_handles, response_handle_buffer_size,
           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_SetPrimaryPolicy
+#if IS_CC_ENABLED(SetPrimaryPolicy)
     case TPM_CC_SetPrimaryPolicy:
       return Exec_SetPrimaryPolicy(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Shutdown
+#if IS_CC_ENABLED(Shutdown)
     case TPM_CC_Shutdown:
       return Exec_Shutdown(tag, &request_parameter_buffer,
                            request_parameter_buffer_size, request_handles,
                            response_handle_buffer_size,
                            response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Sign
+#if IS_CC_ENABLED(Sign)
     case TPM_CC_Sign:
       return Exec_Sign(tag, &request_parameter_buffer,
                        request_parameter_buffer_size, request_handles,
                        response_handle_buffer_size,
                        response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_StartAuthSession
+#if IS_CC_ENABLED(StartAuthSession)
     case TPM_CC_StartAuthSession:
       return Exec_StartAuthSession(tag, &request_parameter_buffer,
                                    request_parameter_buffer_size,
                                    request_handles, response_handle_buffer_size,
                                    response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Startup
+#if IS_CC_ENABLED(Startup)
     case TPM_CC_Startup:
       return Exec_Startup(tag, &request_parameter_buffer,
                           request_parameter_buffer_size, request_handles,
                           response_handle_buffer_size,
                           response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_StirRandom
+#if IS_CC_ENABLED(StirRandom)
     case TPM_CC_StirRandom:
       return Exec_StirRandom(tag, &request_parameter_buffer,
                              request_parameter_buffer_size, request_handles,
                              response_handle_buffer_size,
                              response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_TestParms
+#if IS_CC_ENABLED(TestParms)
     case TPM_CC_TestParms:
       return Exec_TestParms(tag, &request_parameter_buffer,
                             request_parameter_buffer_size, request_handles,
                             response_handle_buffer_size,
                             response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_Unseal
+#if IS_CC_ENABLED(Unseal)
     case TPM_CC_Unseal:
       return Exec_Unseal(tag, &request_parameter_buffer,
                          request_parameter_buffer_size, request_handles,
                          response_handle_buffer_size,
                          response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_VerifySignature
+#if IS_CC_ENABLED(VerifySignature)
     case TPM_CC_VerifySignature:
       return Exec_VerifySignature(tag, &request_parameter_buffer,
                                   request_parameter_buffer_size,
                                   request_handles, response_handle_buffer_size,
                                   response_parameter_buffer_size);
 #endif
-#ifdef TPM_CC_ZGen_2Phase
+#if IS_CC_ENABLED(ZGen_2Phase)
     case TPM_CC_ZGen_2Phase:
       return Exec_ZGen_2Phase(tag, &request_parameter_buffer,
                               request_parameter_buffer_size, request_handles,
