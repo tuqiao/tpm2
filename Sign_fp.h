@@ -16,7 +16,9 @@ typedef struct {
   TPMT_TK_HASHCHECK validation;
 } Sign_In;
 
-typedef struct { TPMT_SIGNATURE signature; } Sign_Out;
+typedef struct {
+  TPMT_SIGNATURE signature;
+} Sign_Out;
 
 // Executes Sign with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

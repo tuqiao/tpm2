@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { UINT16 bytesRequested; } GetRandom_In;
+typedef struct {
+  UINT16 bytesRequested;
+} GetRandom_In;
 
-typedef struct { TPM2B_DIGEST randomBytes; } GetRandom_Out;
+typedef struct {
+  TPM2B_DIGEST randomBytes;
+} GetRandom_Out;
 
 // Executes GetRandom with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_RH_PLATFORM authHandle; } ChangePPS_In;
+typedef struct {
+  TPMI_RH_PLATFORM authHandle;
+} ChangePPS_In;
 
 // Executes ChangePPS with request handles and parameters from |in|.
 TPM_RC TPM2_ChangePPS(ChangePPS_In* in);

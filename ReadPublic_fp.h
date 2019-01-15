@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_OBJECT objectHandle; } ReadPublic_In;
+typedef struct {
+  TPMI_DH_OBJECT objectHandle;
+} ReadPublic_In;
 
 typedef struct {
   TPM2B_PUBLIC outPublic;

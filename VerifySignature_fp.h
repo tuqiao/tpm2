@@ -15,7 +15,9 @@ typedef struct {
   TPMT_SIGNATURE signature;
 } VerifySignature_In;
 
-typedef struct { TPMT_TK_VERIFIED validation; } VerifySignature_Out;
+typedef struct {
+  TPMT_TK_VERIFIED validation;
+} VerifySignature_Out;
 
 // Executes VerifySignature with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

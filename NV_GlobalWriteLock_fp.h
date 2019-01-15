@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_RH_PROVISION authHandle; } NV_GlobalWriteLock_In;
+typedef struct {
+  TPMI_RH_PROVISION authHandle;
+} NV_GlobalWriteLock_In;
 
 // Executes NV_GlobalWriteLock with request handles and parameters from |in|.
 TPM_RC TPM2_NV_GlobalWriteLock(NV_GlobalWriteLock_In* in);

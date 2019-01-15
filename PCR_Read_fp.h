@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPML_PCR_SELECTION pcrSelectionIn; } PCR_Read_In;
+typedef struct {
+  TPML_PCR_SELECTION pcrSelectionIn;
+} PCR_Read_In;
 
 typedef struct {
   UINT32 pcrUpdateCounter;

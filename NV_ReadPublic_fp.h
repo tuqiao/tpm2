@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_RH_NV_INDEX nvIndex; } NV_ReadPublic_In;
+typedef struct {
+  TPMI_RH_NV_INDEX nvIndex;
+} NV_ReadPublic_In;
 
 typedef struct {
   TPM2B_NV_PUBLIC nvPublic;

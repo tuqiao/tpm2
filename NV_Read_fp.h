@@ -16,7 +16,9 @@ typedef struct {
   UINT16 offset;
 } NV_Read_In;
 
-typedef struct { TPM2B_MAX_NV_BUFFER data; } NV_Read_Out;
+typedef struct {
+  TPM2B_MAX_NV_BUFFER data;
+} NV_Read_Out;
 
 // Executes NV_Read with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

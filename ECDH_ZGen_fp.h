@@ -14,7 +14,9 @@ typedef struct {
   TPM2B_ECC_POINT inPoint;
 } ECDH_ZGen_In;
 
-typedef struct { TPM2B_ECC_POINT outPoint; } ECDH_ZGen_Out;
+typedef struct {
+  TPM2B_ECC_POINT outPoint;
+} ECDH_ZGen_Out;
 
 // Executes ECDH_ZGen with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

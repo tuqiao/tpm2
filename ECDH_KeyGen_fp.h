@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_OBJECT keyHandle; } ECDH_KeyGen_In;
+typedef struct {
+  TPMI_DH_OBJECT keyHandle;
+} ECDH_KeyGen_In;
 
 typedef struct {
   TPM2B_ECC_POINT zPoint;

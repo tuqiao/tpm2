@@ -16,7 +16,9 @@ typedef struct {
   TPM2B_DATA label;
 } RSA_Encrypt_In;
 
-typedef struct { TPM2B_PUBLIC_KEY_RSA outData; } RSA_Encrypt_Out;
+typedef struct {
+  TPM2B_PUBLIC_KEY_RSA outData;
+} RSA_Encrypt_Out;
 
 // Executes RSA_Encrypt with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

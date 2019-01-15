@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_SH_POLICY policySession; } PolicyAuthValue_In;
+typedef struct {
+  TPMI_SH_POLICY policySession;
+} PolicyAuthValue_In;
 
 // Executes PolicyAuthValue with request handles and parameters from |in|.
 TPM_RC TPM2_PolicyAuthValue(PolicyAuthValue_In* in);
