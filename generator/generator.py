@@ -112,6 +112,12 @@ def _ParseCommandLine(args):
     raise GeneratorException(usage)
   return structures_file, commands_file
 
+def _PatchCrosChanges():
+  """After generation is completed add Chrome OS specific patches."""
+
+  # A single fixed name patch file is included in the repository, use it to
+  # update generated files with Chrome Os specific changes.
+  subprocess.call(['patch', '-i', 'generator/cros.patch'])
 
 def main(argv):
   """A Main function.
@@ -162,6 +168,7 @@ def main(argv):
   commands = tpm_table.GetCommandList()
   command_generator.GenerateHeader(commands)
   command_generator.GenerateImplementation(commands, typemap)
+  _PatchCrosChanges()
   print('Processed %d TPM types.' % len(typemap))
   print('Processed %d commands.' % len(commands))
 

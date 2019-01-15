@@ -22,13 +22,12 @@ _BASIC_TYPES = ['uint8_t', 'int8_t', 'uint16_t', 'int16_t', 'uint32_t',
 _OUTPUT_FILE_H = 'tpm_generated.h'
 _OUTPUT_FILE_CC = 'tpm_generated.c'
 COPYRIGHT_HEADER = (
-    '// Copyright %d The Chromium OS Authors. All rights reserved.\n'
+    '// Copyright 2015 The Chromium OS Authors. All rights reserved.\n'
     '// Use of this source code is governed by a BSD-style license that can '
     'be\n'
     '// found in the LICENSE file.\n'
     '\n'
-    '// THIS CODE IS GENERATED - DO NOT MODIFY!\n' %
-    datetime.datetime.now().year)
+    '// THIS CODE IS GENERATED - DO NOT MODIFY!\n' )
 HEADER_FILE_GUARD_HEADER = """
 #ifndef %(name)s
 #define %(name)s
