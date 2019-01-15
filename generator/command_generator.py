@@ -219,7 +219,7 @@ TPM_RC Exec_%(command_name)s(
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-  // Marshal output structure to global response buffer.
+// Marshal output structure to global response buffer.
 #ifdef %(command_code)s
   response_buffer = MemoryGetResponseBuffer(%(command_code)s) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
@@ -280,8 +280,8 @@ TPM_RC Exec_%(command_name)s(
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-  // Marshal output structure containing response handles and parameters to
-  // response buffer.
+// Marshal output structure containing response handles and parameters to
+// response buffer.
 #ifdef %(command_code)s
   response_buffer = MemoryGetResponseBuffer(%(command_code)s) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
