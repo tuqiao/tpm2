@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_ECC_CURVE curveID; } ECC_Parameters_In;
+typedef struct {
+  TPMI_ECC_CURVE curveID;
+} ECC_Parameters_In;
 
-typedef struct { TPMS_ALGORITHM_DETAIL_ECC parameters; } ECC_Parameters_Out;
+typedef struct {
+  TPMS_ALGORITHM_DETAIL_ECC parameters;
+} ECC_Parameters_Out;
 
 // Executes ECC_Parameters with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

@@ -15,7 +15,9 @@ typedef struct {
   TPM2B_MAX_BUFFER buffer;
 } EventSequenceComplete_In;
 
-typedef struct { TPML_DIGEST_VALUES results; } EventSequenceComplete_Out;
+typedef struct {
+  TPML_DIGEST_VALUES results;
+} EventSequenceComplete_Out;
 
 // Executes EventSequenceComplete with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

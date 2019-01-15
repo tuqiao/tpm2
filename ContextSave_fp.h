@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_CONTEXT saveHandle; } ContextSave_In;
+typedef struct {
+  TPMI_DH_CONTEXT saveHandle;
+} ContextSave_In;
 
-typedef struct { TPMS_CONTEXT context; } ContextSave_Out;
+typedef struct {
+  TPMS_CONTEXT context;
+} ContextSave_Out;
 
 // Executes ContextSave with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

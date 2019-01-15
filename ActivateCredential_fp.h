@@ -16,7 +16,9 @@ typedef struct {
   TPM2B_ENCRYPTED_SECRET secret;
 } ActivateCredential_In;
 
-typedef struct { TPM2B_DIGEST certInfo; } ActivateCredential_Out;
+typedef struct {
+  TPM2B_DIGEST certInfo;
+} ActivateCredential_Out;
 
 // Executes ActivateCredential with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

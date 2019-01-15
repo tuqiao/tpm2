@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_SH_POLICY sessionHandle; } PolicyRestart_In;
+typedef struct {
+  TPMI_SH_POLICY sessionHandle;
+} PolicyRestart_In;
 
 // Executes PolicyRestart with request handles and parameters from |in|.
 TPM_RC TPM2_PolicyRestart(PolicyRestart_In* in);

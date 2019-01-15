@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { UINT32 sequenceNumber; } FirmwareRead_In;
+typedef struct {
+  UINT32 sequenceNumber;
+} FirmwareRead_In;
 
-typedef struct { TPM2B_MAX_BUFFER fuData; } FirmwareRead_Out;
+typedef struct {
+  TPM2B_MAX_BUFFER fuData;
+} FirmwareRead_Out;
 
 // Executes FirmwareRead with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

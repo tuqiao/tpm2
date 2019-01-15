@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_PCR pcrHandle; } PCR_Reset_In;
+typedef struct {
+  TPMI_DH_PCR pcrHandle;
+} PCR_Reset_In;
 
 // Executes PCR_Reset with request handles and parameters from |in|.
 TPM_RC TPM2_PCR_Reset(PCR_Reset_In* in);

@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPM_SU shutdownType; } Shutdown_In;
+typedef struct {
+  TPM_SU shutdownType;
+} Shutdown_In;
 
 // Executes Shutdown with request handles and parameters from |in|.
 TPM_RC TPM2_Shutdown(Shutdown_In* in);

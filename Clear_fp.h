@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_RH_CLEAR authHandle; } Clear_In;
+typedef struct {
+  TPMI_RH_CLEAR authHandle;
+} Clear_In;
 
 // Executes Clear with request handles and parameters from |in|.
 TPM_RC TPM2_Clear(Clear_In* in);

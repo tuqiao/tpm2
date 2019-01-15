@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_YES_NO fullTest; } SelfTest_In;
+typedef struct {
+  TPMI_YES_NO fullTest;
+} SelfTest_In;
 
 // Executes SelfTest with request handles and parameters from |in|.
 TPM_RC TPM2_SelfTest(SelfTest_In* in);
