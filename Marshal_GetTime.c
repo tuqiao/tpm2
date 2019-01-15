@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "GetTime_fp.h"
 
-#ifdef TPM_CC_GetTime
+#if IS_CC_ENABLED(GetTime)
 static UINT16 GetTime_Out_Marshal(GetTime_Out* source,
                                   TPMI_ST_COMMAND_TAG tag,
                                   BYTE** buffer,
@@ -69,7 +69,7 @@ TPM_RC Exec_GetTime(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   GetTime_In in;
   GetTime_Out out;
-#ifdef TPM_CC_GetTime
+#if IS_CC_ENABLED(GetTime)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -89,7 +89,7 @@ TPM_RC Exec_GetTime(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_GetTime
+#if IS_CC_ENABLED(GetTime)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_GetTime) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

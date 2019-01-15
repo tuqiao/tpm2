@@ -28,7 +28,7 @@ TPM_RC Exec_PCR_Reset(TPMI_ST_COMMAND_TAG tag,
                       UINT32* response_parameter_buffer_size) {
   TPM_RC result = TPM_RC_SUCCESS;
   PCR_Reset_In in;
-#ifdef TPM_CC_PCR_Reset
+#if IS_CC_ENABLED(PCR_Reset)
   BYTE* response_buffer;
   INT32 response_buffer_size;
 #endif
@@ -46,7 +46,7 @@ TPM_RC Exec_PCR_Reset(TPMI_ST_COMMAND_TAG tag,
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#ifdef TPM_CC_PCR_Reset
+#if IS_CC_ENABLED(PCR_Reset)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_PCR_Reset) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   // Add parameter_size field, always equal to 0 here.

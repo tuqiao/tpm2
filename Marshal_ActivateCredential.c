@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ActivateCredential_fp.h"
 
-#ifdef TPM_CC_ActivateCredential
+#if IS_CC_ENABLED(ActivateCredential)
 static UINT16 ActivateCredential_Out_Marshal(ActivateCredential_Out* source,
                                              TPMI_ST_COMMAND_TAG tag,
                                              BYTE** buffer,
@@ -68,7 +68,7 @@ TPM_RC Exec_ActivateCredential(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ActivateCredential_In in;
   ActivateCredential_Out out;
-#ifdef TPM_CC_ActivateCredential
+#if IS_CC_ENABLED(ActivateCredential)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -89,7 +89,7 @@ TPM_RC Exec_ActivateCredential(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ActivateCredential
+#if IS_CC_ENABLED(ActivateCredential)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ActivateCredential) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ActivateCredential_Out_Marshal(&out, tag, &response_buffer,

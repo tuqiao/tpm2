@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "PolicySecret_fp.h"
 
-#ifdef TPM_CC_PolicySecret
+#if IS_CC_ENABLED(PolicySecret)
 static UINT16 PolicySecret_Out_Marshal(PolicySecret_Out* source,
                                        TPMI_ST_COMMAND_TAG tag,
                                        BYTE** buffer,
@@ -77,7 +77,7 @@ TPM_RC Exec_PolicySecret(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   PolicySecret_In in;
   PolicySecret_Out out;
-#ifdef TPM_CC_PolicySecret
+#if IS_CC_ENABLED(PolicySecret)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -98,7 +98,7 @@ TPM_RC Exec_PolicySecret(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_PolicySecret
+#if IS_CC_ENABLED(PolicySecret)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_PolicySecret) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = PolicySecret_Out_Marshal(&out, tag, &response_buffer,

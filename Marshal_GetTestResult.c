@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "GetTestResult_fp.h"
 
-#ifdef TPM_CC_GetTestResult
+#if IS_CC_ENABLED(GetTestResult)
 static UINT16 GetTestResult_Out_Marshal(GetTestResult_Out* source,
                                         TPMI_ST_COMMAND_TAG tag,
                                         BYTE** buffer,
@@ -45,7 +45,7 @@ TPM_RC Exec_GetTestResult(TPMI_ST_COMMAND_TAG tag,
                           UINT32* response_parameter_buffer_size) {
   TPM_RC result = TPM_RC_SUCCESS;
   GetTestResult_Out out;
-#ifdef TPM_CC_GetTestResult
+#if IS_CC_ENABLED(GetTestResult)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -60,7 +60,7 @@ TPM_RC Exec_GetTestResult(TPMI_ST_COMMAND_TAG tag,
   }
 // Marshal output structure containing response handles and parameters to
 // response buffer.
-#ifdef TPM_CC_GetTestResult
+#if IS_CC_ENABLED(GetTestResult)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_GetTestResult) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = GetTestResult_Out_Marshal(&out, tag, &response_buffer,

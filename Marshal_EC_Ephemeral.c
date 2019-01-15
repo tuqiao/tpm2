@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "EC_Ephemeral_fp.h"
 
-#ifdef TPM_CC_EC_Ephemeral
+#if IS_CC_ENABLED(EC_Ephemeral)
 static UINT16 EC_Ephemeral_Out_Marshal(EC_Ephemeral_Out* source,
                                        TPMI_ST_COMMAND_TAG tag,
                                        BYTE** buffer,
@@ -62,7 +62,7 @@ TPM_RC Exec_EC_Ephemeral(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   EC_Ephemeral_In in;
   EC_Ephemeral_Out out;
-#ifdef TPM_CC_EC_Ephemeral
+#if IS_CC_ENABLED(EC_Ephemeral)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -83,7 +83,7 @@ TPM_RC Exec_EC_Ephemeral(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_EC_Ephemeral
+#if IS_CC_ENABLED(EC_Ephemeral)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_EC_Ephemeral) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = EC_Ephemeral_Out_Marshal(&out, tag, &response_buffer,

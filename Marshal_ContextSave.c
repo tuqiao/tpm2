@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ContextSave_fp.h"
 
-#ifdef TPM_CC_ContextSave
+#if IS_CC_ENABLED(ContextSave)
 static UINT16 ContextSave_Out_Marshal(ContextSave_Out* source,
                                       TPMI_ST_COMMAND_TAG tag,
                                       BYTE** buffer,
@@ -58,7 +58,7 @@ TPM_RC Exec_ContextSave(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ContextSave_In in;
   ContextSave_Out out;
-#ifdef TPM_CC_ContextSave
+#if IS_CC_ENABLED(ContextSave)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -79,7 +79,7 @@ TPM_RC Exec_ContextSave(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ContextSave
+#if IS_CC_ENABLED(ContextSave)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ContextSave) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ContextSave_Out_Marshal(&out, tag, &response_buffer,

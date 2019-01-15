@@ -38,7 +38,7 @@ TPM_RC Exec_NV_Write(TPMI_ST_COMMAND_TAG tag,
                      UINT32* response_parameter_buffer_size) {
   TPM_RC result = TPM_RC_SUCCESS;
   NV_Write_In in;
-#ifdef TPM_CC_NV_Write
+#if IS_CC_ENABLED(NV_Write)
   BYTE* response_buffer;
   INT32 response_buffer_size;
 #endif
@@ -55,7 +55,7 @@ TPM_RC Exec_NV_Write(TPMI_ST_COMMAND_TAG tag,
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#ifdef TPM_CC_NV_Write
+#if IS_CC_ENABLED(NV_Write)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_NV_Write) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   // Add parameter_size field, always equal to 0 here.

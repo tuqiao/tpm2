@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "GetCommandAuditDigest_fp.h"
 
-#ifdef TPM_CC_GetCommandAuditDigest
+#if IS_CC_ENABLED(GetCommandAuditDigest)
 static UINT16 GetCommandAuditDigest_Out_Marshal(
     GetCommandAuditDigest_Out* source,
     TPMI_ST_COMMAND_TAG tag,
@@ -71,7 +71,7 @@ TPM_RC Exec_GetCommandAuditDigest(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   GetCommandAuditDigest_In in;
   GetCommandAuditDigest_Out out;
-#ifdef TPM_CC_GetCommandAuditDigest
+#if IS_CC_ENABLED(GetCommandAuditDigest)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -92,7 +92,7 @@ TPM_RC Exec_GetCommandAuditDigest(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_GetCommandAuditDigest
+#if IS_CC_ENABLED(GetCommandAuditDigest)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_GetCommandAuditDigest) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = GetCommandAuditDigest_Out_Marshal(

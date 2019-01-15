@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "StartAuthSession_fp.h"
 
-#ifdef TPM_CC_StartAuthSession
+#if IS_CC_ENABLED(StartAuthSession)
 static UINT16 StartAuthSession_Out_Marshal(StartAuthSession_Out* source,
                                            TPMI_ST_COMMAND_TAG tag,
                                            BYTE** buffer,
@@ -84,7 +84,7 @@ TPM_RC Exec_StartAuthSession(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   StartAuthSession_In in;
   StartAuthSession_Out out;
-#ifdef TPM_CC_StartAuthSession
+#if IS_CC_ENABLED(StartAuthSession)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -105,7 +105,7 @@ TPM_RC Exec_StartAuthSession(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_StartAuthSession
+#if IS_CC_ENABLED(StartAuthSession)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_StartAuthSession) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = StartAuthSession_Out_Marshal(&out, tag, &response_buffer,

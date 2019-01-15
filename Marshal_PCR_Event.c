@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "PCR_Event_fp.h"
 
-#ifdef TPM_CC_PCR_Event
+#if IS_CC_ENABLED(PCR_Event)
 static UINT16 PCR_Event_Out_Marshal(PCR_Event_Out* source,
                                     TPMI_ST_COMMAND_TAG tag,
                                     BYTE** buffer,
@@ -63,7 +63,7 @@ TPM_RC Exec_PCR_Event(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   PCR_Event_In in;
   PCR_Event_Out out;
-#ifdef TPM_CC_PCR_Event
+#if IS_CC_ENABLED(PCR_Event)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -84,7 +84,7 @@ TPM_RC Exec_PCR_Event(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_PCR_Event
+#if IS_CC_ENABLED(PCR_Event)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_PCR_Event) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =
