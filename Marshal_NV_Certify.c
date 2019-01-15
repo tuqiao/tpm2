@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "NV_Certify_fp.h"
 
-#ifdef TPM_CC_NV_Certify
+#if IS_CC_ENABLED(NV_Certify)
 static UINT16 NV_Certify_Out_Marshal(NV_Certify_Out* source,
                                      TPMI_ST_COMMAND_TAG tag,
                                      BYTE** buffer,
@@ -78,7 +78,7 @@ TPM_RC Exec_NV_Certify(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   NV_Certify_In in;
   NV_Certify_Out out;
-#ifdef TPM_CC_NV_Certify
+#if IS_CC_ENABLED(NV_Certify)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -99,7 +99,7 @@ TPM_RC Exec_NV_Certify(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_NV_Certify
+#if IS_CC_ENABLED(NV_Certify)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_NV_Certify) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = NV_Certify_Out_Marshal(&out, tag, &response_buffer,

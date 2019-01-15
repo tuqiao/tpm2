@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Sign_fp.h"
 
-#ifdef TPM_CC_Sign
+#if IS_CC_ENABLED(Sign)
 static UINT16 Sign_Out_Marshal(Sign_Out* source,
                                TPMI_ST_COMMAND_TAG tag,
                                BYTE** buffer,
@@ -71,7 +71,7 @@ TPM_RC Exec_Sign(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Sign_In in;
   Sign_Out out;
-#ifdef TPM_CC_Sign
+#if IS_CC_ENABLED(Sign)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -91,7 +91,7 @@ TPM_RC Exec_Sign(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Sign
+#if IS_CC_ENABLED(Sign)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Sign) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

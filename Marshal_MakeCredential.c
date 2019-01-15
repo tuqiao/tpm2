@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "MakeCredential_fp.h"
 
-#ifdef TPM_CC_MakeCredential
+#if IS_CC_ENABLED(MakeCredential)
 static UINT16 MakeCredential_Out_Marshal(MakeCredential_Out* source,
                                          TPMI_ST_COMMAND_TAG tag,
                                          BYTE** buffer,
@@ -68,7 +68,7 @@ TPM_RC Exec_MakeCredential(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   MakeCredential_In in;
   MakeCredential_Out out;
-#ifdef TPM_CC_MakeCredential
+#if IS_CC_ENABLED(MakeCredential)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -89,7 +89,7 @@ TPM_RC Exec_MakeCredential(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_MakeCredential
+#if IS_CC_ENABLED(MakeCredential)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_MakeCredential) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = MakeCredential_Out_Marshal(&out, tag, &response_buffer,

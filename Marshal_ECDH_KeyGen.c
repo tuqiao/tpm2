@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ECDH_KeyGen_fp.h"
 
-#ifdef TPM_CC_ECDH_KeyGen
+#if IS_CC_ENABLED(ECDH_KeyGen)
 static UINT16 ECDH_KeyGen_Out_Marshal(ECDH_KeyGen_Out* source,
                                       TPMI_ST_COMMAND_TAG tag,
                                       BYTE** buffer,
@@ -59,7 +59,7 @@ TPM_RC Exec_ECDH_KeyGen(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ECDH_KeyGen_In in;
   ECDH_KeyGen_Out out;
-#ifdef TPM_CC_ECDH_KeyGen
+#if IS_CC_ENABLED(ECDH_KeyGen)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -80,7 +80,7 @@ TPM_RC Exec_ECDH_KeyGen(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ECDH_KeyGen
+#if IS_CC_ENABLED(ECDH_KeyGen)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ECDH_KeyGen) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ECDH_KeyGen_Out_Marshal(&out, tag, &response_buffer,

@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "FieldUpgradeData_fp.h"
 
-#ifdef TPM_CC_FieldUpgradeData
+#if IS_CC_ENABLED(FieldUpgradeData)
 static UINT16 FieldUpgradeData_Out_Marshal(FieldUpgradeData_Out* source,
                                            TPMI_ST_COMMAND_TAG tag,
                                            BYTE** buffer,
@@ -62,7 +62,7 @@ TPM_RC Exec_FieldUpgradeData(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   FieldUpgradeData_In in;
   FieldUpgradeData_Out out;
-#ifdef TPM_CC_FieldUpgradeData
+#if IS_CC_ENABLED(FieldUpgradeData)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -83,7 +83,7 @@ TPM_RC Exec_FieldUpgradeData(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_FieldUpgradeData
+#if IS_CC_ENABLED(FieldUpgradeData)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_FieldUpgradeData) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = FieldUpgradeData_Out_Marshal(&out, tag, &response_buffer,

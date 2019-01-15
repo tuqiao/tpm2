@@ -28,7 +28,7 @@ TPM_RC Exec_Clear(TPMI_ST_COMMAND_TAG tag,
                   UINT32* response_parameter_buffer_size) {
   TPM_RC result = TPM_RC_SUCCESS;
   Clear_In in;
-#ifdef TPM_CC_Clear
+#if IS_CC_ENABLED(Clear)
   BYTE* response_buffer;
   INT32 response_buffer_size;
 #endif
@@ -45,7 +45,7 @@ TPM_RC Exec_Clear(TPMI_ST_COMMAND_TAG tag,
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#ifdef TPM_CC_Clear
+#if IS_CC_ENABLED(Clear)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Clear) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   // Add parameter_size field, always equal to 0 here.

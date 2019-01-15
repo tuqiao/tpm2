@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Rewrap_fp.h"
 
-#ifdef TPM_CC_Rewrap
+#if IS_CC_ENABLED(Rewrap)
 static UINT16 Rewrap_Out_Marshal(Rewrap_Out* source,
                                  TPMI_ST_COMMAND_TAG tag,
                                  BYTE** buffer,
@@ -74,7 +74,7 @@ TPM_RC Exec_Rewrap(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Rewrap_In in;
   Rewrap_Out out;
-#ifdef TPM_CC_Rewrap
+#if IS_CC_ENABLED(Rewrap)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -94,7 +94,7 @@ TPM_RC Exec_Rewrap(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Rewrap
+#if IS_CC_ENABLED(Rewrap)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Rewrap) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

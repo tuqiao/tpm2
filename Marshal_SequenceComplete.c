@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "SequenceComplete_fp.h"
 
-#ifdef TPM_CC_SequenceComplete
+#if IS_CC_ENABLED(SequenceComplete)
 static UINT16 SequenceComplete_Out_Marshal(SequenceComplete_Out* source,
                                            TPMI_ST_COMMAND_TAG tag,
                                            BYTE** buffer,
@@ -68,7 +68,7 @@ TPM_RC Exec_SequenceComplete(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   SequenceComplete_In in;
   SequenceComplete_Out out;
-#ifdef TPM_CC_SequenceComplete
+#if IS_CC_ENABLED(SequenceComplete)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -89,7 +89,7 @@ TPM_RC Exec_SequenceComplete(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_SequenceComplete
+#if IS_CC_ENABLED(SequenceComplete)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_SequenceComplete) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = SequenceComplete_Out_Marshal(&out, tag, &response_buffer,

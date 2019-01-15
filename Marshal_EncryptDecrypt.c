@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "EncryptDecrypt_fp.h"
 
-#ifdef TPM_CC_EncryptDecrypt
+#if IS_CC_ENABLED(EncryptDecrypt)
 static UINT16 EncryptDecrypt_Out_Marshal(EncryptDecrypt_Out* source,
                                          TPMI_ST_COMMAND_TAG tag,
                                          BYTE** buffer,
@@ -76,7 +76,7 @@ TPM_RC Exec_EncryptDecrypt(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   EncryptDecrypt_In in;
   EncryptDecrypt_Out out;
-#ifdef TPM_CC_EncryptDecrypt
+#if IS_CC_ENABLED(EncryptDecrypt)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -97,7 +97,7 @@ TPM_RC Exec_EncryptDecrypt(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_EncryptDecrypt
+#if IS_CC_ENABLED(EncryptDecrypt)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_EncryptDecrypt) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = EncryptDecrypt_Out_Marshal(&out, tag, &response_buffer,

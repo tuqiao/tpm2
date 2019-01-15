@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "NV_ReadPublic_fp.h"
 
-#ifdef TPM_CC_NV_ReadPublic
+#if IS_CC_ENABLED(NV_ReadPublic)
 static UINT16 NV_ReadPublic_Out_Marshal(NV_ReadPublic_Out* source,
                                         TPMI_ST_COMMAND_TAG tag,
                                         BYTE** buffer,
@@ -59,7 +59,7 @@ TPM_RC Exec_NV_ReadPublic(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   NV_ReadPublic_In in;
   NV_ReadPublic_Out out;
-#ifdef TPM_CC_NV_ReadPublic
+#if IS_CC_ENABLED(NV_ReadPublic)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -80,7 +80,7 @@ TPM_RC Exec_NV_ReadPublic(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_NV_ReadPublic
+#if IS_CC_ENABLED(NV_ReadPublic)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_NV_ReadPublic) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = NV_ReadPublic_Out_Marshal(&out, tag, &response_buffer,

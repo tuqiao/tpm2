@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ContextLoad_fp.h"
 
-#ifdef TPM_CC_ContextLoad
+#if IS_CC_ENABLED(ContextLoad)
 static UINT16 ContextLoad_Out_Marshal(ContextLoad_Out* source,
                                       TPMI_ST_COMMAND_TAG tag,
                                       BYTE** buffer,
@@ -61,7 +61,7 @@ TPM_RC Exec_ContextLoad(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ContextLoad_In in;
   ContextLoad_Out out;
-#ifdef TPM_CC_ContextLoad
+#if IS_CC_ENABLED(ContextLoad)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -82,7 +82,7 @@ TPM_RC Exec_ContextLoad(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ContextLoad
+#if IS_CC_ENABLED(ContextLoad)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ContextLoad) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ContextLoad_Out_Marshal(&out, tag, &response_buffer,

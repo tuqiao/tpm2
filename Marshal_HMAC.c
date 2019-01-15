@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "HMAC_fp.h"
 
-#ifdef TPM_CC_HMAC
+#if IS_CC_ENABLED(HMAC)
 static UINT16 HMAC_Out_Marshal(HMAC_Out* source,
                                TPMI_ST_COMMAND_TAG tag,
                                BYTE** buffer,
@@ -67,7 +67,7 @@ TPM_RC Exec_HMAC(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   HMAC_In in;
   HMAC_Out out;
-#ifdef TPM_CC_HMAC
+#if IS_CC_ENABLED(HMAC)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -87,7 +87,7 @@ TPM_RC Exec_HMAC(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_HMAC
+#if IS_CC_ENABLED(HMAC)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_HMAC) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

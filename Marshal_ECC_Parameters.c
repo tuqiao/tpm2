@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ECC_Parameters_fp.h"
 
-#ifdef TPM_CC_ECC_Parameters
+#if IS_CC_ENABLED(ECC_Parameters)
 static UINT16 ECC_Parameters_Out_Marshal(ECC_Parameters_Out* source,
                                          TPMI_ST_COMMAND_TAG tag,
                                          BYTE** buffer,
@@ -62,7 +62,7 @@ TPM_RC Exec_ECC_Parameters(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ECC_Parameters_In in;
   ECC_Parameters_Out out;
-#ifdef TPM_CC_ECC_Parameters
+#if IS_CC_ENABLED(ECC_Parameters)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -83,7 +83,7 @@ TPM_RC Exec_ECC_Parameters(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ECC_Parameters
+#if IS_CC_ENABLED(ECC_Parameters)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ECC_Parameters) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ECC_Parameters_Out_Marshal(&out, tag, &response_buffer,

@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Unseal_fp.h"
 
-#ifdef TPM_CC_Unseal
+#if IS_CC_ENABLED(Unseal)
 static UINT16 Unseal_Out_Marshal(Unseal_Out* source,
                                  TPMI_ST_COMMAND_TAG tag,
                                  BYTE** buffer,
@@ -58,7 +58,7 @@ TPM_RC Exec_Unseal(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Unseal_In in;
   Unseal_Out out;
-#ifdef TPM_CC_Unseal
+#if IS_CC_ENABLED(Unseal)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -78,7 +78,7 @@ TPM_RC Exec_Unseal(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Unseal
+#if IS_CC_ENABLED(Unseal)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Unseal) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

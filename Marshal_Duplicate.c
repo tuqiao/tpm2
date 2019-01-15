@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Duplicate_fp.h"
 
-#ifdef TPM_CC_Duplicate
+#if IS_CC_ENABLED(Duplicate)
 static UINT16 Duplicate_Out_Marshal(Duplicate_Out* source,
                                     TPMI_ST_COMMAND_TAG tag,
                                     BYTE** buffer,
@@ -71,7 +71,7 @@ TPM_RC Exec_Duplicate(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Duplicate_In in;
   Duplicate_Out out;
-#ifdef TPM_CC_Duplicate
+#if IS_CC_ENABLED(Duplicate)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -92,7 +92,7 @@ TPM_RC Exec_Duplicate(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Duplicate
+#if IS_CC_ENABLED(Duplicate)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Duplicate) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

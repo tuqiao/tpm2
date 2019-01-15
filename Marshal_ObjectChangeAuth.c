@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ObjectChangeAuth_fp.h"
 
-#ifdef TPM_CC_ObjectChangeAuth
+#if IS_CC_ENABLED(ObjectChangeAuth)
 static UINT16 ObjectChangeAuth_Out_Marshal(ObjectChangeAuth_Out* source,
                                            TPMI_ST_COMMAND_TAG tag,
                                            BYTE** buffer,
@@ -64,7 +64,7 @@ TPM_RC Exec_ObjectChangeAuth(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ObjectChangeAuth_In in;
   ObjectChangeAuth_Out out;
-#ifdef TPM_CC_ObjectChangeAuth
+#if IS_CC_ENABLED(ObjectChangeAuth)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -85,7 +85,7 @@ TPM_RC Exec_ObjectChangeAuth(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ObjectChangeAuth
+#if IS_CC_ENABLED(ObjectChangeAuth)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ObjectChangeAuth) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ObjectChangeAuth_Out_Marshal(&out, tag, &response_buffer,
