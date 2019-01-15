@@ -1,0 +1,51 @@
+diff --git b/tpm_generated.c a/tpm_generated.c
+index b6bd839..954bff3 100644
+--- b/tpm_generated.c
++++ a/tpm_generated.c
+@@ -2349,7 +2349,11 @@ UINT16 TPMS_SIG_SCHEME_RSASSA_Marshal(TPMS_SIG_SCHEME_RSASSA* source,
+ TPM_RC TPMS_SIG_SCHEME_RSASSA_Unmarshal(TPMS_SIG_SCHEME_RSASSA* target,
+                                         BYTE** buffer,
+                                         INT32* size) {
++#if defined(SUPPORT_PADDING_ONLY_RSASSA) && SUPPORT_PADDING_ONLY_RSASSA == YES
++  return TPMI_ALG_HASH_Unmarshal(&target->hashAlg, buffer, size, TRUE);
++#else
+   return TPMS_SCHEME_HASH_Unmarshal(target, buffer, size);
++#endif
+ }
+ 
+ UINT16 TPMS_ENC_SCHEME_OAEP_Marshal(TPMS_ENC_SCHEME_OAEP* source,
+diff --git b/tpm_types.h a/tpm_types.h
+index eec5e48..9528c36 100644
+--- b/tpm_types.h
++++ a/tpm_types.h
+@@ -370,6 +370,7 @@ typedef UINT8 TPM_HT;
+ #define TPM_HT_PERMANENT       0x40
+ #define TPM_HT_TRANSIENT       0x80
+ #define TPM_HT_PERSISTENT      0x81
++#define TPM_HT_HIDDEN          0xfe
+ 
+ // Table 29  Definition of TPM_RH Constants <  S>
+ typedef TPM_HANDLE TPM_RH;
+@@ -404,6 +405,7 @@ typedef TPM_HANDLE TPM_HC;
+ #define HR_PERSISTENT                       (TPM_HT_PERSISTENT <<  HR_SHIFT)
+ #define HR_NV_INDEX                           (TPM_HT_NV_INDEX <<  HR_SHIFT)
+ #define HR_PERMANENT                         (TPM_HT_PERMANENT <<  HR_SHIFT)
++#define HR_HIDDEN                               (TPM_HT_HIDDEN <<  HR_SHIFT)
+ #define PCR_FIRST                                               (HR_PCR + 0)
+ #define PCR_LAST                          (PCR_FIRST + IMPLEMENTATION_PCR-1)
+ #define HMAC_SESSION_FIRST                             (HR_HMAC_SESSION + 0)
+@@ -1119,9 +1121,12 @@ typedef union {
+ #ifdef TPM_ALG_ECDSA
+   TPMS_SIG_SCHEME_ECDSA      ecdsa;
+ #endif
+-#ifdef TPM_ALG_ECDAA
++// TODO(ngm): ECDAA is not currently supported
++// on CR50, but this field has unguarded references
++// in CryptUtil.c, so allow its inclusion.
++// #ifdef TPM_ALG_ECDAA
+   TPMS_SIG_SCHEME_ECDAA      ecdaa;
+-#endif
++// #endif
+ #ifdef TPM_ALG_SM2
+   TPMS_SIG_SCHEME_SM2        sm2;
+ #endif
