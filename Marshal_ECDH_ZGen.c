@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ECDH_ZGen_fp.h"
 
-#ifdef TPM_CC_ECDH_ZGen
+#if IS_CC_ENABLED(ECDH_ZGen)
 static UINT16 ECDH_ZGen_Out_Marshal(ECDH_ZGen_Out* source,
                                     TPMI_ST_COMMAND_TAG tag,
                                     BYTE** buffer,
@@ -63,7 +63,7 @@ TPM_RC Exec_ECDH_ZGen(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ECDH_ZGen_In in;
   ECDH_ZGen_Out out;
-#ifdef TPM_CC_ECDH_ZGen
+#if IS_CC_ENABLED(ECDH_ZGen)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -84,7 +84,7 @@ TPM_RC Exec_ECDH_ZGen(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ECDH_ZGen
+#if IS_CC_ENABLED(ECDH_ZGen)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ECDH_ZGen) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

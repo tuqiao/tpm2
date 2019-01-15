@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "LoadExternal_fp.h"
 
-#ifdef TPM_CC_LoadExternal
+#if IS_CC_ENABLED(LoadExternal)
 static UINT16 LoadExternal_Out_Marshal(LoadExternal_Out* source,
                                        TPMI_ST_COMMAND_TAG tag,
                                        BYTE** buffer,
@@ -71,7 +71,7 @@ TPM_RC Exec_LoadExternal(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   LoadExternal_In in;
   LoadExternal_Out out;
-#ifdef TPM_CC_LoadExternal
+#if IS_CC_ENABLED(LoadExternal)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -92,7 +92,7 @@ TPM_RC Exec_LoadExternal(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_LoadExternal
+#if IS_CC_ENABLED(LoadExternal)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_LoadExternal) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = LoadExternal_Out_Marshal(&out, tag, &response_buffer,

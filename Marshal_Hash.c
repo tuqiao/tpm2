@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Hash_fp.h"
 
-#ifdef TPM_CC_Hash
+#if IS_CC_ENABLED(Hash)
 static UINT16 Hash_Out_Marshal(Hash_Out* source,
                                TPMI_ST_COMMAND_TAG tag,
                                BYTE** buffer,
@@ -70,7 +70,7 @@ TPM_RC Exec_Hash(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Hash_In in;
   Hash_Out out;
-#ifdef TPM_CC_Hash
+#if IS_CC_ENABLED(Hash)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -90,7 +90,7 @@ TPM_RC Exec_Hash(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Hash
+#if IS_CC_ENABLED(Hash)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Hash) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =

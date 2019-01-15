@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "RSA_Decrypt_fp.h"
 
-#ifdef TPM_CC_RSA_Decrypt
+#if IS_CC_ENABLED(RSA_Decrypt)
 static UINT16 RSA_Decrypt_Out_Marshal(RSA_Decrypt_Out* source,
                                       TPMI_ST_COMMAND_TAG tag,
                                       BYTE** buffer,
@@ -71,7 +71,7 @@ TPM_RC Exec_RSA_Decrypt(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   RSA_Decrypt_In in;
   RSA_Decrypt_Out out;
-#ifdef TPM_CC_RSA_Decrypt
+#if IS_CC_ENABLED(RSA_Decrypt)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -92,7 +92,7 @@ TPM_RC Exec_RSA_Decrypt(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_RSA_Decrypt
+#if IS_CC_ENABLED(RSA_Decrypt)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_RSA_Decrypt) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = RSA_Decrypt_Out_Marshal(&out, tag, &response_buffer,

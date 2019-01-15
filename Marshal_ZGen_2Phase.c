@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "ZGen_2Phase_fp.h"
 
-#ifdef TPM_CC_ZGen_2Phase
+#if IS_CC_ENABLED(ZGen_2Phase)
 static UINT16 ZGen_2Phase_Out_Marshal(ZGen_2Phase_Out* source,
                                       TPMI_ST_COMMAND_TAG tag,
                                       BYTE** buffer,
@@ -77,7 +77,7 @@ TPM_RC Exec_ZGen_2Phase(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   ZGen_2Phase_In in;
   ZGen_2Phase_Out out;
-#ifdef TPM_CC_ZGen_2Phase
+#if IS_CC_ENABLED(ZGen_2Phase)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -98,7 +98,7 @@ TPM_RC Exec_ZGen_2Phase(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_ZGen_2Phase
+#if IS_CC_ENABLED(ZGen_2Phase)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_ZGen_2Phase) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = ZGen_2Phase_Out_Marshal(&out, tag, &response_buffer,

@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "HashSequenceStart_fp.h"
 
-#ifdef TPM_CC_HashSequenceStart
+#if IS_CC_ENABLED(HashSequenceStart)
 static UINT16 HashSequenceStart_Out_Marshal(HashSequenceStart_Out* source,
                                             TPMI_ST_COMMAND_TAG tag,
                                             BYTE** buffer,
@@ -65,7 +65,7 @@ TPM_RC Exec_HashSequenceStart(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   HashSequenceStart_In in;
   HashSequenceStart_Out out;
-#ifdef TPM_CC_HashSequenceStart
+#if IS_CC_ENABLED(HashSequenceStart)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -86,7 +86,7 @@ TPM_RC Exec_HashSequenceStart(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_HashSequenceStart
+#if IS_CC_ENABLED(HashSequenceStart)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_HashSequenceStart) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled = HashSequenceStart_Out_Marshal(&out, tag, &response_buffer,

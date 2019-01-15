@@ -7,7 +7,7 @@
 #include "MemoryLib_fp.h"
 #include "Commit_fp.h"
 
-#ifdef TPM_CC_Commit
+#if IS_CC_ENABLED(Commit)
 static UINT16 Commit_Out_Marshal(Commit_Out* source,
                                  TPMI_ST_COMMAND_TAG tag,
                                  BYTE** buffer,
@@ -74,7 +74,7 @@ TPM_RC Exec_Commit(TPMI_ST_COMMAND_TAG tag,
   TPM_RC result = TPM_RC_SUCCESS;
   Commit_In in;
   Commit_Out out;
-#ifdef TPM_CC_Commit
+#if IS_CC_ENABLED(Commit)
   BYTE* response_buffer;
   INT32 response_buffer_size;
   UINT16 bytes_marshalled;
@@ -94,7 +94,7 @@ TPM_RC Exec_Commit(TPMI_ST_COMMAND_TAG tag,
     return result;
   }
 // Marshal output structure to global response buffer.
-#ifdef TPM_CC_Commit
+#if IS_CC_ENABLED(Commit)
   response_buffer = MemoryGetResponseBuffer(TPM_CC_Commit) + 10;
   response_buffer_size = MAX_RESPONSE_SIZE - 10;
   bytes_marshalled =
