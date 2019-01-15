@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_OBJECT itemHandle; } Unseal_In;
+typedef struct {
+  TPMI_DH_OBJECT itemHandle;
+} Unseal_In;
 
-typedef struct { TPM2B_SENSITIVE_DATA outData; } Unseal_Out;
+typedef struct {
+  TPM2B_SENSITIVE_DATA outData;
+} Unseal_Out;
 
 // Executes Unseal with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

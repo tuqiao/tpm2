@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMT_PUBLIC_PARMS parameters; } TestParms_In;
+typedef struct {
+  TPMT_PUBLIC_PARMS parameters;
+} TestParms_In;
 
 // Executes TestParms with request handles and parameters from |in|.
 TPM_RC TPM2_TestParms(TestParms_In* in);

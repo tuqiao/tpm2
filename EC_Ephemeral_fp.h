@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_ECC_CURVE curveID; } EC_Ephemeral_In;
+typedef struct {
+  TPMI_ECC_CURVE curveID;
+} EC_Ephemeral_In;
 
 typedef struct {
   TPM2B_ECC_POINT Q;

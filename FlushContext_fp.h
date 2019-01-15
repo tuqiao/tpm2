@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_DH_CONTEXT flushHandle; } FlushContext_In;
+typedef struct {
+  TPMI_DH_CONTEXT flushHandle;
+} FlushContext_In;
 
 // Executes FlushContext with request handles and parameters from |in|.
 TPM_RC TPM2_FlushContext(FlushContext_In* in);

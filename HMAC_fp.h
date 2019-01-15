@@ -15,7 +15,9 @@ typedef struct {
   TPMI_ALG_HASH hashAlg;
 } HMAC_In;
 
-typedef struct { TPM2B_DIGEST outHMAC; } HMAC_Out;
+typedef struct {
+  TPM2B_DIGEST outHMAC;
+} HMAC_Out;
 
 // Executes HMAC with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

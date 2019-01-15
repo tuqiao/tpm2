@@ -14,7 +14,9 @@ typedef struct {
   TPM2B_EVENT eventData;
 } PCR_Event_In;
 
-typedef struct { TPML_DIGEST_VALUES digests; } PCR_Event_Out;
+typedef struct {
+  TPML_DIGEST_VALUES digests;
+} PCR_Event_Out;
 
 // Executes PCR_Event with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

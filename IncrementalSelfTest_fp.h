@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPML_ALG toTest; } IncrementalSelfTest_In;
+typedef struct {
+  TPML_ALG toTest;
+} IncrementalSelfTest_In;
 
-typedef struct { TPML_ALG toDoList; } IncrementalSelfTest_Out;
+typedef struct {
+  TPML_ALG toDoList;
+} IncrementalSelfTest_Out;
 
 // Executes IncrementalSelfTest with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

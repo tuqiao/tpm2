@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMS_TIME_INFO currentTime; } ReadClock_Out;
+typedef struct {
+  TPMS_TIME_INFO currentTime;
+} ReadClock_Out;
 
 // Executes ReadClock and computes response handles and parameters
 // to |out|.

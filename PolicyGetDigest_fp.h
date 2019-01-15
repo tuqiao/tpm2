@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_SH_POLICY policySession; } PolicyGetDigest_In;
+typedef struct {
+  TPMI_SH_POLICY policySession;
+} PolicyGetDigest_In;
 
-typedef struct { TPM2B_DIGEST policyDigest; } PolicyGetDigest_Out;
+typedef struct {
+  TPM2B_DIGEST policyDigest;
+} PolicyGetDigest_Out;
 
 // Executes PolicyGetDigest with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

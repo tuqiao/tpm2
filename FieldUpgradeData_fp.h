@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPM2B_MAX_BUFFER fuData; } FieldUpgradeData_In;
+typedef struct {
+  TPM2B_MAX_BUFFER fuData;
+} FieldUpgradeData_In;
 
 typedef struct {
   TPMT_HA nextDigest;

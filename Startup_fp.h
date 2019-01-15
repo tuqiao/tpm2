@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPM_SU startupType; } Startup_In;
+typedef struct {
+  TPM_SU startupType;
+} Startup_In;
 
 // Executes Startup with request handles and parameters from |in|.
 TPM_RC TPM2_Startup(Startup_In* in);

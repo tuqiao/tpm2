@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPM2B_SENSITIVE_DATA inData; } StirRandom_In;
+typedef struct {
+  TPM2B_SENSITIVE_DATA inData;
+} StirRandom_In;
 
 // Executes StirRandom with request handles and parameters from |in|.
 TPM_RC TPM2_StirRandom(StirRandom_In* in);
