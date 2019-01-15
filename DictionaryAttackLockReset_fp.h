@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_RH_LOCKOUT lockHandle; } DictionaryAttackLockReset_In;
+typedef struct {
+  TPMI_RH_LOCKOUT lockHandle;
+} DictionaryAttackLockReset_In;
 
 // Executes DictionaryAttackLockReset with request handles and parameters from
 // |in|.

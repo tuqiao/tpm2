@@ -9,9 +9,13 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMS_CONTEXT context; } ContextLoad_In;
+typedef struct {
+  TPMS_CONTEXT context;
+} ContextLoad_In;
 
-typedef struct { TPMI_DH_CONTEXT loadedHandle; } ContextLoad_Out;
+typedef struct {
+  TPMI_DH_CONTEXT loadedHandle;
+} ContextLoad_Out;
 
 // Executes ContextLoad with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

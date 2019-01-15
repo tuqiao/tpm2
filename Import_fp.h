@@ -18,7 +18,9 @@ typedef struct {
   TPMT_SYM_DEF_OBJECT symmetricAlg;
 } Import_In;
 
-typedef struct { TPM2B_PRIVATE outPrivate; } Import_Out;
+typedef struct {
+  TPM2B_PRIVATE outPrivate;
+} Import_Out;
 
 // Executes Import with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

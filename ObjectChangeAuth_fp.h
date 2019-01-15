@@ -15,7 +15,9 @@ typedef struct {
   TPM2B_AUTH newAuth;
 } ObjectChangeAuth_In;
 
-typedef struct { TPM2B_PRIVATE outPrivate; } ObjectChangeAuth_Out;
+typedef struct {
+  TPM2B_PRIVATE outPrivate;
+} ObjectChangeAuth_Out;
 
 // Executes ObjectChangeAuth with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.

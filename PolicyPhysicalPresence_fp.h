@@ -9,7 +9,9 @@
 
 #include "tpm_generated.h"
 
-typedef struct { TPMI_SH_POLICY policySession; } PolicyPhysicalPresence_In;
+typedef struct {
+  TPMI_SH_POLICY policySession;
+} PolicyPhysicalPresence_In;
 
 // Executes PolicyPhysicalPresence with request handles and parameters from
 // |in|.

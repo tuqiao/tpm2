@@ -15,7 +15,9 @@ typedef struct {
   TPMI_ALG_HASH hashAlg;
 } HMAC_Start_In;
 
-typedef struct { TPMI_DH_OBJECT sequenceHandle; } HMAC_Start_Out;
+typedef struct {
+  TPMI_DH_OBJECT sequenceHandle;
+} HMAC_Start_Out;
 
 // Executes HMAC_Start with request handles and parameters from
 // |in| and computes response handles and parameters to |out|.
