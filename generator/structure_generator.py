@@ -530,6 +530,9 @@ class ConstantType(TPMType):
     out_file.write(self._TYPEDEF_UNMARSHAL_START % {'old_type': base_type,
                                                     'new_type': self.new_type})
     for value in self.valid_values:
+      # Commands below aren't real TPM commands, but opcode placeholders.
+      if value in ['TPM_CC_FIRST', 'TPM_CC_PP_FIRST',
+                   'TPM_CC_LAST', 'TPM_CC_PP_LAST']: continue
       if self._NeedsIfdef():
         out_file.write(self._CHECK_VALUE_IFDEF % {'value': value})
       elif self.new_type == 'TPM_CC':
