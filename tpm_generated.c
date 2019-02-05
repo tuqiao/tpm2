@@ -4678,16 +4678,6 @@ TPM_RC TPM_CC_Unmarshal(TPM_CC* target, BYTE** buffer, INT32* size) {
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-#if IS_CC_ENABLED(FIRST)
-  if (*target == TPM_CC_FIRST) {
-    return TPM_RC_SUCCESS;
-  }
-#endif
-#if IS_CC_ENABLED(PP_FIRST)
-  if (*target == TPM_CC_PP_FIRST) {
-    return TPM_RC_SUCCESS;
-  }
-#endif
 #if IS_CC_ENABLED(NV_UndefineSpaceSpecial)
   if (*target == TPM_CC_NV_UndefineSpaceSpecial) {
     return TPM_RC_SUCCESS;
@@ -4780,11 +4770,6 @@ TPM_RC TPM_CC_Unmarshal(TPM_CC* target, BYTE** buffer, INT32* size) {
 #endif
 #if IS_CC_ENABLED(NV_GlobalWriteLock)
   if (*target == TPM_CC_NV_GlobalWriteLock) {
-    return TPM_RC_SUCCESS;
-  }
-#endif
-#if IS_CC_ENABLED(PP_LAST)
-  if (*target == TPM_CC_PP_LAST) {
     return TPM_RC_SUCCESS;
   }
 #endif
@@ -5230,11 +5215,6 @@ TPM_RC TPM_CC_Unmarshal(TPM_CC* target, BYTE** buffer, INT32* size) {
 #endif
 #if IS_CC_ENABLED(PolicyNvWritten)
   if (*target == TPM_CC_PolicyNvWritten) {
-    return TPM_RC_SUCCESS;
-  }
-#endif
-#if IS_CC_ENABLED(LAST)
-  if (*target == TPM_CC_LAST) {
     return TPM_RC_SUCCESS;
   }
 #endif
