@@ -12,8 +12,8 @@
 #undef TRUE
 #undef FALSE
 //
-//     This table is built in to TpmStructures() Change these definitions to turn all algorithms or commands on or
-//     off
+//     This table is built in to TpmStructures() Change these definitions
+//     to turn all algorithms or commands on or off
 //
 #define         ALG_YES         YES
 #define         ALG_NO          NO
@@ -119,117 +119,162 @@
 //
 //     From Vendor-Specific: Table 6 - Defines for Implemented Commands
 //
-#define   IS_CC_ENABLED(cmd) (defined(CC_##cmd) && CC_##cmd == CC_YES)
 
-#define   CC_ActivateCredential                  CC_YES
-#define   CC_Certify                             CC_YES
-#define   CC_CertifyCreation                     CC_YES
+// Flags to define wherever command is needed for a particular environment:
+// - Commands mandatory for Chrome OS
+#define CC_S_CROS_MUST (1 << 1)
+// - Commands required by TCG PC Client Profile
+#define CC_S_TCG_MUST  (1 << 2)
+// - Commands mandatory for Windows
+#define CC_S_WIN_MUST  (1 << 3)
+// - Commands recommended for Windows
+#define CC_S_WIN_REC   (1 << 4)
+// - Commands devoted to firmware upgrade
+#define CC_S_FWUPGRADE (1 << 5)
+// - Commands required for ChromeOS AP firmware
+#define CC_S_COREBOOT  (1 << 6)
+// - Other commands: optional for all OS and TCG
+#define CC_S_OPTIONAL  (1 << 7)
+
+// Flags to define common combinations of flags:
+// - Commands mandatory for ChromeOS and TCG
+#define CC_S_CROS_TCG (CC_S_CROS_MUST | CC_S_TCG_MUST)
+// - Commands mandatory and recommended for Windows
+#define CC_S_WINDOWS (CC_S_WIN_MUST | CC_S_WIN_REC)
+// - Commands mandatory for TCG and Windows, including recommended for Windows
+#define CC_S_WIN_TCG (CC_S_WINDOWS | CC_S_TCG_MUST)
+// - Commands mandatory for ChromeOS, Windows, TCG
+#define CC_S_ALL_MUST (CC_S_CROS_MUST | CC_S_WINDOWS | CC_S_TCG_MUST)
+
+// Flags to select supported environment (for CC_ENABLED_SET)
+// CC_S_CROS_ONLY - Only ChromeOS / Coreboot / FW Upgrade required commands
+// CC_S_WINDOWS_ONLY - Support only Windows mandatory and recommended
+// CC_S_COMMON_SET - Common subset of mandatory and recommended
+//          commands, excluding OPTIONAL
+#define CC_S_CROS_ONLY (CC_S_CROS_MUST | CC_S_COREBOOT)
+#define CC_S_WINDOWS_ONLY (CC_S_WINDOWS | CC_S_COREBOOT)
+#define CC_S_COMMON_SET (CC_S_CROS_ONLY | CC_S_WIN_TCG)
+
+// CC_ENABLED_SET defines flags to select supported environment
+#ifndef CC_ENABLED_SET
+#define CC_ENABLED_SET CC_S_COMMON_SET
+#endif
+
+#define CC_SET(mask) ((CC_ENABLED_SET & (mask)) ? CC_YES : CC_NO)
+#define IS_CC_ENABLED(cmd) ((CC_##cmd) == CC_YES)
+
+#define    CC_ActivateCredential             CC_SET(CC_S_ALL_MUST)
+#define    CC_Certify                        CC_SET(CC_S_ALL_MUST)
+#define    CC_CertifyCreation                CC_SET(CC_S_ALL_MUST)
 //
-#define    CC_ChangeEPS                      CC_YES
-#define    CC_ChangePPS                      CC_YES
-#define    CC_Clear                          CC_YES
-#define    CC_ClearControl                   CC_YES
-#define    CC_ClockRateAdjust                CC_YES
-#define    CC_ClockSet                       CC_YES
-#define    CC_Commit                         (CC_YES*ALG_ECC)
-#define    CC_ContextLoad                    CC_YES
-#define    CC_ContextSave                    CC_YES
-#define    CC_Create                         CC_YES
-#define    CC_CreatePrimary                  CC_YES
-#define    CC_DictionaryAttackLockReset      CC_YES
-#define    CC_DictionaryAttackParameters     CC_YES
-#define    CC_Duplicate                      CC_YES
-#define    CC_ECC_Parameters                 (CC_YES*ALG_ECC)
-#define    CC_ECDH_KeyGen                    (CC_YES*ALG_ECC)
-#define    CC_ECDH_ZGen                      (CC_YES*ALG_ECC)
-#define    CC_EncryptDecrypt                 CC_YES
-#define    CC_EventSequenceComplete          CC_YES
-#define    CC_EvictControl                   CC_YES
-#define    CC_FieldUpgradeData               CC_NO
-#define    CC_FieldUpgradeStart              CC_NO
-#define    CC_FirmwareRead                   CC_NO
-#define    CC_FlushContext                   CC_YES
-#define    CC_GetCapability                  CC_YES
-#define    CC_GetCommandAuditDigest          CC_YES
-#define    CC_GetRandom                      CC_YES
-#define    CC_GetSessionAuditDigest          CC_YES
-#define    CC_GetTestResult                  CC_YES
-#define    CC_GetTime                        CC_YES
-#define    CC_Hash                           CC_YES
-#define    CC_HashSequenceStart              CC_YES
-#define    CC_HierarchyChangeAuth            CC_YES
-#define    CC_HierarchyControl               CC_YES
-#define    CC_HMAC                           CC_YES
-#define    CC_HMAC_Start                     CC_YES
-#define    CC_Import                         CC_YES
-#define    CC_IncrementalSelfTest            CC_YES
-#define    CC_Load                           CC_YES
-#define    CC_LoadExternal                   CC_YES
-#define    CC_MakeCredential                 CC_YES
-#define    CC_NV_Certify                     CC_YES
-#define    CC_NV_ChangeAuth                  CC_YES
-#define    CC_NV_DefineSpace                 CC_YES
-#define    CC_NV_Extend                      CC_YES
-#define    CC_NV_GlobalWriteLock             CC_YES
-#define    CC_NV_Increment                   CC_YES
-#define    CC_NV_Read                        CC_YES
-#define    CC_NV_ReadLock                    CC_YES
-#define    CC_NV_ReadPublic                  CC_YES
-#define    CC_NV_SetBits                     CC_YES
-#define    CC_NV_UndefineSpace               CC_YES
-#define    CC_NV_UndefineSpaceSpecial        CC_YES
-#define    CC_NV_Write                       CC_YES
-#define    CC_NV_WriteLock                   CC_YES
-#define    CC_ObjectChangeAuth               CC_YES
-#define    CC_PCR_Allocate                   CC_YES
-#define    CC_PCR_Event                      CC_YES
-#define    CC_PCR_Extend                     CC_YES
-#define    CC_PCR_Read                       CC_YES
-#define    CC_PCR_Reset                      CC_YES
-#define    CC_PCR_SetAuthPolicy              CC_YES
-#define    CC_PCR_SetAuthValue               CC_YES
-#define    CC_PolicyAuthorize                CC_YES
-#define    CC_PolicyAuthValue                CC_YES
-#define    CC_PolicyCommandCode              CC_YES
-#define   CC_PolicyCounterTimer                  CC_YES
-#define   CC_PolicyCpHash                        CC_YES
-#define   CC_PolicyDuplicationSelect             CC_YES
-#define   CC_PolicyGetDigest                     CC_YES
-#define   CC_PolicyLocality                      CC_YES
-#define   CC_PolicyNameHash                      CC_YES
-#define   CC_PolicyNV                            CC_YES
-#define   CC_PolicyOR                            CC_YES
-#define   CC_PolicyPassword                      CC_YES
-#define   CC_PolicyPCR                           CC_YES
-#define   CC_PolicyPhysicalPresence              CC_YES
-#define   CC_PolicyRestart                       CC_YES
-#define   CC_PolicySecret                        CC_YES
-#define   CC_PolicySigned                        CC_YES
-#define   CC_PolicyTicket                        CC_YES
-#define   CC_PP_Commands                         CC_YES
-#define   CC_Quote                               CC_YES
-#define   CC_ReadClock                           CC_YES
-#define   CC_ReadPublic                          CC_YES
-#define   CC_Rewrap                              CC_YES
-#define   CC_RSA_Decrypt                         (CC_YES*ALG_RSA)
-#define   CC_RSA_Encrypt                         (CC_YES*ALG_RSA)
-#define   CC_SelfTest                            CC_YES
-#define   CC_SequenceComplete                    CC_YES
-#define   CC_SequenceUpdate                      CC_YES
-#define   CC_SetAlgorithmSet                     CC_YES
-#define   CC_SetCommandCodeAuditStatus           CC_YES
-#define   CC_SetPrimaryPolicy                    CC_YES
-#define   CC_Shutdown                            CC_YES
-#define   CC_Sign                                CC_YES
-#define   CC_StartAuthSession                    CC_YES
-#define   CC_Startup                             CC_YES
-#define   CC_StirRandom                          CC_YES
-#define   CC_TestParms                           CC_YES
-#define   CC_Unseal                              CC_YES
-#define   CC_VerifySignature                     CC_YES
-#define   CC_ZGen_2Phase                         (CC_YES*ALG_ECC)
-#define   CC_EC_Ephemeral                        (CC_YES*ALG_ECC)
-#define   CC_PolicyNvWritten                     CC_YES
+#define    CC_ChangeEPS                      CC_SET(CC_S_OPTIONAL)
+#define    CC_ChangePPS                      CC_SET(CC_S_OPTIONAL)
+
+#define    CC_Clear                          CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_ClearControl                   CC_SET(CC_S_WIN_TCG)
+#define    CC_ClockRateAdjust                CC_SET(CC_S_TCG_MUST)
+#define    CC_ClockSet                       CC_SET(CC_S_WINDOWS)
+#define    CC_Commit                         CC_SET((CC_S_CROS_TCG * ALG_ECC))
+#define    CC_ContextLoad                    CC_SET(CC_S_ALL_MUST)
+#define    CC_ContextSave                    CC_SET(CC_S_ALL_MUST)
+#define    CC_Create                         CC_SET(CC_S_ALL_MUST)
+#define    CC_CreatePrimary                  CC_SET(CC_S_ALL_MUST)
+#define    CC_DictionaryAttackLockReset      CC_SET(CC_S_ALL_MUST)
+#define    CC_DictionaryAttackParameters     CC_SET(CC_S_ALL_MUST)
+#define    CC_Duplicate                      CC_SET(CC_S_WIN_TCG)
+#define    CC_ECC_Parameters                 CC_SET((CC_S_CROS_TCG * ALG_ECC))
+#define    CC_ECDH_KeyGen                    CC_SET((CC_S_CROS_TCG * ALG_ECC))
+#define    CC_ECDH_ZGen                      CC_SET((CC_S_CROS_TCG * ALG_ECC))
+#define    CC_EC_Ephemeral                   CC_SET((CC_S_OPTIONAL * ALG_ECC))
+#define    CC_EncryptDecrypt                 CC_SET(CC_S_OPTIONAL)
+#define    CC_EventSequenceComplete          CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_EvictControl                   CC_SET(CC_S_ALL_MUST)
+#define    CC_FieldUpgradeData               CC_SET(CC_S_FWUPGRADE)
+#define    CC_FieldUpgradeStart              CC_SET(CC_S_FWUPGRADE)
+#define    CC_FirmwareRead                   CC_SET(CC_S_FWUPGRADE)
+#define    CC_FlushContext                   CC_SET(CC_S_ALL_MUST)
+#define    CC_GetCapability                  CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_GetCommandAuditDigest          CC_SET(CC_S_OPTIONAL)
+#define    CC_GetRandom                      CC_SET(CC_S_ALL_MUST)
+#define    CC_GetSessionAuditDigest          CC_SET(CC_S_TCG_MUST)
+#define    CC_GetTestResult                  CC_SET(CC_S_ALL_MUST)
+#define    CC_GetTime                        CC_SET(CC_S_TCG_MUST)
+#define    CC_Hash                           CC_SET(CC_S_ALL_MUST)
+#define    CC_HashSequenceStart              CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_HierarchyChangeAuth            CC_SET(CC_S_ALL_MUST)
+#define    CC_HierarchyControl               CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_HMAC                           CC_SET(CC_S_CROS_TCG)
+#define    CC_HMAC_Start                     CC_SET(CC_S_TCG_MUST)
+#define    CC_Import                         CC_SET(CC_S_ALL_MUST)
+#define    CC_IncrementalSelfTest            CC_SET(CC_S_TCG_MUST)
+#define    CC_Load                           CC_SET(CC_S_ALL_MUST)
+#define    CC_LoadExternal                   CC_SET((CC_S_CROS_TCG | CC_S_WIN_REC))
+#define    CC_MakeCredential                 CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_NV_Certify                     CC_SET(CC_S_CROS_TCG)
+#define    CC_NV_ChangeAuth                  CC_SET(CC_S_WIN_TCG)
+#define    CC_NV_DefineSpace                 CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_NV_Extend                      CC_SET(CC_S_CROS_TCG)
+#define    CC_NV_GlobalWriteLock             CC_SET(CC_S_OPTIONAL)
+#define    CC_NV_Increment                   CC_SET(CC_S_WIN_TCG)
+#define    CC_NV_Read                        CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_NV_ReadLock                    CC_SET(CC_S_CROS_TCG)
+#define    CC_NV_ReadPublic                  CC_SET(CC_S_ALL_MUST)
+#define    CC_NV_SetBits                     CC_SET(CC_S_TCG_MUST)
+#define    CC_NV_UndefineSpace               CC_SET(CC_S_ALL_MUST)
+#define    CC_NV_UndefineSpaceSpecial        CC_SET(CC_S_CROS_TCG)
+#define    CC_NV_Write                       CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_NV_WriteLock                   CC_SET((CC_S_CROS_TCG | CC_S_COREBOOT))
+#define    CC_ObjectChangeAuth               CC_SET(CC_S_ALL_MUST)
+#define    CC_PCR_Allocate                   CC_SET(CC_S_CROS_TCG)
+#define    CC_PCR_Event                      CC_SET(CC_S_WIN_TCG)
+#define    CC_PCR_Extend                     CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_PCR_Read                       CC_SET(CC_S_ALL_MUST)
+#define    CC_PCR_Reset                      CC_SET(CC_S_WIN_TCG)
+#define    CC_PCR_SetAuthPolicy              CC_SET(CC_S_OPTIONAL)
+#define    CC_PCR_SetAuthValue               CC_SET(CC_S_OPTIONAL)
+#define    CC_PolicyAuthorize                CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyAuthValue                CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicyCommandCode              CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicyCounterTimer             CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyCpHash                   CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyDuplicationSelect        CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyGetDigest                CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicyLocality                 CC_SET(CC_S_TCG_MUST)
+#define    CC_PolicyNameHash                 CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyNV                       CC_SET((CC_S_TCG_MUST | CC_S_WINDOWS))
+#define    CC_PolicyNvWritten                CC_SET(CC_S_TCG_MUST)
+#define    CC_PolicyOR                       CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicyPassword                 CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PolicyPCR                      CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicyPhysicalPresence         CC_SET(CC_S_OPTIONAL)
+#define    CC_PolicyRestart                  CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicySecret                   CC_SET(CC_S_ALL_MUST)
+#define    CC_PolicySigned                   CC_SET((CC_S_CROS_TCG | CC_S_WIN_REC))
+#define    CC_PolicyTicket                   CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_PP_Commands                    CC_SET(CC_S_OPTIONAL)
+#define    CC_Quote                          CC_SET(CC_S_ALL_MUST)
+#define    CC_ReadClock                      CC_SET(CC_S_WIN_TCG)
+#define    CC_ReadPublic                     CC_SET(CC_S_ALL_MUST)
+#define    CC_Rewrap                         CC_SET(CC_S_OPTIONAL)
+#define    CC_RSA_Decrypt                    CC_SET((CC_S_ALL_MUST * ALG_RSA))
+#define    CC_RSA_Encrypt                    CC_SET((CC_S_CROS_TCG * ALG_RSA))
+#define    CC_SelfTest                       CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_SequenceComplete               CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_SequenceUpdate                 CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
+#define    CC_SetAlgorithmSet                CC_SET(CC_S_OPTIONAL)
+#define    CC_SetCommandCodeAuditStatus      CC_SET(CC_S_OPTIONAL)
+#define    CC_SetPrimaryPolicy               CC_SET(CC_S_TCG_MUST)
+#define    CC_Shutdown                       CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_Sign                           CC_SET(CC_S_ALL_MUST)
+#define    CC_StartAuthSession               CC_SET(CC_S_ALL_MUST)
+#define    CC_Startup                        CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
+#define    CC_StirRandom                     CC_SET(CC_S_ALL_MUST)
+#define    CC_TestParms                      CC_SET(CC_S_TCG_MUST)
+#define    CC_Unseal                         CC_SET(CC_S_ALL_MUST)
+#define    CC_Vendor_TCG_Test                CC_SET(CC_S_OPTIONAL)
+#define    CC_VerifySignature                CC_SET((CC_S_CROS_TCG | CC_S_WIN_REC))
+#define    CC_ZGen_2Phase                    CC_SET((CC_S_OPTIONAL * ALG_ECC))
+
 //
 //      From Vendor-Specific: Table 7 - Defines for Implementation Values
 //

@@ -1728,7 +1728,7 @@ CryptEccGetParameters(
    }
    return found;
 }
-#if CC_ZGen_2Phase == YES
+#if IS_CC_ENABLED(ZGen_2Phase)
 //
 //       CryptEcc2PhaseKeyExchange() This is the interface to the key exchange function.
 //
