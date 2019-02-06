@@ -2182,8 +2182,15 @@ _cpri__C_2_2_KeyExchange(
 //
 LIB_EXPORT CRYPT_RESULT
 _cpri__C_2_2_KeyExchange(
-   void
-   )
+    TPMS_ECC_POINT *outZ1,     //   OUT: a computed point
+    TPMS_ECC_POINT *outZ2,     //   OUT: and optional second point
+    TPM_ECC_CURVE curveId,     //   IN: the curve for the computations
+    TPM_ALG_ID scheme,         //   IN: the key exchange scheme
+    TPM2B_ECC_PARAMETER *dsA,  //   IN: static private TPM key
+    TPM2B_ECC_PARAMETER *deA,  //   IN: ephemeral private TPM key
+    TPMS_ECC_POINT *QsB,       //   IN: static public party B key
+    TPMS_ECC_POINT *QeB        //   IN: ephemeral public party B key
+    )
 {
    return CRYPT_FAIL;
 }
