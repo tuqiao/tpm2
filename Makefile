@@ -5,8 +5,9 @@
 
 obj ?= ./build
 CROSS_COMPILE ?=
-CC ?= $(CROSS_COMPILE)gcc
 AR ?= $(CROSS_COMPILE)ar
+CC ?= $(CROSS_COMPILE)gcc
+OBJCOPY ?= $(CROSS_COMPILE)objcopy
 
 HOST_SOURCES =
 SOURCES  = ActivateCredential.c
@@ -322,13 +323,16 @@ endif
 #
 # Using a unique prefix is necessary in this case because files in
 # archives only have a filename, not a full path.
-OBJS = $(patsubst %.c,$(obj)/$(OBJ_PREFIX)%.o,$(SOURCES))
-DEPS = $(patsubst %.c,$(obj)/$(OBJ_PREFIX)%.d,$(SOURCES))
+OBJS := $(patsubst %.c,$(obj)/$(OBJ_PREFIX)%.o,$(SOURCES))
+DEPS := $(patsubst %.c,$(obj)/$(OBJ_PREFIX)%.d,$(SOURCES))
+COPIED_OBJS := $(patsubst %.o,%.cp.o,$(OBJS))
 
 # This is the default target
 $(obj)/libtpm2.a: $(OBJS)
 	@echo "  AR      $(notdir $@)"
 	$(Q)$(AR) scr $@ $^
+
+copied_objs: $(COPIED_OBJS)
 
 $(obj):
 	@echo "  MKDIR   $(obj)"
@@ -337,6 +341,9 @@ $(obj):
 $(obj)/$(OBJ_PREFIX)%.d $(obj)/$(OBJ_PREFIX)%.o: %.c | $(obj)
 	@echo "  CC      $(notdir $<)"
 	$(Q)$(CC) $(CFLAGS) -c -MMD -MF $(basename $@).d -o $(basename $@).o $<
+
+%.cp.o: %.o
+	$(Q)$(OBJCOPY) --rename-section .bss=.bss.Tpm2_common $< $@
 
 .PHONY: clean
 clean:
