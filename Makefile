@@ -311,6 +311,10 @@ CFLAGS += -I$(ROOTDIR)
 endif
 endif
 
+# Do not allow LTO compilation for this library modules, as it makes it
+# impossible to keep the mudules' .bss segment separate.
+CFLAGS := $(subst -flto,,$(CFLAGS))
+
 # Caller may specify OBJ_PREFIX to prefix all object filenames in the
 # archive with a common string.  This allows the caller's linker
 # script to group the data and bss sections for this library in one
