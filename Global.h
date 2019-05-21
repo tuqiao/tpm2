@@ -510,9 +510,7 @@ typedef enum
    // reserved objects, but located at fixed offset in the NVMEM cache.
    //
    NV_RAM_INDEX_SPACE = NV_RESERVE_LAST,
-   NV_MAX_COUNTER,
-   NV_PSEUDO_RESERVE_LAST    // End of the list including 'pseudo' elements.
-
+   NV_MAX_COUNTER
 } NV_RESERVE;
 //
 //           NV_INDEX
