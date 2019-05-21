@@ -368,9 +368,9 @@ typedef UINT8 TPM_HT;
 #define TPM_HT_POLICY_SESSION  0x03
 #define TPM_HT_ACTIVE_SESSION  0x03
 #define TPM_HT_PERMANENT       0x40
-#define TPM_HT_TRANSIENT       ((TPM_HT)0x80)
-#define TPM_HT_PERSISTENT      ((TPM_HT)0x81)
-#define TPM_HT_HIDDEN          ((TPM_HT)0xfe)
+#define TPM_HT_TRANSIENT       0x80
+#define TPM_HT_PERSISTENT      0x81
+#define TPM_HT_HIDDEN          0xfe
 
 // Table 29  Definition of TPM_RH Constants <  S>
 typedef TPM_HANDLE TPM_RH;
