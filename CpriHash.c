@@ -9,18 +9,31 @@
 
 #include     "OsslCryptoEngine.h"
 #include     "CpriHashData.c"
-#define OSSL_HASH_STATE_DATA_SIZE     (MAX_HASH_STATE_SIZE - 8)
-typedef struct {
-   union    {
-       EVP_MD_CTX context;
-       BYTE         data[OSSL_HASH_STATE_DATA_SIZE];
-   } u;
-   INT16            copySize;
-} OSSL_HASH_STATE;
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 //
 //     Temporary aliasing of SM3 to SHA256 until SM3 is available
 //
-#define EVP_sm3_256 EVP_sha256
+#define EVP_sm3            EVP_sha256
+
+static void *OPENSSL_zalloc(size_t num)
+{
+    void *ret = OPENSSL_malloc(num);
+    if (ret != NULL)
+        memset(ret, 0, num);
+    return ret;
+}
+
+static EVP_MD_CTX *EVP_MD_CTX_new(void)
+{
+    return OPENSSL_zalloc(sizeof(EVP_MD_CTX));
+}
+
+static void EVP_MD_CTX_free(EVP_MD_CTX *ctx)
+{
+    EVP_MD_CTX_cleanup(ctx);
+    OPENSSL_free(ctx);
+}
+#endif
 //
 //
 //          Static Functions
@@ -58,7 +71,7 @@ GetHashServer(
 #endif
 #ifdef TPM_ALG_SM3_256
    case TPM_ALG_SM3_256:
-       return (EVP_MD *)EVP_sm3_256();
+       return (EVP_MD *)EVP_sm3();      // OpenSSL 1.1 introduced this function
        break;
 #endif
    case TPM_ALG_NULL:
@@ -68,59 +81,7 @@ GetHashServer(
    }
    return NULL; // Never reached.
 }
-//
-//
-//        MarshalHashState()
-//
-//     This function copies an OpenSSL() hash context into a caller provided buffer.
-//
-//     Return Value                     Meaning
-//
-//     >0                               the number of bytes of buf used.
-//
-static UINT16
-MarshalHashState(
-    EVP_MD_CTX         *ctxt,               // IN: Context to marshal
-    BYTE               *buf                 // OUT: The buffer that will receive the
-                                            //     context. This buffer is at least
-                                            //     MAX_HASH_STATE_SIZE byte
-    )
-{
-    // make sure everything will fit
-    pAssert(ctxt->digest->ctx_size <= OSSL_HASH_STATE_DATA_SIZE);
-    // Copy the context data
-    memcpy(buf, (void*) ctxt->md_data, ctxt->digest->ctx_size);
-    return (UINT16)ctxt->digest->ctx_size;
-}
-//
-//
-//        GetHashState()
-//
-//     This function will unmarshal a caller provided buffer into an OpenSSL() hash context. The function returns
-//     the number of bytes copied (which may be zero).
-//
-static UINT16
-GetHashState(
-    EVP_MD_CTX         *ctxt,               // OUT: The context structure to receive the
-                                            //     result of unmarshaling.
-    TPM_ALG_ID          algType,            // IN: The hash algorithm selector
-    BYTE               *buf                 // IN: Buffer containing marshaled hash data
-    )
-{
-    EVP_MD             *evpmdAlgorithm = NULL;
-    pAssert(ctxt != NULL);
-    EVP_MD_CTX_init(ctxt);
-    evpmdAlgorithm = GetHashServer(algType);
-    if(evpmdAlgorithm == NULL)
-        return 0;
-    // This also allocates the ctxt->md_data
-    if((EVP_DigestInit_ex(ctxt, evpmdAlgorithm, NULL)) != 1)
-        FAIL(FATAL_ERROR_INTERNAL);
-    pAssert(ctxt->digest->ctx_size < sizeof(ALIGNED_HASH_STATE));
-    memcpy(ctxt->md_data, buf, ctxt->digest->ctx_size);
-//
-    return (UINT16)ctxt->digest->ctx_size;
-}
+
 //
 //
 //          GetHashInfoPointer()
@@ -157,15 +118,6 @@ _cpri__HashStartup(
     void
     )
 {
-    // On startup, make sure that the structure sizes are compatible. It would
-    // be nice if this could be done at compile time but I couldn't figure it out.
-    CPRI_HASH_STATE *cpriState = NULL;
-//     NUMBYTES        evpCtxSize = sizeof(EVP_MD_CTX);
-    NUMBYTES        cpriStateSize = sizeof(cpriState->state);
-//     OSSL_HASH_STATE *osslState;
-    NUMBYTES        osslStateSize = sizeof(OSSL_HASH_STATE);
-//     int             dataSize = sizeof(osslState->u.data);
-    pAssert(cpriStateSize >= osslStateSize);
     return TRUE;
 }
 //
@@ -272,15 +224,21 @@ _cpri__CopyHashState (
     CPRI_HASH_STATE         *in                    // IN: source of the state
     )
 {
-    OSSL_HASH_STATE    *i = (OSSL_HASH_STATE *)&in->state;
-    OSSL_HASH_STATE    *o = (OSSL_HASH_STATE *)&out->state;
-    pAssert(sizeof(i) <= sizeof(in->state));
-    EVP_MD_CTX_init(&o->u.context);
-    EVP_MD_CTX_copy_ex(&o->u.context, &i->u.context);
-    o->copySize = i->copySize;
+    EVP_MD_CTX *in_ctx = *(EVP_MD_CTX **)&in->state;
+    EVP_MD_CTX *out_ctx;
+    pAssert(sizeof(out->state) >= sizeof(EVP_MD_CTX *));
+    if((out_ctx = EVP_MD_CTX_new()) == NULL)
+        FAIL(FATAL_ERROR_INTERNAL);
+    if(!EVP_MD_CTX_copy_ex(out_ctx, in_ctx))
+    {
+        EVP_MD_CTX_free(out_ctx);
+        return 0;
+    }
+    *(EVP_MD_CTX**)&out->state = out_ctx;
     out->hashAlg = in->hashAlg;
-    return sizeof(CPRI_HASH_STATE);
+    return sizeof(EVP_MD_CTX *);
 }
+
 //
 //
 //         _cpri__StartHash()
@@ -294,7 +252,6 @@ _cpri__CopyHashState (
 //
 //      0                                 hash is TPM_ALG_NULL
 //      >0                                digest size
-//
 LIB_EXPORT UINT16
 _cpri__StartHash(
     TPM_ALG_ID               hashAlg,              // IN: hash algorithm
@@ -302,46 +259,19 @@ _cpri__StartHash(
     CPRI_HASH_STATE         *hashState             // OUT: the state of hash stack.
     )
 {
-    EVP_MD_CTX           localState;
-   OSSL_HASH_STATE    *state = (OSSL_HASH_STATE *)&hashState->state;
-   BYTE               *stateData = state->u.data;
-   EVP_MD_CTX         *context;
-   EVP_MD             *evpmdAlgorithm = NULL;
-   UINT16              retVal = 0;
-   if(sequence)
-       context = &localState;
-   else
-       context = &state->u.context;
-   hashState->hashAlg = hashAlg;
-   EVP_MD_CTX_init(context);
-   evpmdAlgorithm = GetHashServer(hashAlg);
-   if(evpmdAlgorithm == NULL)
-       goto Cleanup;
-   if(EVP_DigestInit_ex(context, evpmdAlgorithm, NULL) != 1)
-       FAIL(FATAL_ERROR_INTERNAL);
-   retVal = (CRYPT_RESULT)EVP_MD_CTX_size(context);
-Cleanup:
-   if(retVal > 0)
-   {
-       if (sequence)
-       {
-            if((state->copySize = MarshalHashState(context, stateData)) == 0)
-            {
-                // If MarshalHashState returns a negative number, it is an error
-                // code and not a hash size so copy the error code to be the return
-                // from this function and set the actual stateSize to zero.
-                retVal = state->copySize;
-                state->copySize = 0;
-            }
-            // Do the cleanup
-            EVP_MD_CTX_cleanup(context);
-       }
-       else
-            state->copySize = -1;
-   }
-   else
-       state->copySize = 0;
-   return retVal;
+    EVP_MD_CTX         *context = *(EVP_MD_CTX **)&hashState->state;
+    EVP_MD             *evpmdAlgorithm = NULL;
+    pAssert(sizeof(hashState->state) >= sizeof(EVP_MD_CTX *));
+    evpmdAlgorithm = GetHashServer(hashAlg);
+    if(evpmdAlgorithm == NULL)
+        return 0;
+    if((context = EVP_MD_CTX_new()) == NULL)
+        FAIL(FATAL_ERROR_INTERNAL);
+    *(EVP_MD_CTX**)&hashState->state = context;
+    hashState->hashAlg = hashAlg;
+    if(EVP_DigestInit_ex(context, evpmdAlgorithm, NULL) != 1)
+        FAIL(FATAL_ERROR_INTERNAL);
+    return (CRYPT_RESULT)EVP_MD_CTX_size(context);
 }
 //
 //
@@ -357,35 +287,12 @@ _cpri__UpdateHash(
    BYTE                      *data            // IN: data to be hashed
    )
 {
-   EVP_MD_CTX       localContext;
-   OSSL_HASH_STATE *state = (OSSL_HASH_STATE *)&hashState->state;
-   BYTE            *stateData = state->u.data;
-   EVP_MD_CTX      *context;
-   CRYPT_RESULT     retVal = CRYPT_SUCCESS;
-//
+   EVP_MD_CTX         *context = *(EVP_MD_CTX **)&hashState->state;
     // If there is no context, return
-    if(state->copySize == 0)
+    if(context == NULL)
         return;
-    if(state->copySize > 0)
-    {
-        context = &localContext;
-        if((retVal = GetHashState(context, hashState->hashAlg, stateData)) <= 0)
-            return;
-    }
-    else
-        context = &state->u.context;
     if(EVP_DigestUpdate(context, data, dataSize) != 1)
         FAIL(FATAL_ERROR_INTERNAL);
-    else if(    state->copySize > 0
-                && (retVal= MarshalHashState(context, stateData)) >= 0)
-    {
-        // retVal is the size of the marshaled data. Make sure that it is consistent
-        // by ensuring that we didn't get more than allowed
-        if(retVal < state->copySize)
-             FAIL(FATAL_ERROR_INTERNAL);
-        else
-             EVP_MD_CTX_cleanup(context);
-    }
     return;
 }
 //
@@ -408,24 +315,13 @@ _cpri__CompleteHash(
     BYTE                    *dOut                   // OUT: hash digest
     )
 {
-    EVP_MD_CTX          localState;
-    OSSL_HASH_STATE    *state = (OSSL_HASH_STATE *)&hashState->state;
-    BYTE               *stateData = state->u.data;
-    EVP_MD_CTX         *context;
+    EVP_MD_CTX         *context = *(EVP_MD_CTX **)&hashState->state;
     UINT16              retVal;
     int                 hLen;
-    BYTE                temp[MAX_DIGEST_SIZE];
+    BYTE                temp[EVP_MAX_MD_SIZE];
     BYTE               *rBuffer = dOut;
-    if(state->copySize == 0)
+    if(context == NULL)
         return 0;
-    if(state->copySize > 0)
-    {
-        context = &localState;
-        if((retVal = GetHashState(context, hashState->hashAlg, stateData)) <= 0)
-            goto Cleanup;
-    }
-    else
-        context = &state->u.context;
    hLen = EVP_MD_CTX_size(context);
    if((unsigned)hLen > dOutSize)
        rBuffer = temp;
@@ -443,14 +339,14 @@ _cpri__CompleteHash(
        {
             retVal = (UINT16)hLen;
        }
-       state->copySize = 0;
    }
    else
    {
        retVal = 0; // Indicate that no data is returned
    }
-Cleanup:
-   EVP_MD_CTX_cleanup(context);
+
+   EVP_MD_CTX_free(context);
+   *(EVP_MD_CTX **)&hashState->state = NULL;
    return retVal;
 }
 //
@@ -506,22 +402,22 @@ _cpri__HashBlock(
       BYTE              *digest              //   OUT: hash digest
       )
 {
-      EVP_MD_CTX        hashContext;
+      EVP_MD_CTX       *hashContext;
       EVP_MD           *hashServer = NULL;
       UINT16            retVal = 0;
-      BYTE              b[MAX_DIGEST_SIZE]; // temp buffer in case digestSize not
+      BYTE              b[EVP_MAX_MD_SIZE]; // temp buffer in case digestSize not
       // a full digest
       unsigned int      dSize = _cpri__GetDigestSize(hashAlg);
       // If there is no digest to compute return
       if(dSize == 0)
           return 0;
-      // After the call to EVP_MD_CTX_init(), will need to call EVP_MD_CTX_cleanup()
-      EVP_MD_CTX_init(&hashContext);     // Initialize the local hash context
+      if ((hashContext = EVP_MD_CTX_new()) == NULL)
+          FAIL(FATAL_ERROR_INTERNAL);
       hashServer = GetHashServer(hashAlg); // Find the hash server
       // It is an error if the digest size is non-zero but there is no                server
       if(   (hashServer == NULL)
-         || (EVP_DigestInit_ex(&hashContext, hashServer, NULL) != 1)
-         || (EVP_DigestUpdate(&hashContext, data, dataSize) != 1))
+         || (EVP_DigestInit_ex(hashContext, hashServer, NULL) != 1)
+         || (EVP_DigestUpdate(hashContext, data, dataSize) != 1))
           FAIL(FATAL_ERROR_INTERNAL);
       else
       {
@@ -530,19 +426,19 @@ _cpri__HashBlock(
           // the most significant part into the available buffer.
           if(dSize > digestSize)
           {
-               if(EVP_DigestFinal_ex(&hashContext, b, &dSize) != 1)
+               if(EVP_DigestFinal_ex(hashContext, b, &dSize) != 1)
                    FAIL(FATAL_ERROR_INTERNAL);
                memcpy(digest, b, digestSize);
                retVal = (UINT16)digestSize;
           }
           else
           {
-               if((EVP_DigestFinal_ex(&hashContext, digest, &dSize)) !=               1)
+               if((EVP_DigestFinal_ex(hashContext, digest, &dSize)) !=               1)
                    FAIL(FATAL_ERROR_INTERNAL);
                retVal = (UINT16) dSize;
           }
       }
-      EVP_MD_CTX_cleanup(&hashContext);
+      EVP_MD_CTX_free(hashContext);
       return retVal;
 }
 //
@@ -571,11 +467,12 @@ _cpri__StartHMAC(
       TPM2B                  *oPadKey           //   OUT: the key prepared for the oPad round
       )
 {
-      CPRI_HASH_STATE localState;
+      CPRI_HASH_STATE  localState = {};
       UINT16           blockSize = _cpri__GetHashBlockSize(hashAlg);
       UINT16           digestSize;
       BYTE            *pb;         // temp pointer
       UINT32           i;
+
       // If the key size is larger than the block size, then the hash of the key
       // is used as the key
       if(keySize > blockSize)
@@ -635,8 +532,9 @@ _cpri__CompleteHMAC(
 {
       BYTE             digest[MAX_DIGEST_SIZE];
       CPRI_HASH_STATE *state = (CPRI_HASH_STATE *)hashState;
-      CPRI_HASH_STATE localState;
+      CPRI_HASH_STATE  localState = {};
       UINT16           digestSize = _cpri__GetDigestSize(state->hashAlg);
+
       _cpri__CompleteHash(hashState, digestSize, digest);
       // Using the local hash state, do a hash with the oPad
       if(_cpri__StartHash(state->hashAlg, FALSE, &localState) != digestSize)
@@ -669,7 +567,7 @@ _cpri__MGF1(
    BYTE               *seed            //   IN: seed size
    )
 {
-   EVP_MD_CTX           hashContext;
+   EVP_MD_CTX          *hashContext;
    EVP_MD              *hashServer = NULL;
    CRYPT_RESULT         retVal = 0;
    BYTE                 b[MAX_DIGEST_SIZE]; // temp buffer in case mask is not an
@@ -685,19 +583,20 @@ _cpri__MGF1(
    // If there is no digest to compute return
    if(dSize <= 0)
        return 0;
-   EVP_MD_CTX_init(&hashContext);     // Initialize the local hash context
    hashServer = GetHashServer(hashAlg); // Find the hash server
    if(hashServer == NULL)
        // If there is no server, then there is no digest
        return 0;
+   if ((hashContext = EVP_MD_CTX_new()) == NULL)
+       FAIL(FATAL_ERROR_INTERNAL);
    for(counter = 0, remaining = mSize; remaining > 0; counter++)
    {
        // Because the system may be either Endian...
        UINT32_TO_BYTE_ARRAY(counter, swappedCounter);
         // Start the hash and include the seed and counter
-        if(    (EVP_DigestInit_ex(&hashContext, hashServer, NULL) != 1)
-            || (EVP_DigestUpdate(&hashContext, seed, sSize) != 1)
-            || (EVP_DigestUpdate(&hashContext, swappedCounter, 4) != 1)
+        if(    (EVP_DigestInit_ex(hashContext, hashServer, NULL) != 1)
+            || (EVP_DigestUpdate(hashContext, seed, sSize) != 1)
+            || (EVP_DigestUpdate(hashContext, swappedCounter, 4) != 1)
           )
              FAIL(FATAL_ERROR_INTERNAL);
         // Handling the completion depends on how much space remains in the mask
@@ -706,21 +605,21 @@ _cpri__MGF1(
         // will fit into the mask buffer.
         if(remaining < (unsigned)dSize)
         {
-             if(EVP_DigestFinal_ex(&hashContext, b, &digestSize) != 1)
+             if(EVP_DigestFinal_ex(hashContext, b, &digestSize) != 1)
                  FAIL(FATAL_ERROR_INTERNAL);
              memcpy(mask, b, remaining);
              break;
         }
         else
         {
-             if(EVP_DigestFinal_ex(&hashContext, mask, &digestSize) != 1)
+             if(EVP_DigestFinal_ex(hashContext, mask, &digestSize) != 1)
                  FAIL(FATAL_ERROR_INTERNAL);
              remaining -= dSize;
              mask = &mask[dSize];
         }
         retVal = (CRYPT_RESULT)mSize;
-   }
-   EVP_MD_CTX_cleanup(&hashContext);
+    }
+    EVP_MD_CTX_free(hashContext);
     return retVal;
 }
 //
@@ -766,7 +665,7 @@ _cpri__KDFa(
     INT16                          bytes;          // number of bytes to produce
     BYTE                          *stream = keyStream;
     BYTE                           marshaledUint32[4];
-    CPRI_HASH_STATE                hashState;
+    CPRI_HASH_STATE                hashState = {};
     TPM2B_MAX_HASH_BLOCK           hmacKey;
     pAssert(key != NULL && keyStream != NULL);
     pAssert(once == FALSE || (sizeInBits & 7) == 0);
@@ -859,7 +758,7 @@ _cpri__KDFe(
     UINT32       counter = 0;        // counter value
     UINT32       lSize = 0;
     BYTE        *stream = keyStream;
-    CPRI_HASH_STATE         hashState;
+    CPRI_HASH_STATE         hashState = {};
     INT16        hLen = (INT16) _cpri__GetDigestSize(hashAlg);
     INT16        bytes;              // number of bytes to generate
     BYTE         marshaledUint32[4];
