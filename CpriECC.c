@@ -224,9 +224,12 @@ PointFrom2B(
          bnY == NULL
       || BN_bin2bn(p->x.t.buffer, p->x.t.size, bnX) == NULL
       || BN_bin2bn(p->y.t.buffer, p->y.t.size, bnY) == NULL
-      || !EC_POINT_set_affine_coordinates_GFp(group, ecP, bnX, bnY, context)
       )
       FAIL(FATAL_ERROR_INTERNAL);
+   if(   !EC_POINT_set_affine_coordinates_GFp(group, ecP, bnX, bnY, context)
+      || EC_POINT_is_on_curve(group, ecP, context) <= 0
+      )
+      ecP = NULL; // Point is not on curve
    BN_CTX_end(context);
    return ecP;
 }
@@ -248,7 +251,10 @@ EccInitPoint2B(
     BN_CTX_start(context);
     ecP = EC_POINT_new(group);
     if(PointFrom2B(group, ecP, p, context) == NULL)
-        FAIL(FATAL_ERROR_INTERNAL);
+    {
+        EC_POINT_free(ecP);
+        ecP = NULL;
+    }
     BN_CTX_end(context);
     return ecP;
 }
@@ -380,7 +386,11 @@ _cpri__EccPointMultiply(
        // the contexts in which this function will be called.
        assert2Bsize(Qin->x.t);
        assert2Bsize(Qin->x.t);
-       Q = EccInitPoint2B(group, Qin, context);
+       if (!(Q = EccInitPoint2B(group, Qin, context)))
+       {
+          retVal = CRYPT_POINT;
+          goto Cleanup;
+       }
    }
    if(dIn != NULL)
    {
@@ -412,6 +422,7 @@ _cpri__EccPointMultiply(
     // Use the generator of the curve
     if((retVal = PointMul(group, R, bnD, Q, bnU, context)) == CRYPT_SUCCESS)
         Point2B(group, Rout, R, (INT16) ((EC_GROUP_get_degree(group)+7)/8), context);
+Cleanup:
     if (Q)
         EC_POINT_free(Q);
     if(R)
@@ -517,7 +528,11 @@ _cpri__EccCommitCompute(
        FAIL(FATAL_ERROR_ALLOCATION);
        // need to compute K = [d]B
        // Allocate and initialize BIGNUM version of B
-       pB = EccInitPoint2B(group, B, context);
+       if (!(pB = EccInitPoint2B(group, B, context)))
+       {
+            retVal = CRYPT_POINT;
+            goto Cleanup;
+       }
         // do the math for K = [d]B
         if((retVal = PointMul(group, pK, NULL, pB, bnD, context)) != CRYPT_SUCCESS)
             goto Cleanup;
@@ -550,7 +565,11 @@ _cpri__EccCommitCompute(
         if(M != NULL)
         {
              // M provided so initialize a BIGNUM M and compute E = [r]M
-             pM = EccInitPoint2B(group, M, context);
+             if (!(pM = EccInitPoint2B(group, M, context)))
+             {
+                 retVal = CRYPT_POINT;
+                 goto Cleanup;
+             }
              retVal = PointMul(group, pE, NULL, pM, bnR, context);
         }
         else
@@ -1429,7 +1448,6 @@ ValidateSignatureEcdsa(
    TPMS_ECC_POINT              R;
    const TPM2B                *n;
    BN_CTX                     *context;
-   EC_POINT                   *pQ = NULL;
    EC_GROUP                   *group = NULL;
    BIGNUM                     *bnU1;
    BIGNUM                     *bnU2;
@@ -1439,8 +1457,6 @@ ValidateSignatureEcdsa(
    BIGNUM                     *bnV;
    BIGNUM                     *bnN;
    BIGNUM                     *bnE;
-   BIGNUM                     *bnQx;
-   BIGNUM                     *bnQy;
    CRYPT_RESULT                retVal = CRYPT_FAIL;
    int                         t;
    const ECC_CURVE_DATA       *curveData = GetCurveData(curveId);
@@ -1464,8 +1480,6 @@ ValidateSignatureEcdsa(
    bnE = BN_CTX_get(context);
    bnV = BN_CTX_get(context);
    bnW = BN_CTX_get(context);
-   bnQx = BN_CTX_get(context);
-   bnQy = BN_CTX_get(context);
    bnU1 = BN_CTX_get(context);
    bnU2 = BN_CTX_get(context);
    // Assume the size variables do not overflow, which should not happen in
@@ -1478,12 +1492,6 @@ ValidateSignatureEcdsa(
    if(   bnU2 == NULL
         // initialize the group parameters
        || (group = EccCurveInit(curveId, context)) == NULL
-       // allocate a local point
-       || (pQ = EC_POINT_new(group)) == NULL
-       //   use the public key values (QxIn and QyIn) to initialize Q
-       ||   BN_bin2bn(Qin->x.t.buffer, Qin->x.t.size, bnQx) == NULL
-       ||   BN_bin2bn(Qin->x.t.buffer, Qin->x.t.size, bnQy) == NULL
-       ||   !EC_POINT_set_affine_coordinates_GFp(group, pQ, bnQx, bnQy, context)
        // convert the signature values
        || BN_bin2bn(rIn->t.buffer, rIn->t.size, bnR) == NULL
        || BN_bin2bn(sIn->t.buffer, sIn->t.size, bnS) == NULL
@@ -1508,17 +1516,16 @@ ValidateSignatureEcdsa(
 // 6. Compute the elliptic curve point R = (xR, yR) = u1G+u2Q, using EC
 //    scalar multiplication and EC addition (see [Routines]). If R is equal to
 //    the point at infinity O, output INVALID.
-   if(_cpri__EccPointMultiply(&R, curveId, &U1, Qin, &U2) == CRYPT_SUCCESS)
+   if((retVal = _cpri__EccPointMultiply(&R, curveId, &U1, Qin, &U2)) == CRYPT_SUCCESS)
    {
        // 7. Compute v = Rx mod n.
        if(    BN_bin2bn(R.x.t.buffer, R.x.t.size, bnV) == NULL
            || !BN_mod(bnV, bnV, bnN, context))
             FAIL(FATAL_ERROR_INTERNAL);
    // 8. Compare v and r0. If v = r0, output VALID; otherwise, output INVALID
-       if(BN_cmp(bnV, bnR) == 0)
-           retVal = CRYPT_SUCCESS;
+       if(BN_cmp(bnV, bnR))
+           retVal = CRYPT_FAIL;
    }
-   if(pQ != NULL) EC_POINT_free(pQ);
    if(group != NULL) EC_GROUP_free(group);
    BN_CTX_end(context);
    BN_CTX_free(context);
@@ -1651,7 +1658,8 @@ ValidateSignatureSM2Dsa(
    cpy_hexTo2B(digest,
           "B524F552CD82B8B028476E005C377FB19A87E6FC682D48BB5D42E3D9B9EFFE76");
 #endif
-   pQ = EccInitPoint2B(group, Qin, context);
+   if (!(pQ = EccInitPoint2B(group, Qin, context)))
+       goto Cleanup;
 #ifdef _SM2_SIGN_DEBUG
    pAssert(EC_POINT_get_affine_coordinates_GFp(group, pQ, bnT, bnS, context));
    pAssert(cmp_bn2hex(bnT,
@@ -1837,7 +1845,7 @@ C_2_2_MQV(
    BIGNUM                          *bnN;
    BIGNUM                          *bnXeB;
    const ECC_CURVE_DATA            *curveData = GetCurveData(curveId);
-   CRYPT_RESULT                    retVal;
+   CRYPT_RESULT                    retVal = CRYPT_POINT;
    pAssert(       curveData != NULL && outZ != NULL && dsA != NULL
            &&           deA != NULL && QsB != NULL && QeB != NULL);
    context = BN_CTX_new();
@@ -1868,8 +1876,16 @@ C_2_2_MQV(
    BnFrom2B(bnH, curveData->h);
    BnFrom2B(bnN, curveData->n);
    BnFrom2B(bnXeB, &QeB->x.b);
-   pQeB = EccInitPoint2B(group, QeB, context);
-   pQsB = EccInitPoint2B(group, QsB, context);
+   if (!(pQeB = EccInitPoint2B(group, QeB, context)))
+   {
+       retVal = CRYPT_POINT;
+       goto Cleanup;
+   }
+   if (!(pQsB = EccInitPoint2B(group, QsB, context)))
+   {
+       retVal = CRYPT_POINT;
+       goto Cleanup;
+   }
    // Compute the public ephemeral key pQeA = [de,A]G
    if(    (retVal = PointMul(group, pQeA, bnDeA, NULL, NULL, context))
       != CRYPT_SUCCESS)
@@ -1983,7 +1999,7 @@ SM2KeyExchange(
     BIGNUM                         *bnXeB;
 //
    const ECC_CURVE_DATA      *curveData = GetCurveData(curveId);
-   CRYPT_RESULT              retVal;
+   CRYPT_RESULT              retVal = CRYPT_POINT;
    pAssert(       curveData != NULL && outZ != NULL && dsA != NULL
            &&           deA != NULL && QsB != NULL && QeB != NULL);
    context = BN_CTX_new();
@@ -2009,8 +2025,10 @@ SM2KeyExchange(
    BnFrom2B(bnH, curveData->h);
    BnFrom2B(bnN, curveData->n);
    BnFrom2B(bnXeB, &QeB->x.b);
-   pQeB = EccInitPoint2B(group, QeB, context);
-   pQsB = EccInitPoint2B(group, QsB, context);
+   if(!(pQeB = EccInitPoint2B(group, QeB, context)))
+       goto Cleanup;
+   if(!(pQsB = EccInitPoint2B(group, QsB, context)))
+       goto Cleanup;
    // Compute the public ephemeral key pQeA = [de,A]G
    if(    (retVal = PointMul(group, pQeA, bnDeA, NULL, NULL, context))
       != CRYPT_SUCCESS)
@@ -2085,6 +2103,7 @@ C_2_2_ECDH(
    EC_GROUP                      *group = NULL;
    BIGNUM                        *bnD;
    INT16                          size;
+   CRYPT_RESULT                  retVal = CRYPT_POINT;
    const ECC_CURVE_DATA          *curveData = GetCurveData(curveId);
    context = BN_CTX_new();
    if(context == NULL || curveData == NULL)
@@ -2102,7 +2121,8 @@ C_2_2_ECDH(
    // Get the static private key of A
    BnFrom2B(bnD, &dsA->b);
    // Initialize the static public point from B
-   pQ = EccInitPoint2B(group, QsB, context);
+   if (!(pQ = EccInitPoint2B(group, QsB, context)))
+       goto Cleanup;
    // Do the point multiply for the Zs value
    if(PointMul(group, pQ, NULL, pQ, bnD, context) != CRYPT_NO_RESULT)
        // Convert the Zs value
@@ -2110,16 +2130,21 @@ C_2_2_ECDH(
    // Get the ephemeral private key of A
    BnFrom2B(bnD, &deA->b);
    // Initalize the ephemeral public point from B
-   PointFrom2B(group, pQ, QeB, context);
+   if (!PointFrom2B(group, pQ, QeB, context))
+       goto Cleanup;
    // Do the point multiply for the Ze value
    if(PointMul(group, pQ, NULL, pQ, bnD, context) != CRYPT_NO_RESULT)
        // Convert the Ze value.
-       Point2B(group, outZ2, pQ, size, context);
+       {
+           Point2B(group, outZ2, pQ, size, context);
+           retVal = CRYPT_SUCCESS;
+       }
+Cleanup:
    if(pQ != NULL) EC_POINT_free(pQ);
    if(group != NULL) EC_GROUP_free(group);
    BN_CTX_end(context);
    BN_CTX_free(context);
-   return CRYPT_SUCCESS;
+   return retVal;
 }
 //
 //
