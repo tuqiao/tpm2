@@ -771,13 +771,13 @@ typedef struct {
 // Table 95  Definition of TPML_CC Structure
 typedef struct {
   UINT32  count;
-  TPM_CC  commandCodes[MAX_CAP_CC];
+  TPM_CC  commandCodes[MAX_CAP_CC_ALL];
 } TPML_CC;
 
 // Table 96  Definition of TPML_CCA Structure <  OUT>
 typedef struct {
   UINT32   count;
-  TPMA_CC  commandAttributes[MAX_CAP_CC];
+  TPMA_CC  commandAttributes[MAX_CAP_CC_ALL];
 } TPML_CCA;
 
 // Table 97  Definition of TPML_ALG Structure

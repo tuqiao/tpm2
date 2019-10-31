@@ -765,7 +765,7 @@ typedef struct
 //*****************************************************************************
 //           Command audit values.
 //*****************************************************************************
-   BYTE                auditComands[((TPM_CC_LAST - TPM_CC_FIRST + 1) + 7) / 8];
+   BYTE                auditComands[(MAX_CAP_CC_ALL + 7) / 8];
    TPMI_ALG_HASH       auditHashAlg;
    UINT64              auditCounter;
 //*****************************************************************************

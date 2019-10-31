@@ -10,6 +10,22 @@
 //
 //           Functions
 //
+//
+//      GetBitPosForCC()
+//
+//      Helper function returning a bit offset in command audit bitmap for
+//      the given command code or extended command code.
+//
+//      Return Value                 Meaning
+//
+//        UINT32                     bit-offset in command audit bitmap
+static UINT32 GetBitPosForCC(TPM_CC commandCode)
+{
+    if (commandCode & TPM_CCE_BIT_MASK)
+        return MAX_CAP_CC + commandCode - TPM_CCE_FIRST;
+    return commandCode - TPM_CC_FIRST;
+}
+//
 //           CommandAuditPreInstall_Init()
 //
 //     This function initializes the command audit list. This function is simulates the behavior of manufacturing. A
@@ -23,8 +39,8 @@ CommandAuditPreInstall_Init(
      )
 {
      // Clear all the audit commands
-     MemorySet(gp.auditComands, 0x00,
-               ((TPM_CC_LAST - TPM_CC_FIRST + 1) + 7) / 8);
+     MemorySet(gp.auditComands, 0x00, sizeof(gp.auditComands));
+
      // TPM_CC_SetCommandCodeAuditStatus always being audited
      if(CommandIsImplemented(TPM_CC_SetCommandCodeAuditStatus))
          CommandAuditSet(TPM_CC_SetCommandCodeAuditStatus);
@@ -77,14 +93,13 @@ CommandAuditSet(
    TPM_CC              commandCode          // IN: command code
    )
 {
-   UINT32         bitPos;
+   UINT32         bitPos = GetBitPosForCC(commandCode);
    // Only SET a bit if the corresponding command is implemented
    if(CommandIsImplemented(commandCode))
    {
        // Can't audit shutdown
        if(commandCode != TPM_CC_Shutdown)
        {
-           bitPos = commandCode - TPM_CC_FIRST;
            if(!BitIsSet(bitPos, &gp.auditComands[0], sizeof(gp.auditComands)))
            {
                // Set bit
@@ -118,7 +133,7 @@ CommandAuditClear(
     TPM_CC               commandCode        // IN: command code
     )
 {
-    UINT32         bitPos;
+    UINT32         bitPos = GetBitPosForCC(commandCode);
     // Do nothing if the command is not implemented
     if(CommandIsImplemented(commandCode))
     {
@@ -126,7 +141,6 @@ CommandAuditClear(
         // cleared
         if(commandCode != TPM_CC_SetCommandCodeAuditStatus)
         {
-            bitPos = commandCode - TPM_CC_FIRST;
             if(BitIsSet(bitPos, &gp.auditComands[0], sizeof(gp.auditComands)))
             {
                 // Clear bit
@@ -154,8 +168,7 @@ CommandAuditIsRequired(
     TPM_CC               commandCode        // IN: command code
     )
 {
-    UINT32         bitPos;
-    bitPos = commandCode - TPM_CC_FIRST;
+    UINT32         bitPos = GetBitPosForCC(commandCode);
     // Check the bit map. If the bit is SET, command audit is required
     if((gp.auditComands[bitPos/8] & (1 << (bitPos % 8))) != 0)
         return TRUE;
@@ -190,13 +203,17 @@ CommandAuditCapGetCCList(
      UINT32           i;
      // Initialize output handle list
      commandList->count = 0;
-     // The maximum count of command we may return is MAX_CAP_CC
-     if(count > MAX_CAP_CC) count = MAX_CAP_CC;
+     // The maximum count of commands we may return is MAX_CAP_CC_ALL.
+     if(count > MAX_CAP_CC_ALL) count = MAX_CAP_CC_ALL;
      // If the command code is smaller than TPM_CC_FIRST, start from TPM_CC_FIRST
      if(commandCode < TPM_CC_FIRST) commandCode = TPM_CC_FIRST;
      // Collect audit commands
-     for(i = commandCode; i <= TPM_CC_LAST; i++)
+     for(i = commandCode; i <= TPM_CCE_LAST; i++)
      {
+         if (i > TPM_CC_LAST && i < TPM_CCE_FIRST)
+         {
+             i = TPM_CCE_FIRST;
+         }
          if(CommandAuditIsRequired(i))
          {
              if(commandList->count < count)
@@ -235,8 +252,12 @@ CommandAuditGetDigest(
      // Start hash
      digest->t.size = CryptStartHash(gp.auditHashAlg, &hashState);
      // Add command code
-     for(i = TPM_CC_FIRST; i <= TPM_CC_LAST; i++)
+     for(i = TPM_CC_FIRST; i <= TPM_CCE_LAST; i++)
      {
+         if (i > TPM_CC_LAST && i < TPM_CCE_FIRST)
+         {
+             i = TPM_CCE_FIRST;
+         }
          if(CommandAuditIsRequired(i))
          {
              CryptUpdateDigestInt(&hashState, sizeof(i), &i);
