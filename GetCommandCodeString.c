@@ -7,6 +7,18 @@
 #include "GetCommandCodeString_fp.h"
 
 const char* GetCommandCodeString(TPM_CC command_code) {
+  if (command_code & TPM_CCE_BIT_MASK) {
+    switch (command_code) {
+#if IS_CCE_ENABLED(PolicyFidoSigned)
+    case TPM_CCE_PolicyFidoSigned:
+      return "PolicyFidoSigned";
+#endif
+    default:
+      break;
+    }
+    return "Unknown ext command";
+  }
+
   switch (command_code) {
 #if IS_CC_ENABLED(ActivateCredential)
     case TPM_CC_ActivateCredential:

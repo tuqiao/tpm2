@@ -77,6 +77,7 @@
 #include "PolicyCounterTimer_fp.h"
 #include "PolicyCpHash_fp.h"
 #include "PolicyDuplicationSelect_fp.h"
+#include "PolicyFidoSigned_fp.h"
 #include "PolicyGetDigest_fp.h"
 #include "PolicyLocality_fp.h"
 #include "PolicyNV_fp.h"
@@ -123,6 +124,22 @@ TPM_RC CommandDispatcher(TPMI_ST_COMMAND_TAG tag,
                          UINT32* response_handle_buffer_size,
                          UINT32* response_parameter_buffer_size) {
   BYTE* request_parameter_buffer = request_parameter_buffer_start;
+
+  if (command_code & TPM_CCE_BIT_MASK) {
+    switch (command_code) {
+#if IS_CCE_ENABLED(PolicyFidoSigned)
+    case TPM_CCE_PolicyFidoSigned:
+      return Exec_PolicyFidoSigned(tag, &request_parameter_buffer,
+                              request_parameter_buffer_size, request_handles,
+                              response_handle_buffer_size,
+                              response_parameter_buffer_size);
+#endif
+    default:
+      break;
+    }
+    return TPM_RC_COMMAND_CODE;
+  }
+
   switch (command_code) {
 #if IS_CC_ENABLED(ActivateCredential)
     case TPM_CC_ActivateCredential:

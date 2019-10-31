@@ -16,6 +16,33 @@ TPM_RC ParseHandleBuffer(TPM_CC command_code,
                          UINT32* num_request_handles) {
   TPM_RC result = TPM_RC_SUCCESS;
   *num_request_handles = 0;
+
+  if (command_code & TPM_CCE_BIT_MASK) {
+    switch (command_code) {
+#if IS_CCE_ENABLED(PolicyFidoSigned)
+    case TPM_CCE_PolicyFidoSigned:
+      result = TPMI_DH_OBJECT_Unmarshal(
+          (TPMI_DH_OBJECT*)&request_handles[*num_request_handles],
+          request_handle_buffer_start, request_buffer_remaining_size, FALSE);
+      if (result != TPM_RC_SUCCESS)
+        return result;
+
+      ++(*num_request_handles);
+      result = TPMI_SH_POLICY_Unmarshal(
+          (TPMI_SH_POLICY*)&request_handles[*num_request_handles],
+          request_handle_buffer_start, request_buffer_remaining_size);
+      if (result != TPM_RC_SUCCESS)
+        return result;
+
+      ++(*num_request_handles);
+      return TPM_RC_SUCCESS;
+#endif
+    default:
+      break;
+    }
+    return TPM_RC_COMMAND_CODE;
+  }
+
   switch (command_code) {
 #if IS_CC_ENABLED(ActivateCredential)
     case TPM_CC_ActivateCredential:

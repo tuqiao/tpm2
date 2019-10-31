@@ -1657,5 +1657,16 @@ typedef union {
   TPM2B b;
 } TPM2B_CREATION_DATA;
 
+// Definitions of TPM2B_AUTHDATA, a parameter for PolicyFidoSigned command
+#define MAX_AUTH_DATA_DESCR_COUNT       16
+#define MAX_AUTH_DATA_SIZE              512
+
+typedef union {
+  struct {
+    UINT16  size;
+    BYTE    buffer[MAX_AUTH_DATA_SIZE];
+  } t;
+  TPM2B b;
+} TPM2B_AUTHDATA;
 
 #endif  // TPM2_TPM_TYPES_H_
