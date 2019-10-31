@@ -5218,6 +5218,11 @@ TPM_RC TPM_CC_Unmarshal(TPM_CC* target, BYTE** buffer, INT32* size) {
     return TPM_RC_SUCCESS;
   }
 #endif
+#if IS_CCE_ENABLED(PolicyFidoSigned)
+  if (*target == TPM_CCE_PolicyFidoSigned) {
+    return TPM_RC_SUCCESS;
+  }
+#endif
   return TPM_RC_COMMAND_CODE;
 }
 

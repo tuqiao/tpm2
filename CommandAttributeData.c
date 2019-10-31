@@ -118,7 +118,10 @@ static const TPMA_CC           s_ccAttr [] =      {
          {0x018c,   0,   0,   0,   0,   1,   0,   0,   0},     //   TPM_CC_PolicyPassword
          {0x018d,   0,   0,   0,   0,   1,   0,   0,   0},     //   TPM_CC_ZGen_2Phase
          {0x018e,   0,   0,   0,   0,   0,   0,   0,   0},     //   TPM_CC_EC_Ephemeral
-         {0x018f,   0,   0,   0,   0,   1,   0,   0,   0}      //   TPM_CC_PolicyNvWritten
+         {0x018f,   0,   0,   0,   0,   1,   0,   0,   0},     //   TPM_CC_PolicyNvWritten
+
+         // Attr for Extended Commands
+         {0x8001,   0,   0,   0,   0,   2,   0,   0,   0},  // TPM_CCE_PolicyFidoSigned
 };
 typedef    UINT16                    _ATTR_;
 #define    NOT_IMPLEMENTED           (_ATTR_)(0)
@@ -372,5 +375,5 @@ static const COMMAND_ATTRIBUTES    s_commandAttributes [] = {
 
 // CommandAttributes for extended commands
 static const COMMAND_ATTRIBUTES    s_commandAttributesExt [] = {
- (_ATTR_)(0),
+  (_ATTR_)(CCE_PolicyFidoSigned         * (IS_IMPLEMENTED+DECRYPT_2+ENCRYPT_2)),
 };

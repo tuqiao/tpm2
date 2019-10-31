@@ -276,6 +276,8 @@
 #define    CC_ZGen_2Phase                    CC_SET((CC_S_OPTIONAL * ALG_ECC))
 
 #define IS_CCE_ENABLED(cmd) ((CCE_##cmd) == CC_YES)
+#define    CCE_PolicyFidoSigned              CC_SET(CC_S_CROS_TCG)
+
 //
 //      From Vendor-Specific: Table 7 - Defines for Implementation Values
 //
@@ -707,6 +709,7 @@ typedef UINT32              TPM_CC;
  */
 #define TPM_CCE_BIT_MASK                      (TPM_CC)(0x20000000)
 #define TPM_CCE_FIRST                         (TPM_CC)(TPM_CCE_BIT_MASK|0x8001)
+#define TPM_CCE_PolicyFidoSigned              (TPM_CC)(TPM_CCE_FIRST)
 #define TPM_CCE_LAST                          (TPM_CC)(TPM_CCE_BIT_MASK|0x8001)
 
 #ifndef MAX
