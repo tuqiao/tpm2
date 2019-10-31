@@ -5238,7 +5238,7 @@ TPM_RC TPML_CC_Unmarshal(TPML_CC* target, BYTE** buffer, INT32* size) {
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-  if (target->count > MAX_CAP_CC) {
+  if (target->count > MAX_CAP_CC_ALL) {
     return TPM_RC_SIZE;
   }
   for (i = 0; i < target->count; ++i) {
@@ -5267,7 +5267,7 @@ TPM_RC TPML_CCA_Unmarshal(TPML_CCA* target, BYTE** buffer, INT32* size) {
   if (result != TPM_RC_SUCCESS) {
     return result;
   }
-  if (target->count > MAX_CAP_CC) {
+  if (target->count > MAX_CAP_CC_ALL) {
     return TPM_RC_SIZE;
   }
   for (i = 0; i < target->count; ++i) {
