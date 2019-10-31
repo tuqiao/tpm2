@@ -18,6 +18,30 @@ typedef UINT16          ATTRIBUTE_TYPE;
 //
 #include       "CommandAttributeData.c"
 //
+//  SafeGetAttributesForCC()
+//
+//  Helper function returning a command attribute value for the given command
+//  code or extended command code.
+//
+//  Return Value                 Meaning
+//
+//  COMMAND_ATTRIBUTES            command attribute for the given command
+//
+static COMMAND_ATTRIBUTES SafeGetAttributesForCC(TPM_CC commandCode) {
+  const COMMAND_ATTRIBUTES kUnimplementedAttr = 0;
+
+  if (commandCode & TPM_CCE_BIT_MASK) {
+    if (commandCode >= TPM_CCE_FIRST && commandCode <= TPM_CCE_LAST)
+      return s_commandAttributesExt[commandCode - TPM_CCE_FIRST];
+  } else {
+    if (commandCode >= TPM_CC_FIRST && commandCode <= TPM_CC_LAST)
+      return s_commandAttributes[commandCode - TPM_CC_FIRST];
+  }
+
+  return kUnimplementedAttr;
+}
+//
+//
 //
 //          Command Attribute Functions
 //
@@ -38,16 +62,17 @@ CommandAuthRole(
      UINT32        handleIndex                  // IN: handle index (zero based)
      )
 {
+   ATTRIBUTE_TYPE properties = SafeGetAttributesForCC(commandCode);
+
    if(handleIndex > 1)
        return AUTH_NONE;
    if(handleIndex == 0) {
-       ATTRIBUTE_TYPE properties = s_commandAttributes[commandCode - TPM_CC_FIRST];
        if(properties & HANDLE_1_USER) return AUTH_USER;
        if(properties & HANDLE_1_ADMIN) return AUTH_ADMIN;
        if(properties & HANDLE_1_DUP) return AUTH_DUP;
        return AUTH_NONE;
    }
-   if(s_commandAttributes[commandCode - TPM_CC_FIRST] & HANDLE_2_USER)
+   if(properties & HANDLE_2_USER)
            return AUTH_USER;
    return AUTH_NONE;
 }
@@ -67,12 +92,7 @@ CommandIsImplemented(
     TPM_CC                commandCode          // IN: command code
     )
 {
-    if(commandCode < TPM_CC_FIRST || commandCode > TPM_CC_LAST)
-        return FALSE;
-    if((s_commandAttributes[commandCode - TPM_CC_FIRST] & IS_IMPLEMENTED))
-        return TRUE;
-    else
-        return FALSE;
+  return (SafeGetAttributesForCC(commandCode) & IS_IMPLEMENTED) ? TRUE : FALSE;
 }
 //
 //
@@ -114,7 +134,7 @@ EncryptSize(
     TPM_CC                commandCode          // IN: commandCode
     )
 {
-    COMMAND_ATTRIBUTES        ca = s_commandAttributes[commandCode - TPM_CC_FIRST];
+    COMMAND_ATTRIBUTES        ca = SafeGetAttributesForCC(commandCode);
     if(ca & ENCRYPT_2)
         return 2;
     if(ca & ENCRYPT_4)
@@ -138,7 +158,7 @@ DecryptSize(
     TPM_CC                commandCode          // IN: commandCode
     )
 {
-    COMMAND_ATTRIBUTES        ca = s_commandAttributes[commandCode - TPM_CC_FIRST];
+    COMMAND_ATTRIBUTES        ca = SafeGetAttributesForCC(commandCode);
     if(ca & DECRYPT_2)
         return 2;
     if(ca & DECRYPT_4)
@@ -162,10 +182,7 @@ IsSessionAllowed(
     TPM_CC                commandCode          // IN: the command to be checked
     )
 {
-    if(s_commandAttributes[commandCode - TPM_CC_FIRST] & NO_SESSIONS)
-        return FALSE;
-    else
-        return TRUE;
+    return (SafeGetAttributesForCC(commandCode) & NO_SESSIONS) ? FALSE : TRUE;
 }
 //
 //
@@ -176,11 +193,7 @@ IsHandleInResponse(
     TPM_CC                commandCode
     )
 {
-    if(s_commandAttributes[commandCode - TPM_CC_FIRST] & R_HANDLE)
-        return TRUE;
-    else
-        return FALSE;
-//
+    return (SafeGetAttributesForCC(commandCode) & R_HANDLE) ? TRUE : FALSE;
 }
 //
 //
@@ -262,13 +275,17 @@ CommandCapGetCCList(
      UINT32            i;
      // initialize output handle list count
      commandList->count = 0;
-     // The maximum count of commands that may be return is MAX_CAP_CC.
-     if(count > MAX_CAP_CC) count = MAX_CAP_CC;
+     // The maximum count of commands that may be returned is MAX_CAP_CC_ALL.
+     if(count > MAX_CAP_CC_ALL) count = MAX_CAP_CC_ALL;
      // If the command code is smaller than TPM_CC_FIRST, start from TPM_CC_FIRST
      if(commandCode < TPM_CC_FIRST) commandCode = TPM_CC_FIRST;
      // Collect command attributes
-     for(i = commandCode; i <= TPM_CC_LAST; i++)
+     for(i = commandCode; i <= TPM_CCE_LAST; i++)
      {
+         if (i > TPM_CC_LAST && i < TPM_CCE_FIRST)
+         {
+             i = TPM_CCE_FIRST;
+         }
          if(CommandIsImplemented(i))
          {
              if(commandList->count < count)

@@ -369,3 +369,8 @@ static const COMMAND_ATTRIBUTES    s_commandAttributes [] = {
    (_ATTR_)(CC_PolicyNvWritten            * (IS_IMPLEMENTED))
       // 0x018f
 };
+
+// CommandAttributes for extended commands
+static const COMMAND_ATTRIBUTES    s_commandAttributesExt [] = {
+ (_ATTR_)(0),
+};

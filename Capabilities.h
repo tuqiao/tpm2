@@ -11,6 +11,8 @@
 #define       MAX_CAP_ALGS                (ALG_LAST_VALUE - ALG_FIRST_VALUE + 1)
 #define       MAX_CAP_HANDLES             (MAX_CAP_DATA/sizeof(TPM_HANDLE))
 #define       MAX_CAP_CC                  ((TPM_CC_LAST - TPM_CC_FIRST) + 1)
+#define       MAX_CAP_CCE                 ((TPM_CCE_LAST - TPM_CCE_FIRST) + 1)
+#define       MAX_CAP_CC_ALL              (MAX_CAP_CC + MAX_CAP_CCE)
 #define       MAX_TPM_PROPERTIES          (MAX_CAP_DATA/sizeof(TPMS_TAGGED_PROPERTY))
 #define       MAX_PCR_PROPERTIES          (MAX_CAP_DATA/sizeof(TPMS_TAGGED_PCR_SELECT))
 #define       MAX_ECC_CURVES              (MAX_CAP_DATA/sizeof(TPM_ECC_CURVE))

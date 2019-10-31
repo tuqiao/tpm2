@@ -255,14 +255,15 @@ TPMPropertyIsDefined(
            break;
        case TPM_PT_TOTAL_COMMANDS:
            // total number of commands implemented in the TPM
-             // Since the reference implementation does not have any
-             // vendor-defined commands, this will be the same as the
-             // number of library commands.
         {
              UINT32 i;
              *value = 0;
              // calculate implemented command numbers
              for(i = TPM_CC_FIRST; i <= TPM_CC_LAST; i++)
+             {
+                 if(CommandIsImplemented(i)) (*value)++;
+             }
+             for(i = TPM_CCE_FIRST; i <= TPM_CCE_LAST; i++)
              {
                  if(CommandIsImplemented(i)) (*value)++;
              }
