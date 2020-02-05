@@ -1232,10 +1232,33 @@ NvGetIndexInfo(
     NV_INDEX                 *nvIndex              // OUT: NV index structure
     )
 {
-    UINT32                    entityAddr;          // offset points to the entity
-    pAssert(HandleGetType(handle) == TPM_HT_NV_INDEX);
-    // Find the address of NV index
-    entityAddr = NvFindHandle(handle);
+    NvReadIndexInfo(handle, 0, nvIndex);
+    return;
+}
+//
+//
+//           NvReadIndexInfo()
+//
+//      This function is used to retrieve the contents of an NV Index from the
+//      given address.
+//      A prerequisite to calling this function is that either handle or
+//      entityAddr must be valid value. If entityAddr is non-zero, then it will
+//      be regarded as a valid address of NV data. If it is zero, then "handle"
+//      shall be used to find its address.
+//
+void
+NvReadIndexInfo(
+    TPMI_RH_NV_INDEX          handle,             // IN: handle
+    UINT32                    entityAddr,         // IN: Base address of NV data
+    NV_INDEX                 *nvIndex             // OUT: NV index structure
+    )
+{
+    if (!entityAddr) {
+        pAssert(HandleGetType(handle) == TPM_HT_NV_INDEX);
+        // Find the address of NV index
+        entityAddr = NvFindHandle(handle);
+    }
+
     pAssert(entityAddr != 0);
     // This implementation uses the default format so just
     // read the data in
@@ -1311,6 +1334,29 @@ NvGetIndexData(
     void                     *data               //   OUT: data buffer
     )
 {
+    NvReadIndexData(handle, nvIndex, 0, offset, size, data);
+}
+//
+//
+//           NvReadIndexData()
+//
+// This function is used to read the data in an NV Index from the given address.
+// This function requires that the NV Index be defined, and that the required
+// data is within the data range. It also requires that TPMA_NV_WRITTEN of the
+//  Index is SET.
+// entityAddr is optional. If the value is zero, then it will be retrieved
+// by calling NvFindHandle() in this function.
+//
+void
+NvReadIndexData(
+    TPMI_RH_NV_INDEX       handle,            //   IN: handle
+    NV_INDEX              *nvIndex,           //   IN: RAM image of index header
+    UINT32                 entityAddr,        //   IN: Base address of NV data
+    UINT32                 offset,            //   IN: offset of NV data
+    UINT16                 size,              //   IN: size of NV data
+    void                  *data               //   OUT: data buffer
+    )
+{
     pAssert(nvIndex->publicArea.attributes.TPMA_NV_WRITTEN == SET);
     if(   nvIndex->publicArea.attributes.TPMA_NV_BITS == SET
        || nvIndex->publicArea.attributes.TPMA_NV_COUNTER == SET)
@@ -1325,19 +1371,20 @@ NvGetIndexData(
         if(nvIndex->publicArea.attributes.TPMA_NV_ORDERLY == SET)
         {
             UINT32      ramAddr;
-              // Get data from RAM buffer
-              ramAddr = NvGetRAMIndexOffset(handle);
-              MemoryCopy(data, s_ramIndex + ramAddr + offset, size, size);
-         }
-         else
-         {
-              UINT32      entityAddr;
-              entityAddr = NvFindHandle(handle);
-              // Get data from NV
-              // Skip NV Index info, read data buffer
-              entityAddr += sizeof(TPM_HANDLE) + sizeof(NV_INDEX) + offset;
-              // Read the data
-              _plat__NvMemoryRead(entityAddr, size, data);
+            // Get data from RAM buffer
+            ramAddr = NvGetRAMIndexOffset(handle);
+            MemoryCopy(data, s_ramIndex + ramAddr + offset, size, size);
+        }
+        else
+        {
+            if (!entityAddr)
+                entityAddr = NvFindHandle(handle);
+            pAssert(entityAddr != 0);
+            // Get data from NV
+            // Skip NV Index info, read data buffer
+            entityAddr += sizeof(TPM_HANDLE) + sizeof(NV_INDEX) + offset;
+            // Read the data
+            _plat__NvMemoryRead(entityAddr, size, data);
         }
     }
     return;
@@ -2098,9 +2145,12 @@ NvCapGetCounterAvail(
 // To facilitate NVMEM lookip this function initializes static variables if
 // they are not yet initialized.
 //
-// Returns True if handle was found.
+// Returns Non-zero if handle was found. The value is the offset in NV memory of
+//         the entity associated with the input handle.
+//         Zero if handle does not exist.
+
 //
-BOOL
+UINT32
 NvEarlyStageFindHandle(
    TPM_HANDLE handle
    )
