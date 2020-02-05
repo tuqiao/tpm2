@@ -47,9 +47,20 @@ void NvGetIndexData(TPMI_RH_NV_INDEX handle,  //   IN: handle
                     UINT16 size,              //   IN: size of NV data
                     void *data                //   OUT: data buffer
                     );
+void NvReadIndexData(TPMI_RH_NV_INDEX handle, //   IN: handle
+                     NV_INDEX *nvIndex,       //   IN: RAM image of index header
+                     UINT32 entityAddr,       //   IN: Address of NV data
+                     UINT32 offset,           //   IN: offset of NV data
+                     UINT16 size,             //   IN: size of NV data
+                     void *data               //   OUT: data buffer
+                     );
 void NvGetIndexInfo(TPMI_RH_NV_INDEX handle,  // IN: handle
                     NV_INDEX *nvIndex         // OUT: NV index structure
                     );
+void NvReadIndexInfo(TPMI_RH_NV_INDEX handle, // IN: handle
+                     UINT32 entityAddr,       // IN: entity Address
+                     NV_INDEX *nvIndex        // OUT: NV index structure
+                     );
 void NvGetIntIndexData(TPMI_RH_NV_INDEX handle,  // IN: handle
                        NV_INDEX *nvIndex,  // IN: RAM image of NV Index header
                        UINT64 *data  // IN: UINT64 pointer for counter or bit
@@ -98,7 +109,7 @@ TPM_RC NvWriteIndexInfo(TPMI_RH_NV_INDEX handle,  // IN: handle
 void NvWriteReserved(NV_RESERVE type,  // IN: type of reserved data
                      void *buffer      // IN: data buffer
                      );
-BOOL NvEarlyStageFindHandle(TPM_HANDLE handle);
+UINT32 NvEarlyStageFindHandle(TPM_HANDLE handle);
 BOOL NvIsDefinedHiddenObject(TPMI_RH_NV_INDEX handle  // IN: handle
                         );
 TPM_RC NvAddHiddenObject(TPM_HANDLE handle,  // IN: new evict handle
