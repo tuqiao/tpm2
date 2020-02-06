@@ -345,7 +345,8 @@ $(obj):
 
 $(obj)/$(OBJ_PREFIX)%.d $(obj)/$(OBJ_PREFIX)%.o: %.c | $(obj)
 	@echo "  CC      $(notdir $<)"
-	$(Q)$(CC) $(CFLAGS) -c -MMD -MF $(basename $@).d -o $(basename $@).o $<
+	$(Q)$(CC) $(CFLAGS) -c -MMD -MF $(basename $@).d -MT $(basename $@).o \
+		-o $(basename $@).o $<
 
 %.cp.o: %.o
 	$(Q)$(OBJCOPY) --rename-section .bss=.bss.Tpm2_common $< $@
