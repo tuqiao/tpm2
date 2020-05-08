@@ -440,10 +440,6 @@ _plat__OwnerClearCallback(
     void
 );
 
-// A function to inform CR50 that NvIndexData (handle) has been changed.
-LIB_EXPORT void
-_plat__NvInformIndexDataChanged(uint32_t handle);
-
 int uart_printf(const char *format, ...);
 #define ecprintf(format, args...) uart_printf(format, ## args);
 

@@ -343,10 +343,3 @@ _plat__ShallSurviveOwnerClear(
 {
     return FALSE;
 }
-
-LIB_EXPORT void
-_plat__NvInformIndexDataChanged(uint32_t handle)
-{
-  /* Do nothing */
-  return;
-}

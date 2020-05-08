@@ -66,11 +66,7 @@ TPM2_NV_Write(
    // Perform the write. This called routine will SET the TPMA_NV_WRITTEN
    // attribute if it has not already been SET. If NV isn't available, an error
    // will be returned.
-   result = NvWriteIndexData(in->nvIndex, &nvIndex, in->offset,
-                             in->data.t.size, in->data.t.buffer);
-
-   _plat__NvInformIndexDataChanged(in->nvIndex);
-
-   return result;
+   return NvWriteIndexData(in->nvIndex, &nvIndex, in->offset,
+                           in->data.t.size, in->data.t.buffer);
 
 }
