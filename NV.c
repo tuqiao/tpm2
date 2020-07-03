@@ -2227,6 +2227,49 @@ NvAddHiddenObject(
 
 //
 //
+//           NvGetHiddenObjectAddrSize()
+//
+//      This function returns address (internal to nvmem) and size of
+//      hidden object. It requires the index to be defined.
+//
+//       Error Returns                     Meaning
+//
+//       TPM_RC_HANDLE                  the requested handle could not be found
+//       TPM_RC_TYPE                    handle is not a hidden object
+static TPM_RC NvGetHiddenObjectAddrSize(
+    TPM_HANDLE          handle,            //   IN: handle
+    UINT32             *addr,              //   OUT: address of entity
+    UINT16             *size               //   OUT: size of entity
+    )
+{
+  UINT32      entityAddr;
+  NV_ITER     iter;
+
+  if (HandleGetType(handle) != TPM_HT_HIDDEN)
+    return TPM_RC_TYPE;
+
+  entityAddr = NvFindHandle(handle);
+  if (entityAddr == 0)
+    return TPM_RC_HANDLE;
+
+  iter = entityAddr - sizeof(NV_ITER);
+
+  // This will return the same address we already have in NvFindHandle,
+  // (we discard this return value), and advance iter to point to the
+  // start of next item in the list (its next pointer).
+  NvNext(&iter);
+  // Calculate size of this entity using position of next item.
+  *size =
+      iter                   // Points to beginning of next entry.
+      - entityAddr           // Points to beginning of current item.
+      - sizeof(TPM_HANDLE);  // Current item includes a handle.
+
+  *addr = entityAddr;
+  return TPM_RC_SUCCESS;
+}
+
+//
+//
 //           NvWriteHiddenObject()
 //
 //       This function is used to write new data to an existing hidden object.
@@ -2242,39 +2285,17 @@ TPM_RC NvWriteHiddenObject(TPM_HANDLE handle,  // IN: new evict handle
                            ) {
    UINT32           entityAddr;    // offset points to the entity
    UINT16           entitySize;    // recorded size of the entity
-   NV_ITER          iter;          // iterator used to find next entity
+   TPM_RC           rc;
 
-  if (HandleGetType(handle) != TPM_HT_HIDDEN)
-        return TPM_RC_HANDLE;
-
-   // Find the address of hidden object.
-   entityAddr = NvFindHandle(handle);
-   // If handle is not found, return error.
-   if(entityAddr == 0) {
-     return TPM_RC_HANDLE;
-   } else {
-     // Create iterator starting at the 'next' pointer for this item
-     // in the NV list. The 'next' pointer is a UINT32, and immediately
-     // precedes the address returned by NvFindHandle.
-     iter = entityAddr - sizeof(UINT32);
-     // This will return the same address we already have in NvFindHandle,
-     // (we discard this return value), and advance iter to point to the
-     // start of next item in the list (it's next pointer).
-     NvNext(&iter);
-     // Calculate size of this entity using position of next item.
-     entitySize =
-         iter                   // Points to beginning of next entry.
-         - entityAddr           // Points to beginning of current item.
-         - sizeof(TPM_HANDLE);  // Current item includes a handle.
-
-     if (size != entitySize) {
-       return TPM_RC_NV_SPACE;
-     }
-     _plat__NvMemoryWrite(entityAddr + sizeof(TPM_HANDLE),
-                          size, object);
-     g_updateNV = TRUE;
+   rc = NvGetHiddenObjectAddrSize(handle, &entityAddr, &entitySize);
+   if (TPM_RC_SUCCESS != rc)
+     return rc;
+   if (size != entitySize) {
+     return TPM_RC_NV_SPACE;
    }
-
+   _plat__NvMemoryWrite(entityAddr + sizeof(TPM_HANDLE),
+                       size, object);
+   g_updateNV = TRUE;
    return TPM_RC_SUCCESS;
 }
 //
@@ -2298,35 +2319,40 @@ NvGetHiddenObject(
 {
   UINT32      entityAddr;
   UINT16      entitySize;
-  NV_ITER     iter;
+  TPM_RC           rc;
 
-  if (HandleGetType(handle) != TPM_HT_HIDDEN)
-    return TPM_RC_HANDLE;
+  rc = NvGetHiddenObjectAddrSize(handle, &entityAddr, &entitySize);
+  if (TPM_RC_SUCCESS != rc)
+    return rc;
 
-  entityAddr = NvFindHandle(handle);
-
-  if (entityAddr == 0) {
-    return TPM_RC_HANDLE;
-  } else {
-    iter = entityAddr - sizeof(UINT32);
-    // This will return the same address we already have in NvFindHandle,
-    // and advance iter to point to the start of next item in the list.
-    NvNext(&iter);
-    // Calculate size of this entity using position of next item.
-    entitySize =
-        iter                    // Points to beginning of next entry.
-        - entityAddr            // Points to beginning of current item.
-        - sizeof(TPM_HANDLE);   // Current item includes a handle.
-
-    if (size > entitySize) {
-      return TPM_RC_NV_SPACE;
-    }
-
-    _plat__NvMemoryRead(entityAddr + sizeof(TPM_HANDLE), size, data);
-    return TPM_RC_SUCCESS;
+  if (size > entitySize) {
+    return TPM_RC_NV_SPACE;
   }
-}
 
+  _plat__NvMemoryRead(entityAddr + sizeof(TPM_HANDLE), size, data);
+  return TPM_RC_SUCCESS;
+}
+//
+//
+//           NvGetHiddenObjectSize()
+//
+//      This function is used to get size of data stored as a hidden object.
+//
+//      This function requires that the index be defined.
+//
+//       Error Returns                     Meaning
+//
+//       TPM_RC_HANDLE                  the requested handle could not be found
+TPM_RC
+NvGetHiddenObjectSize(
+    TPM_HANDLE          handle,            //   IN: handle
+    UINT16              *size              //   OUT: size of NV data
+    )
+{
+  UINT32      entityAddr;
+
+  return NvGetHiddenObjectAddrSize(handle, &entityAddr, size);
+}
 //
 // NVWipeCache
 //
