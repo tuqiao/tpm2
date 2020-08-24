@@ -1,4 +1,6 @@
 set noparent
 apronin@chromium.org
-louiscollard@chromium.org
 vbendeb@chromium.org
+
+# For tpm2 simulator project.
+cylai@chromium.org
