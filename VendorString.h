@@ -13,7 +13,12 @@
 //     definition should be replaced as appropriate when this code is used for
 //     actual implementations.
 //
+#ifdef        TPM2_SIMULATOR_MANUFACTURER
+#define        MANUFACTURER       "SIMU"
+#else
+//     Some CR50-specific functions expect this manufacturer.
 #define        MANUFACTURER       "CROS"
+#endif
 //
 //     The following #if macro may be deleted after a proper MANUFACTURER is provided.
 //
