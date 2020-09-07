@@ -300,6 +300,10 @@ else
 Q :=
 endif
 
+
+ifneq ($(TPM2_SIMULATOR_MANUFACTURER),)
+CFLAGS += -DTPM2_SIMULATOR_MANUFACTURER
+endif
 ifeq ($(EMBEDDED_MODE),)
 SOURCES += $(HOST_SOURCES)
 CFLAGS += -Wall -Werror -fPIC
