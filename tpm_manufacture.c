@@ -30,10 +30,11 @@ int tpm_manufactured(void) {
 }
 
 TPM_RC extend_pcr(unsigned int pcr_index, const char *mode_digest) {
+  PCR_Extend_In pcr_in;
+
   if (pcr_index >= IMPLEMENTATION_PCR)
     return TPM_RC_FAILURE;
 
-  PCR_Extend_In pcr_in;
   pcr_in.pcrHandle = HR_PCR + pcr_index;
   pcr_in.digests.count = 1;
   pcr_in.digests.digests[0].hashAlg = TPM_ALG_SHA256;
