@@ -343,16 +343,25 @@ $(obj)/libtpm2.a: $(OBJS)
 	@echo "  AR      $(notdir $@)"
 	$(Q)$(AR) scr $@ $^
 
-copied_objs: $(COPIED_OBJS)
+# A helper target allowing the Cr50 Makefile to determine the exact list of
+# the updated object files to link in.
+list_copied_objs:
+	@echo $(COPIED_OBJS)
+
+# To keep things simple lets use a dummy file as a target depending on the
+# updated object files. This will allow to invoke this Makefile with a single
+# target to rebuild all updated object files.
+$(obj)/.copied_objs: $(COPIED_OBJS)
+	@touch $@
 
 $(obj):
 	@echo "  MKDIR   $(obj)"
 	$(Q)mkdir -p $(obj)
 
-$(obj)/$(OBJ_PREFIX)%.d $(obj)/$(OBJ_PREFIX)%.o: %.c | $(obj)
+$(obj)/$(OBJ_PREFIX)%.o: %.c | $(obj)
 	@echo "  CC      $(notdir $<)"
 	$(Q)$(CC) $(CFLAGS) -c -MMD -MF $(basename $@).d -MT $(basename $@).o \
-		-o $(basename $@).o $<
+		-MP -o $(basename $@).o $<
 
 %.cp.o: %.o
 	$(Q)$(OBJCOPY) --rename-section .bss=.bss.Tpm2_common $< $@
@@ -362,6 +371,14 @@ clean:
 	@echo "  RM      $(obj)"
 	$(Q)rm -rf $(obj)
 
-ifneq ($(MAKECMDGOALS),clean)
+.PHONY: $(DEPS)
+
+# Do not provide an explicit rule for *.d targets, otherwise this include
+# could trigger an unnecessary build for various reasons:
+#
+# - some compilers generate .d files with timestamps more recent than the
+#   corresponding .o files;
+#
+# - when make is invoked with -q, it rebuilds the required includes before
+#   deciding if anything else is needed.
 -include $(DEPS)
-endif
