@@ -444,7 +444,7 @@ typedef enum
 //
 //           NV_RESERVE
 //
-//      This enumeration defines the master list of the elements of a reserved portion of NV. This list includes all
+//      This enumeration defines the list of the elements of a reserved portion of NV. This list includes all
 //      the pre-defined data that takes space in NV, either as persistent data or as state save data. The
 //      enumerations are used as indexes into an array of offset values. The offset values then are used to index
 //      into NV. This is method provides an imperfect analog to an actual NV implementation.
@@ -782,7 +782,7 @@ typedef struct
 // a scheme used in development to allow determination of the linker build time
 // of the TPM. An actual implementation would implement these values in a way that
 // is consistent with vendor needs. The values are maintained in RAM for simplified
-// access with a master version in NV. These values are modified in a
+// access with a primary version in NV. These values are modified in a
 // vendor-specific way.
 // g_firmwareV1 contains the more significant 32-bits of the vendor version number.
 // In the reference implementation, if this value is printed as a hex
