@@ -26,8 +26,11 @@ DAPreInstall_Init(
      gp.failedTries = 0;
      // TODO(vbendeb): consider finer tuning of this value (crosbug.com/p/55708)
      gp.maxTries = 200;
-     gp.recoveryTime = 1000;                  // in seconds (~16.67 minutes)
-     gp.lockoutRecovery = 1000;               // in seconds
+
+     // Disable DA mitigation mechanism.
+     gp.recoveryTime = 0;
+     gp.lockoutRecovery = 0;
+
      gp.lockOutAuthEnabled = TRUE;            // Use of lockoutAuth is enabled
      // Record persistent DA parameter changes to NV
      NvWriteReserved(NV_FAILED_TRIES, &gp.failedTries);
