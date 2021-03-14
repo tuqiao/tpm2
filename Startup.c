@@ -112,6 +112,12 @@ TPM2_Startup(
   // Read persistent data from NV
   NvReadPersistent();
 
+  // After reading the dictionary attack parameters, disable DA mitigation by
+  // calling `DAPreInstall_Init()`, if necessary.
+  // Note that this is not TPM2-compliant (b/178365982).
+  if (gp.recoveryTime != 0 || gp.lockoutRecovery != 0)
+    DAPreInstall_Init();
+
   // Crypto Startup
   CryptUtilStartup(startup);
 
