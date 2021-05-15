@@ -12,7 +12,13 @@
 
 #include <string.h>
 
-#define EK_CERT_NV_START_INDEX 0x01C00000
+#ifdef TCG_EK_CERT_INDICES
+#define RSA_EK_CERT_NV_INDEX 0x01C00002
+#define ECC_EK_CERT_NV_INDEX 0x01C0000a
+#else
+#define RSA_EK_CERT_NV_INDEX 0x01C00000
+#define ECC_EK_CERT_NV_INDEX 0x01C00001
+#endif
 
 enum cros_perso_component_type {
   CROS_PERSO_COMPONENT_TYPE_EPS = 128,
@@ -185,8 +191,6 @@ const uint8_t FIXED_ECC_ENDORSEMENT_CERT[804] = {
 
 static int store_cert(enum cros_perso_component_type component_type,
                       const uint8_t *cert, size_t cert_len) {
-  const uint32_t rsa_ek_nv_index = EK_CERT_NV_START_INDEX;
-  const uint32_t ecc_ek_nv_index = EK_CERT_NV_START_INDEX + 1;
   uint32_t nv_index;
   NV_DefineSpace_In define_space;
   TPMA_NV space_attributes;
@@ -203,9 +207,9 @@ static int store_cert(enum cros_perso_component_type component_type,
   HierarchyStartup(SU_RESET);
 
   if (component_type == CROS_PERSO_COMPONENT_TYPE_RSA_CERT)
-    nv_index = rsa_ek_nv_index;
+    nv_index = RSA_EK_CERT_NV_INDEX;
   else /* P256 certificate. */
-    nv_index = ecc_ek_nv_index;
+    nv_index = ECC_EK_CERT_NV_INDEX;
 
   /* EK Credential attributes specified in the "TCG PC Client
    * Platform, TPM Profile (PTP) Specification" document.
