@@ -263,10 +263,6 @@ IsAuthValueAvailable(
     )
 {
     BOOL             result = FALSE;
-    // If a policy session is required, the entity can not be authorized by
-    // authValue. However, at this point, the policy session requirement should
-    // already have been checked.
-    pAssert(!IsPolicySessionRequired(commandCode, sessionIndex));
    switch(HandleGetType(handle))
    {
        case TPM_HT_PERMANENT:
