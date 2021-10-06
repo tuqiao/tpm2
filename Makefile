@@ -320,9 +320,10 @@ CFLAGS += -DTHIRD_PARTY
 ifneq ($(ROOTDIR),)
 CFLAGS += -I$(ROOTDIR)
 endif
-# Do not allow LTO compilation for this library modules, as it makes it
-# impossible to keep the mudules' .bss segment separate.
+# Suppress LTO compilation unless explicitly requested.
+ifneq ($(LTO),1)
 CFLAGS := $(subst -flto,,$(CFLAGS))
+endif
 endif
 
 # Caller may specify OBJ_PREFIX to prefix all object filenames in the
@@ -345,6 +346,10 @@ COPIED_OBJS := $(patsubst %.o,%.cp.o,$(OBJS))
 $(obj)/libtpm2.a: $(OBJS)
 	@echo "  AR      $(notdir $@)"
 	$(Q)$(AR) scr $@ $^
+
+$(obj)/linkedtpm2.o: $(OBJS)
+	@echo "  LTO     $(notdir $@)"
+	$(Q)$(CC) $(CFLAGS) --static -Wl,--relocatable $^ -o $@
 
 # A helper target allowing the Cr50 Makefile to determine the exact list of
 # the updated object files to link in.
