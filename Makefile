@@ -349,7 +349,8 @@ $(obj)/libtpm2.a: $(OBJS)
 
 $(obj)/linkedtpm2.o: $(OBJS)
 	@echo "  LTO     $(notdir $@)"
-	$(Q)$(CC) $(CFLAGS) --static -Wl,--relocatable $^ -o $@
+	$(Q)$(CC) $(CFLAGS) $(CFLAGS_LTO_PARTIAL_LINK)\
+		  --static -Wl,--relocatable $^ -o $@
 
 # A helper target allowing the Cr50 Makefile to determine the exact list of
 # the updated object files to link in.
