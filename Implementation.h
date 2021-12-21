@@ -215,7 +215,7 @@
 #define    CC_NV_DefineSpace                 CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
 #define    CC_NV_Extend                      CC_SET(CC_S_CROS_TCG)
 #define    CC_NV_GlobalWriteLock             CC_SET(CC_S_OPTIONAL)
-#define    CC_NV_Increment                   CC_SET(CC_S_WIN_TCG)
+#define    CC_NV_Increment                   CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
 #define    CC_NV_Read                        CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
 #define    CC_NV_ReadLock                    CC_SET(CC_S_CROS_TCG)
 #define    CC_NV_ReadPublic                  CC_SET(CC_S_ALL_MUST)
