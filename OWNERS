@@ -1,6 +1,11 @@
-set noparent
+# Chromium Cr50 owners
 apronin@chromium.org
+mruthven@chromium.org
+sukhomlinov@chromium.org
 vbendeb@chromium.org
 
 # For tpm2 simulator project.
 cylai@chromium.org
+
+# Don't inherit owners from elsewhere in the manifest
+set noparent
