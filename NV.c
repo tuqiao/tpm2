@@ -427,9 +427,9 @@ NvAddRAM(
    // Add data space at the end of reserved RAM buffer
    UINT32 value = size + sizeof(TPMI_RH_NV_INDEX);
    memcpy(&s_ramIndex[s_ramIndexSize], &value,
-          sizeof(s_ramIndex[s_ramIndexSize]));
+          sizeof(value));
    memcpy(&s_ramIndex[s_ramIndexSize + sizeof(UINT32)], &handle,
-          sizeof(s_ramIndex[s_ramIndexSize + sizeof(UINT32)]));
+          sizeof(handle));
    s_ramIndexSize += sizeof(UINT32) + sizeof(TPMI_RH_NV_INDEX) + size;
    pAssert(s_ramIndexSize <= RAM_INDEX_SPACE);
    // Update NV version of s_ramIndexSize
@@ -454,6 +454,8 @@ NvDeleteRAM(
    UINT32             nextNode;
    UINT32             size;
    nodeOffset = NvGetRAMIndexOffset(handle);
+   if(nodeOffset >= s_ramIndexSize)
+        return;
    // Move the pointer back to get the size field of this node
    nodeOffset -= sizeof(UINT32) + sizeof(TPMI_RH_NV_INDEX);
    // Get node size
@@ -470,6 +472,53 @@ NvDeleteRAM(
    // Write reserved RAM space to NV to reflect the newly delete NV Index
    _plat__NvMemoryWrite(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
    return;
+}
+//
+//
+//          NvCleanBadFromRAM()
+//
+//      This function is used to delete RAM-backed NV Index data areas
+//      for indexes, which shouldn't be there (e.g. created with b/211564769).
+static void
+NvCleanBadFromRAM()
+{
+    UINT32         currAddr = 0;
+    BOOL           foundBad = FALSE;
+
+    if(NvIsAvailable() != TPM_RC_SUCCESS)
+        return;
+
+    while(currAddr < s_ramIndexSize)
+    {
+        UINT32              currSize;
+        TPMI_RH_NV_INDEX    currHandle;
+        UINT32              nextAddr;
+
+        memcpy(&currSize, &s_ramIndex[currAddr], sizeof(currSize));
+        nextAddr = currAddr + sizeof(UINT32) + currSize;
+        if(nextAddr > s_ramIndexSize || currSize < sizeof(TPMI_RH_NV_INDEX))
+            break;
+
+        memcpy(&currHandle, &s_ramIndex[currAddr + sizeof(UINT32)],
+               sizeof(currHandle));
+
+        if(HandleGetType(currHandle) != TPM_HT_NV_INDEX)
+        {
+            MemoryMove(s_ramIndex + currAddr, s_ramIndex + nextAddr,
+                       s_ramIndexSize - nextAddr, s_ramIndexSize - nextAddr);
+            s_ramIndexSize -= currSize + sizeof(UINT32);
+            foundBad = TRUE;
+        }
+        else
+        {
+            currAddr = nextAddr;
+        }
+    }
+    if(foundBad)
+    {
+        _plat__NvMemoryWrite(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
+        _plat__NvMemoryWrite(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+    }
 }
 //
 //
@@ -897,6 +946,7 @@ NvEntityStartup(
     // Restore RAM index data
     _plat__NvMemoryRead(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
     _plat__NvMemoryRead(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+    NvCleanBadFromRAM();
     // If recovering from state save, do nothing
     if(type == SU_RESUME)
         return;
@@ -1373,7 +1423,14 @@ NvReadIndexData(
             UINT32      ramAddr;
             // Get data from RAM buffer
             ramAddr = NvGetRAMIndexOffset(handle);
-            MemoryCopy(data, s_ramIndex + ramAddr + offset, size, size);
+            if(ramAddr + offset + size <= s_ramIndexSize)
+            {
+                MemoryCopy(data, s_ramIndex + ramAddr + offset, size, size);
+            }
+            else
+            {
+                MemorySet(data, 0x00, size);
+            }
         }
         else
         {
@@ -1416,7 +1473,35 @@ NvGetIntIndexData(
         UINT32      ramAddr;
           // Get data from RAM buffer
           ramAddr = NvGetRAMIndexOffset(handle);
-          MemoryCopy(data, s_ramIndex + ramAddr, sizeof(*data), sizeof(*data));
+          if(ramAddr + sizeof(*data) <= s_ramIndexSize)
+          {
+              MemoryCopy(data, s_ramIndex + ramAddr, sizeof(*data), sizeof(*data));
+          }
+          else if(ramAddr >= s_ramIndexSize)
+          {
+              // No data space in RAM
+              if(nvIndex->publicArea.attributes.TPMA_NV_COUNTER == SET)
+              {
+                  *data = NvReadMaxCount();
+              }
+              else
+              {
+                  *data = 0;
+              }
+              // Add missing data space at the end of reserved RAM buffer if possible
+              if(NvTestRAMSpace(sizeof(*data)))
+              {
+                  UINT32 size = sizeof(*data) + sizeof(TPMI_RH_NV_INDEX);
+                  memcpy(&s_ramIndex[s_ramIndexSize], &size, sizeof(size));
+                  s_ramIndexSize += sizeof(UINT32);
+                  memcpy(&s_ramIndex[s_ramIndexSize], &handle, sizeof(handle));
+                  s_ramIndexSize += sizeof(TPMI_RH_NV_INDEX);
+                  memcpy(&s_ramIndex[s_ramIndexSize], data, sizeof(*data));
+                  s_ramIndexSize += sizeof(*data);
+                  _plat__NvMemoryWrite(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
+                  _plat__NvMemoryWrite(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+              }
+          }
     }
     else
     {
@@ -1506,8 +1591,11 @@ NvWriteIndexData(
         UINT32      ramAddr;
           // Write data to RAM buffer
           ramAddr = NvGetRAMIndexOffset(handle);
-          MemoryCopy(s_ramIndex + ramAddr + offset, data, size,
-                     sizeof(s_ramIndex) - ramAddr - offset);
+          if(ramAddr + offset + size <= s_ramIndexSize)
+          {
+              MemoryCopy(s_ramIndex + ramAddr + offset, data, size,
+                         sizeof(s_ramIndex) - ramAddr - offset);
+          }
           // NV update does not happen for orderly index. Have
           // to clear orderlyState to reflect that we have changed the
           // NV and an orderly shutdown is required. Only going to do this if we
@@ -2442,4 +2530,3 @@ void NvGetReserved(UINT32 index, NV_RESERVED_ITEM *ri)
 
   ri->size = 0;
 }
-
