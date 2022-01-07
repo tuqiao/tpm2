@@ -229,7 +229,7 @@
 #define    CC_PCR_Event                      CC_SET(CC_S_WIN_TCG)
 #define    CC_PCR_Extend                     CC_SET((CC_S_ALL_MUST | CC_S_COREBOOT))
 #define    CC_PCR_Read                       CC_SET(CC_S_ALL_MUST)
-#define    CC_PCR_Reset                      CC_SET(CC_S_WIN_TCG)
+#define    CC_PCR_Reset                      CC_SET((CC_S_WIN_TCG | CC_S_CROS_MUST))
 #define    CC_PCR_SetAuthPolicy              CC_SET(CC_S_OPTIONAL)
 #define    CC_PCR_SetAuthValue               CC_SET(CC_S_OPTIONAL)
 #define    CC_PolicyAuthorize                CC_SET((CC_S_TCG_MUST | CC_S_WIN_REC))
