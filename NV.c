@@ -927,6 +927,29 @@ NvStateSave(
 }
 //
 //
+//          NvStateCapture()
+//
+//      This function is used to capture the current state of RAM backed NV Indices in an external `copy`.
+//      It doesn't need to capture s_ramIndexSize since that value is always saved to flash when it is modified.
+//
+void NvStateCapture(BYTE copy[RAM_INDEX_SPACE])
+{
+    memcpy(copy, s_ramIndex, RAM_INDEX_SPACE);
+}
+//
+//
+//          NvStateRestore()
+//
+//      This function is used to restore the current state of RAM backed NV Indices from an external `copy`.
+//      It doesn't need to restore s_ramIndexSize since that value is always saved to flash when it is modified.
+//
+void NvStateRestore(const BYTE copy[RAM_INDEX_SPACE])
+{
+    memcpy(s_ramIndex, copy, RAM_INDEX_SPACE);
+    g_nvStatePreserved = TRUE;
+}
+//
+//
 //
 //           NvEntityStartup()
 //
@@ -944,10 +967,17 @@ NvEntityStartup(
 {
     NV_ITER                   iter = NV_ITER_INIT;
     UINT32                    currentAddr;         // offset points to the current entity
-    // Restore RAM index data
+    BOOL                      nvStatePreserved = g_nvStatePreserved;
+
+    g_nvStatePreserved = FALSE;
+    // Restore RAM index size
     _plat__NvMemoryRead(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
-    _plat__NvMemoryRead(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
-    NvCleanBadFromRAM();
+    if (!nvStatePreserved)
+    {
+        // Restore RAM index data
+        _plat__NvMemoryRead(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+        NvCleanBadFromRAM();
+    }
     // If recovering from state save, do nothing
     if(type == SU_RESUME)
         return;
@@ -998,8 +1028,10 @@ NvEntityStartup(
                  g_updateNV = TRUE;
          }
          // Set the lower bits in an orderly counter to 1 for a non-orderly startup
+         // unless the state was restored for them.
          if(    g_prevOrderlyState == SHUTDOWN_NONE
-             && attributes.TPMA_NV_WRITTEN == SET)
+             && attributes.TPMA_NV_WRITTEN == SET
+             && !nvStatePreserved)
          {
               if(    attributes.TPMA_NV_ORDERLY == SET
                   && attributes.TPMA_NV_COUNTER == SET)

@@ -14,6 +14,7 @@ _TPM_Init(
    // Clear the failure mode flags
    g_inFailureMode = FALSE;
    g_forceFailureMode = FALSE;
+   g_nvStatePreserved = FALSE;
 
    // Initialize the NvEnvironment.
    g_nvOk = NvPowerOn();
