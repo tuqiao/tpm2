@@ -653,6 +653,15 @@ extern TPM_SU                 g_prevOrderlyState;
 extern BOOL                   g_nvOk;
 //
 //
+//       g_nvStateRestored
+//
+//      This value indicates if the state of RAM-backed NV indices has been preserved over TPM reset.
+//      If that was the case, the state doesn't need to be re-read from flash and the counters don't need to be rolled
+//      up even after unorderly shutdowns.
+//
+extern BOOL                   g_nvStatePreserved;
+//
+//
 //       g_platformUnique
 //
 //      This location contains the unique value(s) used to identify the TPM. It is loaded on every

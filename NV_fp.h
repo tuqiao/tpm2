@@ -97,6 +97,8 @@ void NvReadReserved(NV_RESERVE type,  // IN: type of reserved data
                     );
 void NvSetGlobalLock(void);
 void NvStateSave(void);
+void NvStateCapture(BYTE copy[RAM_INDEX_SPACE]);
+void NvStateRestore(const BYTE copy[RAM_INDEX_SPACE]);
 TPM_RC NvWriteIndexData(TPMI_RH_NV_INDEX handle,  //   IN: handle
                         NV_INDEX *nvIndex,        //   IN: RAM copy of NV Index
                         UINT32 offset,            //   IN: offset of NV data
