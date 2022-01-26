@@ -29,6 +29,7 @@ BOOL                    g_clearOrderly;
 TPM_SU                  g_prevOrderlyState;
 BOOL                    g_updateNV;
 BOOL                    g_nvOk;
+BOOL                    g_nvStatePreserved;
 TPM2B_AUTH              g_platformUniqueDetails;
 STATE_CLEAR_DATA        gc;
 STATE_RESET_DATA        gr;
