@@ -518,6 +518,7 @@ NvCleanBadFromRAM()
     {
         _plat__NvMemoryWrite(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
         _plat__NvMemoryWrite(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+        g_updateNV = TRUE;
     }
 }
 //
@@ -1500,6 +1501,7 @@ NvGetIntIndexData(
                   s_ramIndexSize += sizeof(*data);
                   _plat__NvMemoryWrite(s_ramIndexSizeAddr, sizeof(UINT32), &s_ramIndexSize);
                   _plat__NvMemoryWrite(s_ramIndexAddr, RAM_INDEX_SPACE, s_ramIndex);
+                  g_updateNV = TRUE;
               }
           }
     }
