@@ -38,9 +38,9 @@
 #   define CRYPTO_ALIGNMENT    16
 #elif defined CRYPTO_ALIGN_8
 #   define CRYPTO_ALIGNMENT    8
-#eliF defined CRYPTO_ALIGN_2
+#elif defined CRYPTO_ALIGN_2
 #   define CRYPTO_ALIGNMENT    2
-#elif defined CRTYPO_ALIGN_1
+#elif defined CRYPTO_ALIGN_1
 #   define CRYPTO_ALIGNMENT    1
 #else
 #   define CRYPTO_ALIGNMENT    4    // For 32-bit builds
