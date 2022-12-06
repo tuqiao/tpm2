@@ -260,11 +260,8 @@ MemoryRemoveTrailingZeros (
       TPM2B_AUTH        *auth               // IN/OUT: value to adjust
       )
 {
-      BYTE         *a = &auth->t.buffer[auth->t.size-1];
-      for(; auth->t.size > 0; auth->t.size--)
-      {
-          if(*a--)
-              break;
-      }
+      while (auth->t.size > 0 && !auth->t.buffer[auth->t.size - 1])
+       auth->t.size--;
+
       return auth->t.size;
 }
