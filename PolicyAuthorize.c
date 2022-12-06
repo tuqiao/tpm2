@@ -34,6 +34,9 @@ TPM2_PolicyAuthorize(
    // Get pointer to the session structure
    session = SessionGet(in->policySession);
 
+   if (in->keySign.t.size < 2)
+     return TPM_RC_HASH + RC_PolicyAuthorize_keySign;
+
    // Extract from the Name of the key, the algorithm used to compute it's Name
    hashAlg = BYTE_ARRAY_TO_UINT16(in->keySign.t.name);
 

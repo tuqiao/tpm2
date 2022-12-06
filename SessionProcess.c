@@ -1901,6 +1901,7 @@ BuildResponseSession(
              size = EncryptSize(commandCode);
              CryptParameterEncryption(s_sessionHandles[s_encryptSessionIndex],
                                        &s_nonceCaller[s_encryptSessionIndex].b,
+                                       bufferSize,
                                        (UINT16)size,
                                        &extraKey,
                                        resParmBuffer);
