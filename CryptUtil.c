@@ -2662,6 +2662,7 @@ void
 CryptParameterEncryption(
    TPM_HANDLE           handle,            // IN: encrypt session handle
    TPM2B               *nonceCaller,       // IN: nonce caller
+   UINT32               bufferSize,        // IN: size of parameter buffer
    UINT16               leadingSizeInByte, // IN: the size of the leading size field in
                                            //     byte
    TPM2B_AUTH          *extraKey,          // IN: additional key material other than
@@ -2675,6 +2676,9 @@ CryptParameterEncryption(
    TPM2B_SYM_KEY        key;               // encryption key
    UINT32               cipherSize = 0;    // size of cipher text
    pAssert(session->sessionKey.t.size + extraKey->t.size <= sizeof(key.t.buffer));
+
+    if (bufferSize < leadingSizeInByte)
+        return;
    // Retrieve encrypted data size.
    if(leadingSizeInByte == 2)
    {
@@ -2683,6 +2687,7 @@ CryptParameterEncryption(
        cipherSize = (UINT32)BYTE_ARRAY_TO_UINT16(buffer);
        // advance the buffer
        buffer = &buffer[2];
+       bufferSize -= 2;
    }
 #ifdef      TPM4B
    else if(leadingSizeInByte == 4)
@@ -2691,12 +2696,15 @@ CryptParameterEncryption(
        cipherSize = BYTE_ARRAY_TO_UINT32(buffer);
        //advance pointer
        buffer = &buffer[4];
+       bufferSize -= 4;
    }
 #endif
    else
    {
        pAssert(FALSE);
    }
+   if (cipherSize > bufferSize)
+       cipherSize = bufferSize;
 //
    // Compute encryption key by concatenating sessionAuth with extra key
    MemoryCopy2B(&key.b, &session->sessionKey.b, sizeof(key.t.buffer));
