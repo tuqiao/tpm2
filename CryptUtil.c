@@ -45,14 +45,14 @@ TranslateCryptErrors (
       case CRYPT_SCHEME:
           return TPM_RC_SCHEME;
       case CRYPT_PARAMETER:
-          return TPM_RC_VALUE;
+          return TPM_RC_RANGE;
       case CRYPT_UNDERFLOW:
           return TPM_RC_SIZE;
       case CRYPT_POINT:
           return TPM_RC_ECC_POINT;
       case CRYPT_CANCEL:
        return TPM_RC_CANCELED;
-   default: // Other unknown warnings
+   default: // CRYPT_HW_FAILURE and other unknown warnings
        return TPM_RC_FAILURE;
    }
 }
