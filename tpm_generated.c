@@ -942,10 +942,10 @@ TPM_RC TPMS_PCR_SELECTION_Unmarshal(TPMS_PCR_SELECTION* target,
     return result;
   }
   if (target->sizeofSelect > PCR_SELECT_MAX) {
-    return TPM_RC_VALUE;
+    return TPM_RC_PCR;
   }
   if (target->sizeofSelect < PCR_SELECT_MIN) {
-    return TPM_RC_VALUE;
+    return TPM_RC_PCR;
   }
   for (i = 0; i < target->sizeofSelect; ++i) {
     result = BYTE_Unmarshal(&target->pcrSelect[i], buffer, size);

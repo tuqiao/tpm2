@@ -220,6 +220,7 @@ typedef INT16      CRYPT_RESULT;
 #define CRYPT_UNDERFLOW     ((CRYPT_RESULT) -4)
 #define CRYPT_POINT         ((CRYPT_RESULT) -5)
 #define CRYPT_CANCEL        ((CRYPT_RESULT) -6)
+#define CRYPT_HW_FAILURE    ((CRYPT_RESULT) -7)
 #include    "CpriCryptPri_fp.h"
 #ifdef TPM_ALG_ECC
 #   include "CpriDataEcc.h"
