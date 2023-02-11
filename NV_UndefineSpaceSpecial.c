@@ -33,6 +33,11 @@ TPM2_NV_UndefineSpaceSpecial(
    if (_plat__NvGetHandleVirtualOffset(in->nvIndex))
        return TPM_RC_NV_AUTHORIZATION;
 
+   // Check if there are platform-specific reasons to prohibit updating this
+   // index.
+   if (!_plat__NvUpdateAllowed(in->nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
 // Input Validation
 
    // Get NV index info

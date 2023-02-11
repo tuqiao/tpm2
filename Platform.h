@@ -440,6 +440,15 @@ _plat__OwnerClearCallback(
     void
 );
 
+//
+//
+//      _plat__NvUpdateAllowed()
+//
+// Returns true if the specified handle is allowed to be updated (modified or deleted).
+//
+LIB_EXPORT BOOL
+_plat__NvUpdateAllowed(uint32_t handle);
+
 // A function to inform CR50 that NvIndexData (handle) has been changed.
 LIB_EXPORT void
 _plat__NvInformIndexDataChanged(uint32_t handle);
