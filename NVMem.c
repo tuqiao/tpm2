@@ -350,3 +350,15 @@ _plat__NvInformIndexDataChanged(uint32_t handle)
   /* Do nothing */
   return;
 }
+
+//
+//
+//      _plat__NvUpdateAllowed()
+//
+// Always returns TRUE. No platform-specific reasons to prevent updates.
+//
+LIB_EXPORT BOOL
+_plat__NvUpdateAllowed(uint32_t handle)
+{
+   return TRUE;
+}
