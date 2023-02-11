@@ -1287,3 +1287,29 @@ PCRCapGetHandles(
      }
      return more;
 }
+//
+//
+//             PCRGetValue()
+//
+//      This function fills the provided buffer with the current value of the specified PCR.
+//
+//      Return Value                      Meaning
+//
+//      TRUE                              buffer filled with the PCR value
+//      FALSE                             no such PCR or bad buffer size
+//
+BOOL
+PCRGetValue(
+   TPMI_ALG_HASH        hashAlg,             // IN: hash algorithm of PCR
+   UINT32               pcrNumber,           // IN: PCR number
+   UINT16               size,                // IN: size of the buffer
+   BYTE                *data                 // IN: pointer to the buffer
+   )
+{
+    const BYTE *pcrData = GetPcrPointer(hashAlg, pcrNumber);
+    UINT16      pcrSize = CryptGetHashDigestSize(hashAlg);
+    if (pcrData == NULL) return FALSE;
+    if (pcrSize != size) return FALSE;
+    MemoryCopy(data, pcrData, pcrSize, size);
+    return TRUE;
+}
