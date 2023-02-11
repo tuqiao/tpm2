@@ -90,5 +90,11 @@ void PCRStartup(STARTUP_TYPE type,  // IN: startup type
                 );
 void PCRStateSave(TPM_SU type  // IN: startup type
                   );
+BOOL PCRGetValue(
+   TPMI_ALG_HASH        hashAlg,             // IN: hash algorithm of PCR
+   UINT32               pcrNumber,           // IN: PCR number
+   UINT16               size,                // IN: size of the buffer
+   BYTE                *data                 // IN: pointer to the buffer
+   );
 
 #endif  // __TPM2_PCR_FP_H
