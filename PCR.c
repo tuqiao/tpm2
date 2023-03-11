@@ -684,6 +684,28 @@ PCRIsExtendAllowed(
 }
 //
 //
+//          PCRIsExtended()
+//
+//      This function checks if the PCR value is non-zero.
+//
+//      Return Value                      Meaning
+//
+//      TRUE                              value is non-zero (PCR extended)
+//      FALSE                             value is zero (PCR was not extended yet)
+//
+static BOOL
+PCRIsExtended(BYTE *pcrValue, UINT16 pcrSize)
+{
+   UINT16 n;
+   for(n = 0; n < pcrSize; ++n, ++pcrValue)
+   {
+       if((*pcrValue) != 0)
+          return TRUE;
+   }
+   return FALSE;
+}
+//
+//
 //           PCRExtend()
 //
 //      This function is used to extend a PCR in a specific bank.
@@ -705,6 +727,12 @@ PCRExtend(
    if(pcrData != NULL)
    {
        pcrSize = CryptGetHashDigestSize(hash);
+
+       // Prevent double-extend for PCR0 (b/271637992).
+       // Return success, but do nothing, if a 2nd extend is requested.
+       if(pcr == 0 && PCRIsExtended(pcrData, pcrSize))
+          return;
+
        CryptStartHash(hash, &hashState);
        CryptUpdateDigest(&hashState, pcrSize, pcrData);
        CryptUpdateDigest(&hashState, size, data);
