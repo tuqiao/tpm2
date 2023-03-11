@@ -41,6 +41,11 @@ TPM2_NV_DefineSpace(
    if (_plat__NvGetHandleVirtualOffset(in->publicInfo.t.nvPublic.nvIndex))
        return TPM_RC_NV_AUTHORIZATION;
 
+   // Check if there are platform-specific reasons to prohibit updating this
+   // index.
+   if (!_plat__NvUpdateAllowed(in->publicInfo.t.nvPublic.nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
 // Input Validation
    // If an index is being created by the owner and shEnable is
    // clear, then we would not reach this point because ownerAuth
