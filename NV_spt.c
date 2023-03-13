@@ -89,11 +89,6 @@ NvWriteAccessChecks(
 {
      NV_INDEX          nvIndex;
 
-     // Check if there are platform-specific reasons to prohibit updating this
-     // index.
-     if (!_plat__NvUpdateAllowed(nvHandle))
-             return TPM_RC_NV_AUTHORIZATION;
-
      // Get NV index info
      NvGetIndexInfo(nvHandle, &nvIndex);
 // This check may be done before doing authorization checks as is done in this
