@@ -37,6 +37,11 @@ TPM2_NV_SetBits(
    if(result != TPM_RC_SUCCESS)
        return result;
 
+   // Check if there are platform-specific reasons to prohibit updating this
+   // index.
+   if (!_plat__NvUpdateAllowed(in->nvIndex))
+       return TPM_RC_NV_AUTHORIZATION;
+
    // Get NV index info
    NvGetIndexInfo(in->nvIndex, &nvIndex);
 
