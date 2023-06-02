@@ -398,14 +398,14 @@ typedef TPM_HANDLE TPM_HC;
 #define HR_HANDLE_MASK                                            0x00FFFFFF
 #define HR_RANGE_MASK                                             0xFF000000
 #define HR_SHIFT                                                          24
-#define HR_PCR                                     (TPM_HT_PCR <<  HR_SHIFT)
-#define HR_HMAC_SESSION                   (TPM_HT_HMAC_SESSION <<  HR_SHIFT)
-#define HR_POLICY_SESSION               (TPM_HT_POLICY_SESSION <<  HR_SHIFT)
-#define HR_TRANSIENT                         (TPM_HT_TRANSIENT <<  HR_SHIFT)
-#define HR_PERSISTENT                       (TPM_HT_PERSISTENT <<  HR_SHIFT)
-#define HR_NV_INDEX                           (TPM_HT_NV_INDEX <<  HR_SHIFT)
-#define HR_PERMANENT                         (TPM_HT_PERMANENT <<  HR_SHIFT)
-#define HR_HIDDEN                               (TPM_HT_HIDDEN <<  HR_SHIFT)
+#define HR_PCR                       (((TPM_HANDLE)TPM_HT_PCR) <<  HR_SHIFT)
+#define HR_HMAC_SESSION     (((TPM_HANDLE)TPM_HT_HMAC_SESSION) <<  HR_SHIFT)
+#define HR_POLICY_SESSION (((TPM_HANDLE)TPM_HT_POLICY_SESSION) <<  HR_SHIFT)
+#define HR_TRANSIENT           (((TPM_HANDLE)TPM_HT_TRANSIENT) <<  HR_SHIFT)
+#define HR_PERSISTENT         (((TPM_HANDLE)TPM_HT_PERSISTENT) <<  HR_SHIFT)
+#define HR_NV_INDEX             (((TPM_HANDLE)TPM_HT_NV_INDEX) <<  HR_SHIFT)
+#define HR_PERMANENT           (((TPM_HANDLE)TPM_HT_PERMANENT) <<  HR_SHIFT)
+#define HR_HIDDEN                 (((TPM_HANDLE)TPM_HT_HIDDEN) <<  HR_SHIFT)
 #define PCR_FIRST                                               (HR_PCR + 0)
 #define PCR_LAST                          (PCR_FIRST + IMPLEMENTATION_PCR-1)
 #define HMAC_SESSION_FIRST                             (HR_HMAC_SESSION + 0)
